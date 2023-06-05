@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 
 namespace ClamFFI
 {
-    public static class Clam
+    public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230604170952";
+	public const string __DllName = "clam_ffi_20230604182729";
 
         [DllImport(__DllName, EntryPoint = "get_answer", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int get_answer();

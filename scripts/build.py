@@ -10,8 +10,9 @@ def replace_word_in_file(filename, new_libname):
 
         for (i,line) in enumerate(data):
             if "const string __DllName" in line:
-                data[i] = "\tpublic const string libname = " + '"' + new_libname + '"' + ";" + "\n"
-                return data
+                data[i] = "\tpublic const string __DllName = " + '"' + new_libname + '"' + ";" + "\n"
+            else:
+                data[i] = data[i].replace("unsafe ","")
 
         print("error libname not updated")
         return data
