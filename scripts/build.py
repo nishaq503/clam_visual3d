@@ -7,14 +7,16 @@ from datetime import datetime
 def replace_word_in_file(filename, new_libname):
     with open(filename,'r') as file:
         data = file.readlines()
-
+        found = False
         for (i,line) in enumerate(data):
             if "const string __DllName" in line:
                 data[i] = "\tpublic const string __DllName = " + '"' + new_libname + '"' + ";" + "\n"
+                found = True
             else:
                 data[i] = data[i].replace("unsafe ","")
-
-        print("error libname not updated")
+        if not found:
+            print("error libname not updated")
+            
         return data
 
 def update_unity(new_libname):

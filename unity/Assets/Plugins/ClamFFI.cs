@@ -11,10 +11,13 @@ namespace ClamFFI
 {
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230604182729";
+	public const string __DllName = "clam_ffi_20230605133231";
 
         [DllImport(__DllName, EntryPoint = "get_answer", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int get_answer();
+
+        [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern uint init_clam(IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
 
 
     }

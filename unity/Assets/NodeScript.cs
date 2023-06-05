@@ -8,7 +8,7 @@ public class NodeScript : MonoBehaviour
     void Start()
     {
         SetColor(new Vector3(0.1f,0.0f,0.0f));
-        Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", ClamFFI.Clam.get_answer()));
+        //Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", ClamFFI.Clam.get_answer()));
 
 
     }
