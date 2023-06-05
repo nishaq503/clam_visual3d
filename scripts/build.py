@@ -78,7 +78,7 @@ def main():
     is_release = should_build_release()
     build_lib(is_release)
     copy_lib(libname, new_libname, is_release)
-    gen_cs_binding()
+    # gen_cs_binding()
     update_unity(new_libname)
 
 main()

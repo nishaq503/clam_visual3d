@@ -1,0 +1,10 @@
+{
+    "name": "pima",
+    "url": "https://www.dropbox.com/s/mvlwu7p0nyk2a2r/pima.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/pima.mat",
+    "features_path": "preprocessed/pima_features.npy",
+    "normalized_features_path": "preprocessed/pima_features_normalized.npy",
+    "scores_path": "preprocessed/pima_scores.npy"
+}

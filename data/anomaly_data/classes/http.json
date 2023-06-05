@@ -1,0 +1,10 @@
+{
+    "name": "http",
+    "url": "https://www.dropbox.com/s/iy9ucsifal754tp/http.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/http.mat",
+    "features_path": "preprocessed/http_features.npy",
+    "normalized_features_path": "preprocessed/http_features_normalized.npy",
+    "scores_path": "preprocessed/http_scores.npy"
+}

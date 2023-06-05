@@ -1,0 +1,10 @@
+{
+    "name": "pendigits",
+    "url": "https://www.dropbox.com/s/1x8rzb4a0lia6t1/pendigits.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/pendigits.mat",
+    "features_path": "preprocessed/pendigits_features.npy",
+    "normalized_features_path": "preprocessed/pendigits_features_normalized.npy",
+    "scores_path": "preprocessed/pendigits_scores.npy"
+}

@@ -1,0 +1,10 @@
+{
+    "name": "vowels",
+    "url": "https://www.dropbox.com/s/pa26odoq6atq9vx/vowels.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/vowels.mat",
+    "features_path": "preprocessed/vowels_features.npy",
+    "normalized_features_path": "preprocessed/vowels_features_normalized.npy",
+    "scores_path": "preprocessed/vowels_scores.npy"
+}

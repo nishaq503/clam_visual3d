@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
+using System;
 
 public class NodeScript : MonoBehaviour
 {
@@ -9,7 +11,8 @@ public class NodeScript : MonoBehaviour
     {
         SetColor(new Vector3(0.1f,0.0f,0.0f));
         //Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", ClamFFI.Clam.get_answer()));
-
+        int clam_result = ClamFFI.Clam.InitClam("arrhythmia", 50);
+        //ClamFFI.Clam.CreateReingoldLayout();
 
     }
 

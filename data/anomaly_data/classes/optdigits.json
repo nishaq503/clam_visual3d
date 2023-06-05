@@ -1,0 +1,10 @@
+{
+    "name": "optdigits",
+    "url": "https://www.dropbox.com/s/w52ndgz5k75s514/optdigits.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/optdigits.mat",
+    "features_path": "preprocessed/optdigits_features.npy",
+    "normalized_features_path": "preprocessed/optdigits_features_normalized.npy",
+    "scores_path": "preprocessed/optdigits_scores.npy"
+}

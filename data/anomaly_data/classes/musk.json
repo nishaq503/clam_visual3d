@@ -1,0 +1,10 @@
+{
+    "name": "musk",
+    "url": "https://www.dropbox.com/s/we6aqhb0m38i60t/musk.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/musk.mat",
+    "features_path": "preprocessed/musk_features.npy",
+    "normalized_features_path": "preprocessed/musk_features_normalized.npy",
+    "scores_path": "preprocessed/musk_scores.npy"
+}

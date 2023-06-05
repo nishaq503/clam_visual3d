@@ -1,0 +1,10 @@
+{
+    "name": "thyroid",
+    "url": "https://www.dropbox.com/s/bih0e15a0fukftb/thyroid.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/thyroid.mat",
+    "features_path": "preprocessed/thyroid_features.npy",
+    "normalized_features_path": "preprocessed/thyroid_features_normalized.npy",
+    "scores_path": "preprocessed/thyroid_scores.npy"
+}

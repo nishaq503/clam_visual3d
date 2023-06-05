@@ -1,0 +1,10 @@
+{
+    "name": "cardio",
+    "url": "https://www.dropbox.com/s/galg3ihvxklf0qi/cardio.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/cardio.mat",
+    "features_path": "preprocessed/cardio_features.npy",
+    "normalized_features_path": "preprocessed/cardio_features_normalized.npy",
+    "scores_path": "preprocessed/cardio_scores.npy"
+}

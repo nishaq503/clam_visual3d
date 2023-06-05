@@ -6,18 +6,53 @@
 #pragma warning disable CS8981
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ClamFFI
 {
-    public static partial class Clam
+    public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230605133231";
+	public const string __DllName = "clam_ffi_20230605190118";
+        private static IntPtr _handle;
 
         [DllImport(__DllName, EntryPoint = "get_answer", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int get_answer();
 
+        [DllImport(__DllName, EntryPoint = "get_num_nodes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern int get_num_nodes(IntPtr handle);
+
+        public static int GetNumNodes()
+        {
+            return get_num_nodes(_handle);    
+        }
+
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern uint init_clam(IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
+        private static extern int init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
+
+        public static int InitClam(string dataName, uint cardinality)
+        {
+            byte[] byteName = Encoding.UTF8.GetBytes(dataName);
+            int len = byteName.Length;
+
+            return init_clam(out _handle, byteName, len, cardinality);
+
+        }
+
+        [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern int create_reingold_layout(out IntPtr ptr);
+
+        public static int CreateReingoldLayout()
+        {
+            return create_reingold_layout(out _handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "free_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void free_reingold_layout(IntPtr ptr);
+
+        public static void FreeReingoldLayout()
+        {
+            free_reingold_layout(_handle);
+        }
 
 
     }
@@ -25,4 +60,3 @@ namespace ClamFFI
 
 
 }
-    

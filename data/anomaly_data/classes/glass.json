@@ -1,0 +1,10 @@
+{
+    "name": "glass",
+    "url": "https://www.dropbox.com/s/iq3hjxw77gpbl7u/glass.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/glass.mat",
+    "features_path": "preprocessed/glass_features.npy",
+    "normalized_features_path": "preprocessed/glass_features_normalized.npy",
+    "scores_path": "preprocessed/glass_scores.npy"
+}

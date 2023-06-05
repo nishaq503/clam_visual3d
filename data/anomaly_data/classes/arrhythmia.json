@@ -1,0 +1,10 @@
+{
+    "name": "arrhythmia",
+    "url": "https://www.dropbox.com/s/lmlwuspn1sey48r/arrhythmia.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/arrhythmia.mat",
+    "features_path": "preprocessed/arrhythmia_features.npy",
+    "normalized_features_path": "preprocessed/arrhythmia_features_normalized.npy",
+    "scores_path": "preprocessed/arrhythmia_scores.npy"
+}

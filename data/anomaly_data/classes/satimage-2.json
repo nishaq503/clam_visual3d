@@ -1,0 +1,10 @@
+{
+    "name": "satimage-2",
+    "url": "https://www.dropbox.com/s/hckgvu9m6fs441p/satimage-2.mat?dl=0",
+    "mmap_threshold": 1073741824,
+    "mmap_mode": null,
+    "raw_path": "raw/satimage-2.mat",
+    "features_path": "preprocessed/satimage-2_features.npy",
+    "normalized_features_path": "preprocessed/satimage-2_features_normalized.npy",
+    "scores_path": "preprocessed/satimage-2_scores.npy"
+}
