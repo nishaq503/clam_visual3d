@@ -5,15 +5,81 @@
 #pragma warning disable CS8500
 #pragma warning disable CS8981
 using System;
+//using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
+
+using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 
 namespace ClamFFI
 {
+
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe class NodeBaton
+    {
+        public float x, y, z;
+        public float r, g, b;
+        public byte* id;
+        public byte* leftID;
+        public byte* rightID;
+
+        //NodeBaton()
+        //{
+
+        //}
+    }
+
+    public unsafe class Node
+    {
+        public Vector3 pos;
+        public Vector3 color;
+        public string id, leftID, rightID;
+
+        public Node(NodeBaton baton)
+        {
+            pos = new Vector3(baton.x, baton.y, baton.z);
+            color = new Vector3(baton.r, baton.g, baton.b);
+
+            //id = new String((sbyte*)baton.id);
+            //leftID = new String((sbyte*)baton.id);
+            //rightID = new String((sbyte*)baton.id);
+        }
+    }
+
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230605190118";
+	public const string __DllName = "clam_ffi_20230606173145";
         private static IntPtr _handle;
+
+
+        public delegate float callback(float a, float b);
+        public delegate void voidcallback(float a);
+        public unsafe delegate void stringcallback(byte* id);
+        public unsafe delegate void InitNodeCallBack(byte* id, byte* leftID, byte* rightID);
+        public unsafe delegate void ReingoldifyCallBack(NodeBaton baton, byte* id);
+
+        [DllImport(__DllName)]
+        public static extern float retcall(callback cb);
+
+        [DllImport(__DllName)]
+
+        public static extern float voidcall(voidcallback cb);
+
+        [DllImport(__DllName)]
+        public static extern float set_stringcb(stringcallback cb);
+
+        [DllImport(__DllName, EntryPoint = "set_node_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void set_node_ids();
+        
+
+        [DllImport(__DllName, EntryPoint = "alloc_c_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern byte* alloc_c_string();
+
+        [DllImport(__DllName, EntryPoint = "free_c_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void free_c_string(byte* str);
+
 
         [DllImport(__DllName, EntryPoint = "get_answer", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int get_answer();
@@ -23,8 +89,17 @@ namespace ClamFFI
 
         public static int GetNumNodes()
         {
-            return get_num_nodes(_handle);    
+            return get_num_nodes(_handle);
         }
+
+        [DllImport(__DllName, EntryPoint = "init_node_objects", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int init_node_objects(IntPtr ptr, InitNodeCallBack callback);
+
+        public static int InitNodeObjects(InitNodeCallBack callback)
+        {
+            return init_node_objects(_handle, callback);
+        }
+
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern int init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
@@ -39,20 +114,22 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern int create_reingold_layout(out IntPtr ptr);
+        private static extern int create_reingold_layout(IntPtr ptr, ReingoldifyCallBack callback);
 
-        public static int CreateReingoldLayout()
+        public static int CreateReingoldLayout(ReingoldifyCallBack callback)
         {
-            return create_reingold_layout(out _handle);
+            return create_reingold_layout(_handle, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "free_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern void free_reingold_layout(IntPtr ptr);
+        private static extern void free_reingold_layout(IntPtr ptr);
 
         public static void FreeReingoldLayout()
         {
             free_reingold_layout(_handle);
         }
+
+
 
 
     }
