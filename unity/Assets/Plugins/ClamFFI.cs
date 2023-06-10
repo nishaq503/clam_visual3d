@@ -16,19 +16,27 @@ using UnityEditor.ShaderGraph.Internal;
 namespace ClamFFI
 {
 
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public partial struct Vec3
+    {
+        public float x;
+        public float y;
+        public float z;
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public unsafe class NodeBaton
     {
-        public float x, y, z;
-        public float r, g, b;
+        public Vec3 pos;
+        public Vec3 color;
         public byte* id;
         public byte* leftID;
         public byte* rightID;
-
-        //NodeBaton()
-        //{
-
-        //}
+        public int cardinality;
+        public int depth;
+        public int argCenter;
+        public int argRadius;
     }
 
     public unsafe class Node
@@ -36,53 +44,42 @@ namespace ClamFFI
         public Vector3 pos;
         public Vector3 color;
         public string id, leftID, rightID;
+        public int cardinality;
+        public int depth;
+        public int argCenter;   
+        public int argRadius;   
 
         public Node(NodeBaton baton)
         {
-            pos = new Vector3(baton.x, baton.y, baton.z);
-            color = new Vector3(baton.r, baton.g, baton.b);
+            pos = new Vector3(baton.pos.x, baton.pos.y, baton.pos.z);
+            color = new Vector3(baton.color.x, baton.color.y, baton.color.z);
 
-            //id = new String((sbyte*)baton.id);
-            //leftID = new String((sbyte*)baton.id);
-            //rightID = new String((sbyte*)baton.id);
+            id = new String((sbyte*)baton.id);
+            leftID = new String((sbyte*)baton.leftID);
+            rightID = new String((sbyte*)baton.rightID);
+
+            cardinality = baton.cardinality;
+            depth = baton.depth;
+            argCenter = baton.argCenter;    
+            argRadius = baton.argRadius;
+            
         }
     }
 
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230606173145";
+	public const string __DllName = "clam_ffi_20230610121255";
         private static IntPtr _handle;
+       
+        public unsafe delegate void NodeVisitor(NodeBaton baton);
 
+        [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int create_reingold_layout(IntPtr ptr, NodeVisitor callback);
 
-        public delegate float callback(float a, float b);
-        public delegate void voidcallback(float a);
-        public unsafe delegate void stringcallback(byte* id);
-        public unsafe delegate void InitNodeCallBack(byte* id, byte* leftID, byte* rightID);
-        public unsafe delegate void ReingoldifyCallBack(NodeBaton baton, byte* id);
-
-        [DllImport(__DllName)]
-        public static extern float retcall(callback cb);
-
-        [DllImport(__DllName)]
-
-        public static extern float voidcall(voidcallback cb);
-
-        [DllImport(__DllName)]
-        public static extern float set_stringcb(stringcallback cb);
-
-        [DllImport(__DllName, EntryPoint = "set_node_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern void set_node_ids();
-        
-
-        [DllImport(__DllName, EntryPoint = "alloc_c_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern byte* alloc_c_string();
-
-        [DllImport(__DllName, EntryPoint = "free_c_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void free_c_string(byte* str);
-
-
-        [DllImport(__DllName, EntryPoint = "get_answer", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern int get_answer();
+        public static int CreateReingoldLayout(NodeVisitor callback)
+        {
+            return create_reingold_layout(_handle, callback);
+        }
 
         [DllImport(__DllName, EntryPoint = "get_num_nodes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int get_num_nodes(IntPtr handle);
@@ -92,14 +89,13 @@ namespace ClamFFI
             return get_num_nodes(_handle);
         }
 
-        [DllImport(__DllName, EntryPoint = "init_node_objects", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int init_node_objects(IntPtr ptr, InitNodeCallBack callback);
+        [DllImport(__DllName, EntryPoint = "traverse_tree_df", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int traverse_tree_df(IntPtr ptr, NodeVisitor callback);
 
-        public static int InitNodeObjects(InitNodeCallBack callback)
+        public static int TraverseTreeDF(NodeVisitor callback)
         {
-            return init_node_objects(_handle, callback);
+            return traverse_tree_df(_handle, callback);
         }
-
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern int init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
@@ -110,30 +106,6 @@ namespace ClamFFI
             int len = byteName.Length;
 
             return init_clam(out _handle, byteName, len, cardinality);
-
         }
-
-        [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int create_reingold_layout(IntPtr ptr, ReingoldifyCallBack callback);
-
-        public static int CreateReingoldLayout(ReingoldifyCallBack callback)
-        {
-            return create_reingold_layout(_handle, callback);
-        }
-
-        [DllImport(__DllName, EntryPoint = "free_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern void free_reingold_layout(IntPtr ptr);
-
-        public static void FreeReingoldLayout()
-        {
-            free_reingold_layout(_handle);
-        }
-
-
-
-
     }
-
-
-
 }

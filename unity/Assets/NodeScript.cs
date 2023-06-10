@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
+using static UnityEditor.PlayerSettings;
 
 public class NodeScript : MonoBehaviour
 {
@@ -14,11 +15,6 @@ public class NodeScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //SetColor(new Vector3(0.15f,0.85f,0.0f));
-        //SetColor(new Vector3(0.15f,0.85f,0.0f));
-        //Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", ClamFFI.Clam.get_answer()));
-        //int clam_result = ClamFFI.Clam.InitClam("arrhythmia", 50);
-        //ClamFFI.Clam.CreateReingoldLayout();
 
     }
 
