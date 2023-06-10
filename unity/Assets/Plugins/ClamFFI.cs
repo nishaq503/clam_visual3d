@@ -37,6 +37,37 @@ namespace ClamFFI
         public int depth;
         public int argCenter;
         public int argRadius;
+        public NodeBaton()
+        {
+           
+            this.cardinality = -1;
+            this.depth = -1;
+            this.argCenter = -1;
+            this.argRadius = -1;
+            this.id = null;
+            this.leftID = null;
+            this.rightID = null;
+            this.pos = new Vec3();
+            this.color = new Vec3();
+        }
+    }
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public class NodeFromClam
+    {
+        public Vec3 pos;
+        public int cardinality;
+        public int depth;
+        public int argCenter;
+        public int argRadius;
+        public NodeFromClam()
+        {
+            this.cardinality = -1;
+            this.depth = -1;
+            this.argCenter = -1;
+            this.argRadius = -1;
+            this.pos = new Vec3();
+        }
     }
 
     public unsafe class Node
@@ -46,32 +77,131 @@ namespace ClamFFI
         public string id, leftID, rightID;
         public int cardinality;
         public int depth;
-        public int argCenter;   
-        public int argRadius;   
+        public int argCenter;
+        public int argRadius;
 
         public Node(NodeBaton baton)
         {
             pos = new Vector3(baton.pos.x, baton.pos.y, baton.pos.z);
             color = new Vector3(baton.color.x, baton.color.y, baton.color.z);
+            //Debug.Log("node constructor");
+            if (baton.id != null)
+            {
+                //Debug.Log("setting id");
 
-            id = new String((sbyte*)baton.id);
-            leftID = new String((sbyte*)baton.leftID);
-            rightID = new String((sbyte*)baton.rightID);
+                id = new String((sbyte*)baton.id);
+            }
+            else
+            {
+                Debug.Log("id null");
+
+                id = "default";
+            }
+            if (baton.leftID != null)
+            {
+                //Debug.Log("setting leftID");
+
+                leftID = new String((sbyte*)baton.leftID);
+
+            }
+            else
+            {
+                //Debug.Log("leftID null");
+
+                leftID = "default";
+            }
+            if (baton.rightID != null)
+            {
+                // Debug.Log("setting rightID");
+
+                rightID = new String((sbyte*)baton.rightID);
+
+            }
+            else
+            {
+                //Debug.Log("rightID null");
+
+                rightID = "default";
+            }
+
+            // Debug.Log("setting clam params");
 
             cardinality = baton.cardinality;
             depth = baton.depth;
-            argCenter = baton.argCenter;    
+            argCenter = baton.argCenter;
             argRadius = baton.argRadius;
-            
+
+            // Debug.Log("constructor done");
+
+
         }
     }
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public partial struct SuperComplexEntity
+    {
+        public Vec3 player_1;
+        public Vec3 player_2;
+        public ulong ammo;
+        /// Point to an ASCII encoded whatnot.
+        public IntPtr some_str;
+        public uint str_len;
+    }
+
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public partial struct ThirdPartyVecF32
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+    }
+
+
 
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230610121255";
+	public const string __DllName = "clam_ffi_20230610180037";
         private static IntPtr _handle;
-       
+
         public unsafe delegate void NodeVisitor(NodeBaton baton);
+
+
+        [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "example_double_super_complex_entity")]
+        public static extern void example_double_super_complex_entity(IntPtr context, NodeFromClam incoming, out NodeFromClam outgoing);
+
+        public static NodeFromClam ExampleDoubleEtc(ref NodeFromClam incoming)
+        {
+            example_double_super_complex_entity(_handle, incoming, out var outgoing);
+            Debug.Log("finished c# example call");
+            return incoming;
+        }
+
+        [DllImport(__DllName, EntryPoint = "get_node_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void get_node_data(IntPtr handle, ref NodeFromClam inNode, out NodeFromClam outBaton);
+
+        public static unsafe NodeFromClam GetNodeData(string name)
+        {
+            //byte[] byteName = Encoding.UTF8.GetBytes(name);
+            //int len = byteName.Length;
+            NodeFromClam baton = new NodeFromClam();
+            Debug.Log("card here3 " + baton.cardinality);
+            Debug.Log("test here ");
+
+            get_node_data(_handle, ref baton, out var outNode);
+            Debug.Log("test here ");
+
+            Debug.Log("card here " + outNode.cardinality);
+            Debug.Log("card here2 " + baton.cardinality);
+            return outNode;
+        }
+
+
+
+        [DllImport(__DllName, EntryPoint = "destroy_node_baton", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void destroy_node_baton(NodeBaton context);
+
 
         [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern int create_reingold_layout(IntPtr ptr, NodeVisitor callback);
@@ -88,6 +218,26 @@ namespace ClamFFI
         {
             return get_num_nodes(_handle);
         }
+
+        [DllImport(__DllName, EntryPoint = "test", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern int test();
+
+        public static int Test()
+        {
+            return test();
+        }
+
+        //[DllImport(__DllName, EntryPoint = "get_node_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        //public static extern int get_node_data(IntPtr handle, byte[] data_name, int name_len, ref NodeBaton inNode, out NodeBaton outNode);
+
+        //public static Node GetNodeData(string nodeName)
+        //{
+        //    byte[] byteName = Encoding.UTF8.GetBytes(nodeName);
+        //    int len = byteName.Length;
+        //    NodeBaton inNode = new NodeBaton();
+        //    get_node_data(_handle, byteName, len, ref inNode, out var outNode);
+        //    return new Node(outNode);
+        //}
 
         [DllImport(__DllName, EntryPoint = "traverse_tree_df", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern int traverse_tree_df(IntPtr ptr, NodeVisitor callback);

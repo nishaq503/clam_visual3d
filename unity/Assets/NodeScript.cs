@@ -49,8 +49,4 @@ public class NodeScript : MonoBehaviour
     {
         _rightChildID = id;
     }
-
-
-
-
 }

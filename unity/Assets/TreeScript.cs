@@ -2,6 +2,8 @@ using ClamFFI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Numerics;
+using System.Text;
 using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -16,6 +18,45 @@ public class TreeScript : MonoBehaviour
 
     public GameObject _nodePrefab;
     private Dictionary<string, GameObject> _tree;
+
+    private string _nodeName;
+
+    public void RunGameEngine()
+    {
+        var super1 = new SuperComplexEntity()
+        {
+            player_1 = new Vec3
+            {
+                x = 2,
+                y = 4,
+                z = 6,
+            },
+
+            player_2 = new Vec3
+            {
+                x = 2,
+                y = 4,
+                z = 6,
+            },
+
+            ammo = 10,
+        };
+        var node = new ClamFFI.NodeFromClam()
+        {
+            cardinality = -2,
+            argCenter = -2,
+            argRadius = -2,
+            depth = -2,
+
+        };
+        Debug.Log("node card " + node.cardinality);
+
+        var super2 = ClamFFI.Clam.ExampleDoubleEtc(ref node);
+        Debug.Log("node card " + node.cardinality);
+        Debug.Log("super2 card " + super2.cardinality);
+        Debug.Log("super2 x card " + super2.pos.x);
+    }
+
 
     void Start()
     {
@@ -33,7 +74,20 @@ public class TreeScript : MonoBehaviour
         ClamFFI.Clam.TraverseTreeDF(SetNodeNames);
         ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
 
+        //ClamFFI.Clam.Test();
+
+        Debug.Log("nodename "+ _nodeName);
+        //ClamFFI.Clam.GetNodeData(HexStringToBinary(_nodeName));
+
+        //ClamFFI.NodeFromClam testNode = ClamFFI.Clam.GetNodeData(_nodeName);
+        //Debug.Log("nodename " + _nodeName);
+
+        //Debug.Log(testNode.id);
+        //Debug.Log("Card " + testNode.cardinality);
+        RunGameEngine();
     }
+
+ 
 
     void Update()
     {
@@ -67,6 +121,7 @@ public class TreeScript : MonoBehaviour
         node.GetComponent<NodeScript>().SetLeft(nodeData.leftID);
         node.GetComponent<NodeScript>().SetRight(nodeData.rightID);
         _tree.Add(nodeData.id, node);
+        _nodeName = nodeData.id;
     }
 
     unsafe void Reingoldify(ClamFFI.NodeBaton baton)
@@ -123,5 +178,36 @@ public class TreeScript : MonoBehaviour
         {
             Debug.Log("reingoldify key not found - " + nodeData.id);
         }
+    }
+
+
+    private static readonly Dictionary<char, string> hexCharacterToBinary = new Dictionary<char, string> {
+    { '0', "0000" },
+    { '1', "0001" },
+    { '2', "0010" },
+    { '3', "0011" },
+    { '4', "0100" },
+    { '5', "0101" },
+    { '6', "0110" },
+    { '7', "0111" },
+    { '8', "1000" },
+    { '9', "1001" },
+    { 'a', "1010" },
+    { 'b', "1011" },
+    { 'c', "1100" },
+    { 'd', "1101" },
+    { 'e', "1110" },
+    { 'f', "1111" }
+};
+
+    public string HexStringToBinary(string hex)
+    {
+        StringBuilder result = new StringBuilder();
+        foreach (char c in hex)
+        {
+            // This will crash for non-hex characters. You might want to handle that differently.
+            result.Append(hexCharacterToBinary[char.ToLower(c)]);
+        }
+        return result.ToString();
     }
 }
