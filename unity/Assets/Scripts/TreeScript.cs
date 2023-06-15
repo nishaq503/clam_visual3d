@@ -1,19 +1,5 @@
-using ClamFFI;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-//using System.Numerics;
-using System.Text;
-using System.Threading;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Assertions;
-using UnityEngine.Video;
-using static UnityEngine.Rendering.DebugUI;
-using static UnityEngine.InputSystem.HID.HID;
-using System.Xml;
-using UnityEditor.SearchService;
 
 public class TreeScript : MonoBehaviour
 {
@@ -41,36 +27,24 @@ public class TreeScript : MonoBehaviour
         ClamFFI.Clam.TraverseTreeDF(SetNodeNames);
         ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
 
-        //ClamFFI.Clam.Test();
 
-        Debug.Log("nodename "+ _nodeName);
-        //ClamFFI.Clam.GetNodeData(HexStringToBinary(_nodeName));
+        ClamFFI.NodeData testNode = GetNodeData(_nodeName);
 
-        ClamFFI.Node testNode = GetNodeData(_nodeName);
-        //ClamFFI.Node testNode = ClamFFI.Clam.GetNodeData2(_nodeName);
-        Debug.Log("nodename " + _nodeName);
-
-        Debug.Log(testNode.id);
-        Debug.Log("Card " + testNode.cardinality);
-        Debug.Log("Card " + testNode.argCenter);
-        Debug.Log("Card " + testNode.argRadius);
-        Debug.Log("Card " + testNode.depth);
-        //RunGameEngine();
+        //ClamFFI.Clam.TestStringFn("Asd");
+        ClamFFI.Clam.TestStringStruct();
+        ClamFFI.Clam.TestStringStruct2();
     }
 
-    ClamFFI.Node GetNodeData(string id)
+    ClamFFI.NodeData GetNodeData(string id)
     {
         GameObject node;
 
         bool hasValue = _tree.TryGetValue(id, out node);
         if (hasValue)
         {
-            //var script = node.GetComponent<NodeScript>();
-            
-            //NodeBaton2 baton = new NodeBaton2(node.GetComponent<NodeScript>().ToNodeData());
             Debug.Log("here---");
             
-            ClamFFI.Node outNode = ClamFFI.Clam.GetNodeData3(node.GetComponent<NodeScript>().ToNodeData());
+            ClamFFI.NodeData outNode = ClamFFI.Clam.FindClamData(node.GetComponent<NodeScript>().ToNodeData());
             Debug.Log("object searched for name " + outNode.id);
             return outNode;
         }
@@ -124,32 +98,26 @@ public class TreeScript : MonoBehaviour
 
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            //if (Physics.Raycast(ray, out RaycastHit hit))
-            //{
-            //    // Use the hit variable to determine what was clicked on.
-            //    Debug.Log("something was pressed");
-            //    Debug.Log(hit.colliderInstanceID);
-            //}
-
             RaycastHit hitInfo;
 
             if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
             {
                 var objectSelected = hitInfo.collider.gameObject;
                 Debug.Log(objectSelected.GetComponent<NodeScript>().GetId() +  " was clicked");
-                Debug.Log("name in binary " + ClamFFI.Clam.HexStringToBinary(objectSelected.GetComponent<NodeScript>().GetId()));
+                Debug.Log("name in binary " + ClamHelpers.HexStringToBinary(objectSelected.GetComponent<NodeScript>().GetId()));
+
+                ClamFFI.NodeData nodeData = ClamFFI.Clam.FindClamData(objectSelected.GetComponent<NodeScript>().ToNodeData());
+                nodeData.LogInfo();
             }
         }
     }
 
-    unsafe void SetNodeNames(ClamFFI.NodeBaton baton)
+    unsafe void SetNodeNames(ClamFFI.NodeFFI baton)
     {
-        //Debug.Log("hello");
-        ClamFFI.Node nodeData = new ClamFFI.Node(baton);
+        ClamFFI.NodeData nodeData = new ClamFFI.NodeData(baton);
         Debug.Log("pos x " + nodeData.pos.x);
         Debug.Log("pos y" + nodeData.pos.y);
         Debug.Log("pos z " + nodeData.pos.z);
-        //Debug.Log("id " + nodeData.id);
         GameObject node = Instantiate(_nodePrefab);
         Debug.Log("adding nod123e " + nodeData.id);
         node.GetComponent<NodeScript>().SetID(nodeData.id);
@@ -159,9 +127,9 @@ public class TreeScript : MonoBehaviour
         _nodeName = nodeData.id;
     }
 
-    unsafe void Reingoldify(ClamFFI.NodeBaton baton)
+    unsafe void Reingoldify(ClamFFI.NodeFFI baton)
     {
-        ClamFFI.Node nodeData = new ClamFFI.Node(baton);
+        ClamFFI.NodeData nodeData = new ClamFFI.NodeData(baton);
         GameObject node;
 
         bool hasValue = _tree.TryGetValue(nodeData.id, out node);
@@ -176,16 +144,15 @@ public class TreeScript : MonoBehaviour
         }
     }
 
-    unsafe void SetColorBlue(ClamFFI.NodeBaton baton)
+    unsafe void SetColorBlue(ClamFFI.NodeFFI baton)
     {
-        ClamFFI.Node nodeData = new ClamFFI.Node(baton);
+        ClamFFI.NodeData nodeData = new ClamFFI.NodeData(baton);
         GameObject node;
 
         bool hasValue = _tree.TryGetValue(nodeData.id, out node);
         if (hasValue)
         {
             node.GetComponent<NodeScript>().SetColor(new Color(0.0f, 0.0f, 1.0f));
-            //node.GetComponent<NodeScript>().SetPosition(nodeData.pos);
         }
         else
         {
@@ -194,9 +161,9 @@ public class TreeScript : MonoBehaviour
     }
 
 
-    unsafe void MoveRight(ClamFFI.NodeBaton baton)
+    unsafe void MoveRight(ClamFFI.NodeFFI baton)
     {
-        ClamFFI.Node nodeData = new ClamFFI.Node(baton);
+        ClamFFI.NodeData nodeData = new ClamFFI.NodeData(baton);
         GameObject node;
 
         bool hasValue = _tree.TryGetValue(nodeData.id, out node);
@@ -216,33 +183,5 @@ public class TreeScript : MonoBehaviour
     }
 
 
-    private static readonly Dictionary<char, string> hexCharacterToBinary = new Dictionary<char, string> {
-    { '0', "0000" },
-    { '1', "0001" },
-    { '2', "0010" },
-    { '3', "0011" },
-    { '4', "0100" },
-    { '5', "0101" },
-    { '6', "0110" },
-    { '7', "0111" },
-    { '8', "1000" },
-    { '9', "1001" },
-    { 'a', "1010" },
-    { 'b', "1011" },
-    { 'c', "1100" },
-    { 'd', "1101" },
-    { 'e', "1110" },
-    { 'f', "1111" }
-};
 
-    public string HexStringToBinary(string hex)
-    {
-        StringBuilder result = new StringBuilder();
-        foreach (char c in hex)
-        {
-            // This will crash for non-hex characters. You might want to handle that differently.
-            result.Append(hexCharacterToBinary[char.ToLower(c)]);
-        }
-        return result.ToString();
-    }
 }
