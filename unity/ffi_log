@@ -338,3 +338,583 @@ built clam tree for mnist
 card ouy 2
 card root 2
 finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+card ouy 2
+card root 2
+finished passing data
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+freeing string
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+freeing string
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 2196
+node data card 2816
+node data card 0
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 4401
+node data card 1311
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 476
+node data card 7219
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name  worked!
+node data card 7603
+node data card 1528
+node data card 7309
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 6770
+node data card 7349
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 5105
+node data card 7299
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 2026
+node data card 7235
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 2614
+node data card 7299
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 2138
+node data card 7169
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 6181
+node data card 1311
+node data card 0
+node data card Vec3(0.0, 0.0, 0.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 4350
+node data card 7219
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"00111111"
+"0011111"
+"001111"
+"00111"
+"0011"
+"001"
+get_node data2 went wrong
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"1111"
+"111"
+"11"
+"1"
+get_node data3 went wrong
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"00011111"
+"0001111"
+"000111"
+"00011"
+"0001"
+get_node data3 went wrong
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 984
+node data card 7219
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 2214
+node data card 7169
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+test name --  -- worked!
+node data card 7603
+node data card 3204
+node data card 3405
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 2347
+node data card 7235
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"00111111"
+"0011111"
+"001111"
+"00111"
+"0011"
+"001"
+get_node data3 went wrong
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"01111111"
+"0111111"
+"011111"
+"01111"
+"0111"
+"011"
+"01"
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"00111111"
+"0011111"
+"001111"
+"00111"
+"0011"
+"001"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111100"
+"1111110"
+"111111"
+"11111"
+"1111"
+"111"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111100"
+"1111110"
+"111111"
+"11111"
+"1111"
+"111"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111110"
+"1111111"
+"111111"
+"11111"
+"1111"
+"111"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111110"
+"1111111"
+"111111"
+"11111"
+"1111"
+"111"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111000"
+"1111100"
+"111110"
+"11111"
+"1111"
+"111"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 2
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"1100"
+"110"
+"11"
+"1"
+node data card 5
+node data card 271
+node data card 393
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+"11111110"
+"1111111"
+"111111"
+"11111"
+"1111"
+"111"
+"11"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 61
+node data card 7219
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 1667
+node data card 4077
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 4039
+node data card 7309
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 5179
+node data card 4077
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 4317
+node data card 1311
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset mnist
+built clam tree for mnist
+node data card 7603
+node data card 5305
+node data card 3731
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 51
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 172
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 112
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 325
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 238
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 144
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+node data card 452
+node data card 32
+node data card 141
+node data card 0
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids

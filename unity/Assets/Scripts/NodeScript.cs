@@ -12,6 +12,7 @@ public class NodeScript : MonoBehaviour
     private string _leftChildID;
     private string _rightChildID;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,10 +30,33 @@ public class NodeScript : MonoBehaviour
         //GetComponent<Transform>().position = pos;
     }
 
-    public void SetColor(Vector3 color)
+    public void SetColor(Color color)
     {
         Debug.Log("setting node " + _id + " color to " + color);
-        GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z);    
+        GetComponent<Renderer>().material.color = color;    
+    }
+
+    public string GetId()
+    {
+        return _id;
+    }
+
+    public string GetLeftChildID()
+    {
+        return _leftChildID;
+    }
+    public string GetRightChildID() 
+    {
+        return _rightChildID;    
+    }
+    public Vector3 GetPosition()
+    {
+        return GetComponent<Transform>().position;
+    }
+
+    public Color GetColor()
+    {
+        return GetComponent<Renderer>().material.color;
     }
 
     public void SetID(string id)
@@ -48,5 +72,12 @@ public class NodeScript : MonoBehaviour
     public void SetRight(string id)
     {
         _rightChildID = id;
+    }
+
+    public ClamFFI.Node ToNodeData()
+    {
+        ClamFFI.Node node = new ClamFFI.Node(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
+        
+        return node;
     }
 }

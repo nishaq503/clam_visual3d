@@ -7,9 +7,13 @@ using System.Text;
 using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Assertions;
 using UnityEngine.Video;
 using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.InputSystem.HID.HID;
+using System.Xml;
+using UnityEditor.SearchService;
 
 public class TreeScript : MonoBehaviour
 {
@@ -20,43 +24,6 @@ public class TreeScript : MonoBehaviour
     private Dictionary<string, GameObject> _tree;
 
     private string _nodeName;
-
-    public void RunGameEngine()
-    {
-        var super1 = new SuperComplexEntity()
-        {
-            player_1 = new Vec3
-            {
-                x = 2,
-                y = 4,
-                z = 6,
-            },
-
-            player_2 = new Vec3
-            {
-                x = 2,
-                y = 4,
-                z = 6,
-            },
-
-            ammo = 10,
-        };
-        var node = new ClamFFI.NodeFromClam()
-        {
-            cardinality = -2,
-            argCenter = -2,
-            argRadius = -2,
-            depth = -2,
-
-        };
-        Debug.Log("node card " + node.cardinality);
-
-        var super2 = ClamFFI.Clam.ExampleDoubleEtc(ref node);
-        Debug.Log("node card " + node.cardinality);
-        Debug.Log("super2 card " + super2.cardinality);
-        Debug.Log("super2 x card " + super2.pos.x);
-    }
-
 
     void Start()
     {
@@ -79,17 +46,44 @@ public class TreeScript : MonoBehaviour
         Debug.Log("nodename "+ _nodeName);
         //ClamFFI.Clam.GetNodeData(HexStringToBinary(_nodeName));
 
-        //ClamFFI.NodeFromClam testNode = ClamFFI.Clam.GetNodeData(_nodeName);
-        //Debug.Log("nodename " + _nodeName);
+        ClamFFI.Node testNode = GetNodeData(_nodeName);
+        //ClamFFI.Node testNode = ClamFFI.Clam.GetNodeData2(_nodeName);
+        Debug.Log("nodename " + _nodeName);
 
-        //Debug.Log(testNode.id);
-        //Debug.Log("Card " + testNode.cardinality);
-        RunGameEngine();
+        Debug.Log(testNode.id);
+        Debug.Log("Card " + testNode.cardinality);
+        Debug.Log("Card " + testNode.argCenter);
+        Debug.Log("Card " + testNode.argRadius);
+        Debug.Log("Card " + testNode.depth);
+        //RunGameEngine();
     }
 
- 
+    ClamFFI.Node GetNodeData(string id)
+    {
+        GameObject node;
 
-    void Update()
+        bool hasValue = _tree.TryGetValue(id, out node);
+        if (hasValue)
+        {
+            //var script = node.GetComponent<NodeScript>();
+            
+            //NodeBaton2 baton = new NodeBaton2(node.GetComponent<NodeScript>().ToNodeData());
+            Debug.Log("here---");
+            
+            ClamFFI.Node outNode = ClamFFI.Clam.GetNodeData3(node.GetComponent<NodeScript>().ToNodeData());
+            Debug.Log("object searched for name " + outNode.id);
+            return outNode;
+        }
+        else
+        {
+            Debug.Log("reingoldify key not found - " + id);
+        }
+
+        return null;
+    }
+
+
+    void FixedUpdate()
     {
         //if(Input.GetKey(KeyCode.Space))
         //{
@@ -104,19 +98,60 @@ public class TreeScript : MonoBehaviour
         //    _timer = 0;
         //}
         //_timer += 1;
+        //foreach (KeyValuePair<string, GameObject> entry in _tree)
+        //{
+        //    // do something with entry.Value or entry.Key
+        //    Debug.DrawLine(Vector3.zero, new Vector3(5, 0, 0), Color.white, 2.5f);
+        //}
 
+        foreach (var item in _tree.Values)
+        {
+            bool hasLeft = _tree.TryGetValue(item.GetComponent<NodeScript>().GetLeftChildID(), out var leftChild);
+            bool hasRight = _tree.TryGetValue(item.GetComponent<NodeScript>().GetRightChildID(), out var rightChild);
+            if(hasLeft && hasRight)
+            {
+                Debug.DrawLine(item.GetComponent<Transform>().position, leftChild.GetComponent<Transform>().position, Color.black, 2.5f);
+                Debug.DrawLine(item.GetComponent<Transform>().position, rightChild.GetComponent<Transform>().position, Color.white, 2.5f);
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("lmb was pressed");
+
+            Vector3 mousePosition = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            //if (Physics.Raycast(ray, out RaycastHit hit))
+            //{
+            //    // Use the hit variable to determine what was clicked on.
+            //    Debug.Log("something was pressed");
+            //    Debug.Log(hit.colliderInstanceID);
+            //}
+
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
+            {
+                var objectSelected = hitInfo.collider.gameObject;
+                Debug.Log(objectSelected.GetComponent<NodeScript>().GetId() +  " was clicked");
+                Debug.Log("name in binary " + ClamFFI.Clam.HexStringToBinary(objectSelected.GetComponent<NodeScript>().GetId()));
+            }
+        }
     }
 
     unsafe void SetNodeNames(ClamFFI.NodeBaton baton)
     {
         //Debug.Log("hello");
         ClamFFI.Node nodeData = new ClamFFI.Node(baton);
-        Debug.Log("x " + nodeData.pos.x);
-        Debug.Log("y" + nodeData.pos.y);
-        Debug.Log("z " + nodeData.pos.z);
+        Debug.Log("pos x " + nodeData.pos.x);
+        Debug.Log("pos y" + nodeData.pos.y);
+        Debug.Log("pos z " + nodeData.pos.z);
         //Debug.Log("id " + nodeData.id);
         GameObject node = Instantiate(_nodePrefab);
-        Debug.Log("adding node " + nodeData.id);
+        Debug.Log("adding nod123e " + nodeData.id);
         node.GetComponent<NodeScript>().SetID(nodeData.id);
         node.GetComponent<NodeScript>().SetLeft(nodeData.leftID);
         node.GetComponent<NodeScript>().SetRight(nodeData.rightID);
@@ -149,7 +184,7 @@ public class TreeScript : MonoBehaviour
         bool hasValue = _tree.TryGetValue(nodeData.id, out node);
         if (hasValue)
         {
-            node.GetComponent<NodeScript>().SetColor(new Vector3(0.0f, 0.0f, 1.0f));
+            node.GetComponent<NodeScript>().SetColor(new Color(0.0f, 0.0f, 1.0f));
             //node.GetComponent<NodeScript>().SetPosition(nodeData.pos);
         }
         else

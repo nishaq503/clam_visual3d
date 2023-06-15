@@ -5,17 +5,16 @@
 #pragma warning disable CS8500
 #pragma warning disable CS8981
 using System;
+using System.Collections.Generic;
 //using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 
 namespace ClamFFI
 {
-
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public partial struct Vec3
@@ -23,6 +22,13 @@ namespace ClamFFI
         public float x;
         public float y;
         public float z;
+
+        public Vec3(float x, float y, float z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -37,6 +43,33 @@ namespace ClamFFI
         public int depth;
         public int argCenter;
         public int argRadius;
+        public int idLen;
+
+        public NodeBaton(Node node)
+        {
+            byte[] byteName = Encoding.UTF8.GetBytes(node.id);
+            int len = byteName.Length;
+
+            unsafe
+            {
+                fixed (char* p = node.id)
+                {
+                    // do some work
+                    //this.id = (byte*)p;
+                    this.cardinality = node.cardinality;
+                    this.depth = node.depth;
+                    this.argCenter = node.argCenter;
+                    this.argRadius = node.argRadius;
+                    this.id = null;
+                    this.leftID = null;
+                    this.rightID = null;
+                    this.pos = new Vec3();
+                    this.color = new Vec3();
+                    //this.idLen = node.id.Length;
+                }
+            }
+            
+        }
         public NodeBaton()
         {
            
@@ -55,7 +88,7 @@ namespace ClamFFI
     [StructLayout(LayoutKind.Sequential)]
     public class NodeFromClam
     {
-        public Vec3 pos;
+        //public Vec3 pos;
         public int cardinality;
         public int depth;
         public int argCenter;
@@ -66,24 +99,36 @@ namespace ClamFFI
             this.depth = -1;
             this.argCenter = -1;
             this.argRadius = -1;
-            this.pos = new Vec3();
+            //this.pos = new Vec3();
         }
     }
 
     public unsafe class Node
     {
         public Vector3 pos;
-        public Vector3 color;
+        public Color color;
         public string id, leftID, rightID;
         public int cardinality;
         public int depth;
         public int argCenter;
         public int argRadius;
 
+        public Node(string id, string leftID, string rightID, Vector3 position, Color color)
+        {
+            this.id = id; this.leftID = leftID;
+            this.rightID = rightID;
+            this.pos = position;
+            this.color = color;
+            this.cardinality = -1;
+            this.depth = -1;
+            this.argCenter = -1;
+            this.argRadius = -1;
+        }
+
         public Node(NodeBaton baton)
         {
             pos = new Vector3(baton.pos.x, baton.pos.y, baton.pos.z);
-            color = new Vector3(baton.color.x, baton.color.y, baton.color.z);
+            color = new Color(baton.color.x, baton.color.y, baton.color.z);
             //Debug.Log("node constructor");
             if (baton.id != null)
             {
@@ -135,34 +180,116 @@ namespace ClamFFI
 
 
         }
+
+        public Node(NodeBaton2 baton)
+        {
+            pos = new Vector3(baton.pos.x, baton.pos.y, baton.pos.z);
+            color = new Color(baton.color.x, baton.color.y, baton.color.z);
+            //Debug.Log("node constructor");
+            if (baton.id != null)
+            {
+                //Debug.Log("setting id");
+
+                id = new String((sbyte*)baton.id);
+            }
+            else
+            {
+                Debug.Log("id null");
+
+                id = "default";
+            }
+            if (baton.leftID != null)
+            {
+                //Debug.Log("setting leftID");
+
+                leftID = new String((sbyte*)baton.leftID);
+
+            }
+            else
+            {
+                //Debug.Log("leftID null");
+
+                leftID = "default";
+            }
+            if (baton.rightID != null)
+            {
+                // Debug.Log("setting rightID");
+
+                rightID = new String((sbyte*)baton.rightID);
+
+            }
+            else
+            {
+                //Debug.Log("rightID null");
+
+                rightID = "default";
+            }
+
+            // Debug.Log("setting clam params");
+
+            cardinality = baton.cardinality;
+            depth = baton.depth;
+            argCenter = baton.argCenter;
+            argRadius = baton.argRadius;
+
+            // Debug.Log("constructor done");
+
+
+        }
+
+        //public Node(string id, Vector3 pos, Color color)
+        //{
+        //    this.id = id;
+        //    this.pos = pos;
+        //    this.color = color;
+        //}
     }
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public partial struct SuperComplexEntity
-    {
-        public Vec3 player_1;
-        public Vec3 player_2;
-        public ulong ammo;
-        /// Point to an ASCII encoded whatnot.
-        public IntPtr some_str;
-        public uint str_len;
-    }
+ 
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public partial struct ThirdPartyVecF32
+    public unsafe partial struct NodeBaton2
     {
-        public float x;
-        public float y;
-        public float z;
-        public float w;
+        public Vec3 pos;
+        public Vec3 color;
+        public byte* id;
+        public byte* leftID;
+        public byte* rightID;
+
+        public int cardinality;
+        public int depth;
+        public int argCenter;
+        public int argRadius;
+
+        public NodeBaton2(Node node)
+        {
+            this.cardinality = node.cardinality;
+            this.depth = node.depth;
+            this.argCenter = node.argCenter;
+            this.argRadius = node.argRadius;
+            this.id = null;
+            this.leftID = null;
+            this.rightID = null;
+            this.pos = new Vec3(node.pos.x, node.pos.y, node.pos.z);
+            this.color = new Vec3(node.color.r, node.color.g, node.color.b);
+        }
+        public NodeBaton2(int test)
+        {
+            this.cardinality = -1;
+            this.depth = -1;
+            this.argCenter = -1;
+            this.argRadius = -1;
+            this.id = null;
+            this.leftID = null;
+            this.rightID = null;
+            this.pos = new Vec3();
+            this.color = new Vec3();
+        }
     }
-
-
 
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230610180037";
+	public const string __DllName = "clam_ffi_20230615161850";
         private static IntPtr _handle;
 
         public unsafe delegate void NodeVisitor(NodeBaton baton);
@@ -178,25 +305,66 @@ namespace ClamFFI
             return incoming;
         }
 
-        [DllImport(__DllName, EntryPoint = "get_node_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void get_node_data(IntPtr handle, ref NodeFromClam inNode, out NodeFromClam outBaton);
+        [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
+        public unsafe static extern void free_string(IntPtr context, byte* data);
 
-        public static unsafe NodeFromClam GetNodeData(string name)
+        public unsafe static void FreeString(byte* data)
+        {
+            free_string(_handle, data);
+            Debug.Log("finishedfreeing");
+        }
+
+
+        [DllImport(__DllName, EntryPoint = "get_node_data2", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void get_node_data2(IntPtr handle, ref NodeBaton2 inNode, out NodeBaton2 outNode);
+
+        public static unsafe Node GetNodeData2(string name)
         {
             //byte[] byteName = Encoding.UTF8.GetBytes(name);
             //int len = byteName.Length;
-            NodeFromClam baton = new NodeFromClam();
-            Debug.Log("card here3 " + baton.cardinality);
-            Debug.Log("test here ");
+            NodeBaton2 baton = new NodeBaton2(1);
+            //Debug.Log("card here3 " + baton.cardinality);
+            //Debug.Log("test here ");
 
-            get_node_data(_handle, ref baton, out var outNode);
-            Debug.Log("test here ");
+            get_node_data2(_handle, ref baton, out var outNode);
+            //Debug.Log("test here ");
 
             Debug.Log("card here " + outNode.cardinality);
+            Debug.Log("argr here " + outNode.argRadius);
+            Debug.Log("argc here " + outNode.argCenter);
+            Debug.Log("depth here " + outNode.depth);
+            Node finalNode = new Node(outNode);
+            free_node_string(_handle, ref baton, out var freedBaton);
+            //FreeString(baton.leftID);
+            //FreeString(baton.rightID);
             Debug.Log("card here2 " + baton.cardinality);
-            return outNode;
+            return finalNode;
         }
 
+
+        [DllImport(__DllName, EntryPoint = "get_node_data3", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void get_node_data3(IntPtr handle, byte[] binary_id, int idLen, ref NodeBaton2 inNode, out NodeBaton2 outNode);
+
+        public static unsafe Node GetNodeData3(ClamFFI.Node nodeData)
+        {
+           
+            NodeBaton2 baton = new NodeBaton2(1);
+            string binaryID = HexStringToBinary(nodeData.id);
+            binaryID.TrimStart('0');
+            byte[] byteName = Encoding.UTF8.GetBytes(binaryID);
+            int len = byteName.Length;
+            Debug.Log("bytename " + binaryID);
+           
+            get_node_data3(_handle, byteName, byteName.Length, ref baton, out var outNode);
+
+            Debug.Log("depth here " + outNode.depth);
+            Node finalNode = new Node(outNode);
+            free_node_string(_handle, ref baton, out var freedBaton);
+            return finalNode;
+        }
+
+        [DllImport(__DllName, EntryPoint = "free_node_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void free_node_string(IntPtr handle, ref NodeBaton2 inNode, out NodeBaton2 outNode);
 
 
         [DllImport(__DllName, EntryPoint = "destroy_node_baton", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -227,18 +395,6 @@ namespace ClamFFI
             return test();
         }
 
-        //[DllImport(__DllName, EntryPoint = "get_node_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        //public static extern int get_node_data(IntPtr handle, byte[] data_name, int name_len, ref NodeBaton inNode, out NodeBaton outNode);
-
-        //public static Node GetNodeData(string nodeName)
-        //{
-        //    byte[] byteName = Encoding.UTF8.GetBytes(nodeName);
-        //    int len = byteName.Length;
-        //    NodeBaton inNode = new NodeBaton();
-        //    get_node_data(_handle, byteName, len, ref inNode, out var outNode);
-        //    return new Node(outNode);
-        //}
-
         [DllImport(__DllName, EntryPoint = "traverse_tree_df", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern int traverse_tree_df(IntPtr ptr, NodeVisitor callback);
 
@@ -257,5 +413,37 @@ namespace ClamFFI
 
             return init_clam(out _handle, byteName, len, cardinality);
         }
+
+        private static readonly Dictionary<char, string> hexCharacterToBinary = new Dictionary<char, string> {
+        { '0', "0000" },
+        { '1', "0001" },
+        { '2', "0010" },
+        { '3', "0011" },
+        { '4', "0100" },
+        { '5', "0101" },
+        { '6', "0110" },
+        { '7', "0111" },
+        { '8', "1000" },
+        { '9', "1001" },
+        { 'a', "1010" },
+        { 'b', "1011" },
+        { 'c', "1100" },
+        { 'd', "1101" },
+        { 'e', "1110" },
+        { 'f', "1111" }
+    };
+
+        public static string HexStringToBinary(string hex)
+        {
+            StringBuilder result = new StringBuilder();
+            foreach (char c in hex)
+            {
+                // This will crash for non-hex characters. You might want to handle that differently.
+                result.Append(hexCharacterToBinary[char.ToLower(c)]);
+            }
+            return result.ToString();
+        }
     }
+
+
 }
