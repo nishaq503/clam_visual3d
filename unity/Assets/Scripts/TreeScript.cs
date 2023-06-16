@@ -33,6 +33,10 @@ public class TreeScript : MonoBehaviour
         //ClamFFI.Clam.TestStringFn("Asd");
         ClamFFI.Clam.TestStringStruct();
         ClamFFI.Clam.TestStringStruct2();
+        ClamFFI.Clam.TestStringStructRustAlloc();
+        ClamFFI.Clam.TestNodeRustAlloc();
+        ClamFFI.Clam.TestNodeRustAlloc2();
+        //ClamFFI.Clam.FreeString2();
     }
 
     ClamFFI.NodeData GetNodeData(string id)
@@ -78,16 +82,19 @@ public class TreeScript : MonoBehaviour
         //    Debug.DrawLine(Vector3.zero, new Vector3(5, 0, 0), Color.white, 2.5f);
         //}
 
-        foreach (var item in _tree.Values)
-        {
-            bool hasLeft = _tree.TryGetValue(item.GetComponent<NodeScript>().GetLeftChildID(), out var leftChild);
-            bool hasRight = _tree.TryGetValue(item.GetComponent<NodeScript>().GetRightChildID(), out var rightChild);
-            if(hasLeft && hasRight)
-            {
-                Debug.DrawLine(item.GetComponent<Transform>().position, leftChild.GetComponent<Transform>().position, Color.black, 2.5f);
-                Debug.DrawLine(item.GetComponent<Transform>().position, rightChild.GetComponent<Transform>().position, Color.white, 2.5f);
-            }
-        }
+        //foreach (var item in _tree.Values)
+        //{
+        //    if(item.activeSelf)
+        //    {
+        //        bool hasLeft = _tree.TryGetValue(item.GetComponent<NodeScript>().GetLeftChildID(), out var leftChild);
+        //        bool hasRight = _tree.TryGetValue(item.GetComponent<NodeScript>().GetRightChildID(), out var rightChild);
+        //        if(hasLeft && hasRight)
+        //        {
+        //            Debug.DrawLine(item.GetComponent<Transform>().position, leftChild.GetComponent<Transform>().position, Color.black, 2.5f);
+        //            Debug.DrawLine(item.GetComponent<Transform>().position, rightChild.GetComponent<Transform>().position, Color.white, 2.5f);
+        //        }
+        //    }
+        //}
     }
 
     void Update()

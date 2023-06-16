@@ -9,186 +9,78 @@ built clam tree for mnist
 node not found - no children available
 get_node data3 went wrong1
 freed ids
-cstr testing "hello world!"
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
+string struct test Ok("hello again")
+string struct test 109
+string struct test Ok("hello again")
+string struct test 116
+string struct test 123 0x1e25673d330
+freeing string
+string struct test 123 0x1e25673d330
+string struct test 123 "0x1e25673db30"
 "1"
+node data card 2560
+node data card 2995
+node data card 7179
+node data card 1
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+"01000000011"
+"0100000001"
+"010000000"
+"01000000"
+"0100000"
+"010000"
+"01000"
+"0100"
+"010"
+"01"
+"0"
 node not found - no children available
 get_node data3 went wrong1
 freed ids
-cstr testing "hello world!"
-dataname in init_Dataset mnist
-built clam tree for mnist
-"11111"
-"1111"
-"111"
+"1101"
+"110"
 "11"
 "1"
+node data card 145
+node data card 314
+node data card 7309
+node data card 4
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+"10101101"
+"1010110"
+"101011"
+"10101"
+"1010"
+"101"
+"10"
+"1"
+node data card 7
+node data card 3941
+node data card 5871
+node data card 8
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+"0000101101"
+"000010110"
+"00001011"
+"0000101"
+"000010"
+"00001"
+"0000"
+"000"
+"00"
+"0"
 node not found - no children available
 get_node data3 went wrong1
 freed ids
-cstr testing "hello world!"
-start string struct test 
 dataname in init_Dataset mnist
 built clam tree for mnist
 "1111111"
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-cstr testing "hello world!"
-start string struct test 
-string struct test hello again
-dataname in init_Dataset mnist
-built clam tree for mnist
-"1111111"
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 104
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 105
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 105
-string struct test Ok("hello again")
-string struct test 105
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 105
-string struct test Ok("hello again")
-string struct test 105
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 109
-string struct test Ok("hello again")
-string struct test 107
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 109
-string struct test Ok("hello again")
-string struct test 104
-dataname in init_Dataset mnist
-built clam tree for mnist
-"111111"
-"11111"
-"1111"
-"111"
-"11"
-"1"
-node not found - no children available
-get_node data3 went wrong1
-freed ids
-string struct test Ok("hello again")
-string struct test 109
-string struct test Ok("hello again")
-string struct test 105
-dataname in init_Dataset mnist
-built clam tree for mnist
 "111111"
 "11111"
 "1111"
@@ -202,3 +94,45 @@ string struct test Ok("hello again")
 string struct test 109
 string struct test Ok("hello again")
 string struct test 116
+string struct test 123 0x1e259e9e3a0
+freeing string
+string struct test 123 0x1e259e9e3a0
+string struct test 123 "0x1e259e9e340"
+dataname in init_Dataset arrhythmia
+built clam tree for arrhythmia
+"11"
+"1"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+string struct test Ok("hello again")
+string struct test 109
+string struct test Ok("hello again")
+string struct test 116
+string struct test 123 0x1e3953d3280
+freeing string
+string struct test 123 0x1e3953d3280
+string struct test 123 "0x1e3953d3e40"
+"1"
+node data card 4
+node data card 316
+node data card 297
+node data card 1
+node data card Vec3(1.0, 2.0, 3.0)
+node data card Vec3(0.0, 0.0, 0.0)
+freed ids
+"001"
+"00"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+"001"
+"00"
+node not found - no children available
+get_node data3 went wrong1
+freed ids
+"001"
+"00"
+node not found - no children available
+get_node data3 went wrong1
+freed ids

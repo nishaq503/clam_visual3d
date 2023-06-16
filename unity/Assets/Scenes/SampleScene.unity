@@ -132,11 +132,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2093046468355038056, guid: 6f8b23280dafe724896ac1d0bd7e9a58, type: 3}
       propertyPath: dataName
-      value: mnist
+      value: arrhythmia
       objectReference: {fileID: 0}
     - target: {fileID: -2093046468355038056, guid: 6f8b23280dafe724896ac1d0bd7e9a58, type: 3}
       propertyPath: cardinality
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6271065680075697688, guid: 6f8b23280dafe724896ac1d0bd7e9a58, type: 3}
       propertyPath: m_RootOrder
