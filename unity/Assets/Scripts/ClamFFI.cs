@@ -182,7 +182,7 @@ namespace ClamFFI
 
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230615223118";
+	public const string __DllName = "clam_ffi_20230617164209";
         private static IntPtr _handle;
 
         public unsafe delegate void NodeVisitor(NodeFFI baton);
@@ -217,6 +217,18 @@ namespace ClamFFI
             test_string_struct(ref nodeData, out var outNode);
 
             Debug.Log("nodeData data after " + nodeData.AsString);
+
+        }
+
+        [DllImport(__DllName, EntryPoint = "test_string_struct_complex", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void test_string_struct_complex(ref NewClam.NodeData inNode, out NewClam.NodeData outNode);
+
+        public static unsafe void TestStringStructComplex()
+        {
+            NewClam.NodeData nodeData = new NewClam.NodeData("ab", "123", "456", new Vector3(0.0f,1.0f,2.0f), new Color(0.5f, 0.6f,0.7f));
+            test_string_struct_complex(ref nodeData, out var outNode);
+
+            Debug.Log("nodeData data after " + nodeData.id.AsString);
 
         }
 
@@ -341,6 +353,25 @@ namespace ClamFFI
             return finalNode;
         }
 
+        [DllImport(__DllName, EntryPoint = "get_node_data2", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static unsafe extern void get_node_data2(IntPtr handle,ref NewClam.NodeData inNode, out NewClam.NodeData outNode);
+
+        public static unsafe NewClam.NodeData FindClamData2(NewClam.NodeData nodeData)
+        {
+
+            //NodeFFI baton = new NodeFFI(1);
+            //string binaryID = ClamHelpers.HexToTrimmedBinaryString(nodeData.id);
+            //byte[] byteName = Encoding.UTF8.GetBytes(binaryID);
+            //int len = byteName.Length;
+            //Debug.Log("bytename " + binaryID);
+
+            get_node_data2(_handle, ref nodeData, out var outNode);
+            return outNode;
+            //NodeData finalNode = new NodeData(outNode);
+            //free_node_string(_handle, ref baton, out var freedBaton);
+            //return finalNode;
+        }
+
         [DllImport(__DllName, EntryPoint = "free_node_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static unsafe extern void free_node_string(IntPtr handle, ref NodeFFI inNode, out NodeFFI outNode);
 
@@ -355,6 +386,14 @@ namespace ClamFFI
         public static int CreateReingoldLayout(NodeVisitor callback)
         {
             return create_reingold_layout(_handle, callback);
+        }
+
+        [DllImport(__DllName, EntryPoint = "create_reingold_layout2", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int create_reingold_layout2(IntPtr ptr, NodeVisitor2 callback);
+
+        public static int CreateReingoldLayout2(NodeVisitor2 callback)
+        {
+            return create_reingold_layout2(_handle, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "get_num_nodes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -379,6 +418,14 @@ namespace ClamFFI
         public static int TraverseTreeDF(NodeVisitor callback)
         {
             return traverse_tree_df(_handle, callback);
+        }
+
+        [DllImport(__DllName, EntryPoint = "traverse_tree_df2", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int traverse_tree_df2(IntPtr ptr, NodeVisitor2 callback);
+
+        public static int TraverseTreeDF2(NodeVisitor2 callback)
+        {
+            return traverse_tree_df2(_handle, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

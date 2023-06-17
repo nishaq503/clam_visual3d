@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEditor.UI;
 using UnityEngine;
 
 namespace NewClam
@@ -33,18 +34,40 @@ namespace NewClam
             argRadius = -1;
         }
 
+        public NodeData(string id, string leftID, string rightID, Vector3 pos, Color color) 
+        {
+            this.pos = new NewClam.Vec3(pos);
+            this.color = new Vec3(color);
+
+            this.id = new StringFFI(id);
+            this.leftID = new StringFFI(leftID);
+            this.rightID = new StringFFI(rightID);
+
+            cardinality = -1;
+            depth = -1;
+            argCenter = -1;
+            argRadius = -1;
+        }
+
         public void LogInfo()
         {
-            Debug.Log("id: " + this.id);
-            Debug.Log("pos: " + this.pos);
-            Debug.Log("color: " + this.color);
+            Debug.Log("id: " + this.id.AsString);
+            Debug.Log("pos: " + this.pos.AsVector3);
+            Debug.Log("color: " + this.color.AsColor);
 
-            Debug.Log("leftID: " + this.leftID);
-            Debug.Log("rightID: " + this.rightID);
+            Debug.Log("leftID: " + this.leftID.AsString);
+            Debug.Log("rightID: " + this.rightID.AsString);
             Debug.Log("depth: " + this.depth);
             Debug.Log("cardinality: " + this.cardinality);
             Debug.Log("argCenter: " + this.argCenter);
             Debug.Log("argRadius: " + this.argRadius);
+        }
+
+        public void FreeStrings()
+        {
+            this.id.Free();
+            this.leftID.Free();
+            this.rightID.Free();
         }
 
     }
@@ -55,7 +78,8 @@ namespace NewClam
     {
         private IntPtr data;
         private int len;
-        private bool isOwned;
+        private bool isOwnedByUnity;
+        //private bool mustFree;
 
         //public StringFFI(int n)
         //{
@@ -68,25 +92,26 @@ namespace NewClam
         {
             this.data = Marshal.StringToCoTaskMemUTF8(data);
             len = data.Length;
-            isOwned = true;
+            isOwnedByUnity = true;
+            //mustFree = true;
         }
 
         public string AsString { get { return Marshal.PtrToStringAnsi(data); } }
         public IntPtr AsPtr { get { return data; } }
 
         public bool IsEmpty { get { return len == 0; } }
-        public bool IsOwned { get { return isOwned; } }
+        public bool IsOwned { get { return isOwnedByUnity; } }
         public bool IsNull { get { return data == IntPtr.Zero; } }
 
-        public void TakeOwnership()
+        public void CopyToUnity()
         {
-            if (!isOwned)
+            if (!isOwnedByUnity)
             {
                 var text = Marshal.PtrToStringUTF8(data);
                 len = text.Length;
-                ClamFFI.Clam.FreeStringFFI(ref this);
+                //ClamFFI.Clam.FreeStringFFI(ref this);
                 data = Marshal.StringToCoTaskMemUTF8(text);
-                isOwned = true;
+                isOwnedByUnity = true;
             }
             else
             {
@@ -94,18 +119,39 @@ namespace NewClam
             }
         }
 
-        void Free()
+        public void TakeOwnership()
         {
-            if (!IsNull)
+            if (!isOwnedByUnity)
+            {
+                var text = Marshal.PtrToStringUTF8(data);
+                len = text.Length;
+                ClamFFI.Clam.FreeStringFFI(ref this);
+                data = Marshal.StringToCoTaskMemUTF8(text);
+                isOwnedByUnity = true;
+            }
+            else
+            {
+                Debug.Log("Error: string is already owned by c#");
+            }
+        }
+
+        public void Free()
+        {
+            if (!IsNull && isOwnedByUnity)
             {
                 Debug.Log("string ffi freeing memory");
                 Marshal.FreeCoTaskMem(data);
                 data = IntPtr.Zero;
                 len = 0;
+            }else if (!IsNull && !isOwnedByUnity)
+            {
+                Debug.Log("warning memory not freed from string ffi");
+                ClamFFI.Clam.FreeStringFFI(ref this);
+                Debug.Log("successfully freed rust string");
             }
             else
             {
-                Debug.Log("Error: string is already null");
+                Debug.Log("Warning: string is already null");
             }
         }
     }
@@ -123,6 +169,20 @@ namespace NewClam
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        public Vec3(Vector3 other)
+        {
+            this.x = other.x;
+            this.y = other.y;
+            this.z = other.z;
+        }
+
+        public Vec3(Color other)
+        {
+            this.x = other.r;
+            this.y = other.g;
+            this.z = other.b;
         }
 
         public Color AsColor { get { return new Color(x, y, z); } }

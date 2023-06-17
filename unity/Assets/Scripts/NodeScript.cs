@@ -33,7 +33,7 @@ public class NodeScript : MonoBehaviour
     public void SetColor(Color color)
     {
         Debug.Log("setting node " + _id + " color to " + color);
-        GetComponent<Renderer>().material.color = color;    
+        GetComponent<Renderer>().material.color = color;
     }
 
     public string GetId()
@@ -45,9 +45,9 @@ public class NodeScript : MonoBehaviour
     {
         return _leftChildID;
     }
-    public string GetRightChildID() 
+    public string GetRightChildID()
     {
-        return _rightChildID;    
+        return _rightChildID;
     }
     public Vector3 GetPosition()
     {
@@ -77,7 +77,14 @@ public class NodeScript : MonoBehaviour
     public ClamFFI.NodeData ToNodeData()
     {
         ClamFFI.NodeData node = new ClamFFI.NodeData(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
-        
+
+        return node;
+    }
+
+    public NewClam.NodeData ToNodeData2()
+    {
+        NewClam.NodeData node = new NewClam.NodeData(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
+
         return node;
     }
 }
