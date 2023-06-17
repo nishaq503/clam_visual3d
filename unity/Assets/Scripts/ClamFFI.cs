@@ -182,7 +182,7 @@ namespace ClamFFI
 
     public static class Clam
     {
-	public const string __DllName = "clam_ffi_20230617164209";
+	public const string __DllName = "clam_ffi_20230617170647";
         private static IntPtr _handle;
 
         public unsafe delegate void NodeVisitor(NodeFFI baton);
@@ -335,41 +335,12 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "get_node_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void get_node_data(IntPtr handle, byte[] binary_id, int idLen, ref NodeFFI inNode, out NodeFFI outNode);
+        public static unsafe extern void get_node_data(IntPtr handle,ref NewClam.NodeData inNode, out NewClam.NodeData outNode);
 
-        public static unsafe NodeData FindClamData(ClamFFI.NodeData nodeData)
+        public static unsafe NewClam.NodeData FindClamData(NewClam.NodeData nodeData)
         {
-           
-            NodeFFI baton = new NodeFFI(1);
-            string binaryID = ClamHelpers.HexToTrimmedBinaryString(nodeData.id);
-            byte[] byteName = Encoding.UTF8.GetBytes(binaryID);
-            int len = byteName.Length;
-            Debug.Log("bytename " + binaryID);
-           
-            get_node_data(_handle, byteName, byteName.Length, ref baton, out var outNode);
-
-            NodeData finalNode = new NodeData(outNode);
-            free_node_string(_handle, ref baton, out var freedBaton);
-            return finalNode;
-        }
-
-        [DllImport(__DllName, EntryPoint = "get_node_data2", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void get_node_data2(IntPtr handle,ref NewClam.NodeData inNode, out NewClam.NodeData outNode);
-
-        public static unsafe NewClam.NodeData FindClamData2(NewClam.NodeData nodeData)
-        {
-
-            //NodeFFI baton = new NodeFFI(1);
-            //string binaryID = ClamHelpers.HexToTrimmedBinaryString(nodeData.id);
-            //byte[] byteName = Encoding.UTF8.GetBytes(binaryID);
-            //int len = byteName.Length;
-            //Debug.Log("bytename " + binaryID);
-
-            get_node_data2(_handle, ref nodeData, out var outNode);
+            get_node_data(_handle, ref nodeData, out var outNode);
             return outNode;
-            //NodeData finalNode = new NodeData(outNode);
-            //free_node_string(_handle, ref baton, out var freedBaton);
-            //return finalNode;
         }
 
         [DllImport(__DllName, EntryPoint = "free_node_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

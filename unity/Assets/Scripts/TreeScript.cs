@@ -41,26 +41,26 @@ public class TreeScript : MonoBehaviour
         //ClamFFI.Clam.FreeString2();
     }
 
-    ClamFFI.NodeData GetNodeData(string id)
-    {
-        GameObject node;
+    //ClamFFI.NodeData GetNodeData(string id)
+    //{
+    //    GameObject node;
 
-        bool hasValue = _tree.TryGetValue(id, out node);
-        if (hasValue)
-        {
-            Debug.Log("here---");
+    //    bool hasValue = _tree.TryGetValue(id, out node);
+    //    if (hasValue)
+    //    {
+    //        Debug.Log("here---");
             
-            ClamFFI.NodeData outNode = ClamFFI.Clam.FindClamData(node.GetComponent<NodeScript>().ToNodeData());
-            Debug.Log("object searched for name " + outNode.id);
-            return outNode;
-        }
-        else
-        {
-            Debug.Log("reingoldify key not found - " + id);
-        }
+    //        ClamFFI.NodeData outNode = ClamFFI.Clam.FindClamData(node.GetComponent<NodeScript>().ToNodeData());
+    //        Debug.Log("object searched for name " + outNode.id);
+    //        return outNode;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("reingoldify key not found - " + id);
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
 
     void FixedUpdate()
@@ -117,7 +117,7 @@ public class TreeScript : MonoBehaviour
                 var before = objectSelected.GetComponent<NodeScript>().ToNodeData2();
 
                 //ClamFFI.NodeData nodeData = ClamFFI.Clam.FindClamData(objectSelected.GetComponent<NodeScript>().ToNodeData());
-                NewClam.NodeData nodeData = ClamFFI.Clam.FindClamData2(objectSelected.GetComponent<NodeScript>().ToNodeData2());
+                NewClam.NodeData nodeData = ClamFFI.Clam.FindClamData(objectSelected.GetComponent<NodeScript>().ToNodeData2());
                 nodeData.LogInfo();
 
                 nodeData.FreeStrings();
