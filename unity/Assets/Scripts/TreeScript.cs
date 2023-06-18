@@ -30,7 +30,7 @@ public class TreeScript : MonoBehaviour
         int numNodes = ClamFFI.Clam.GetNumNodes();
         Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
 
-        ClamFFI.Clam.TraverseTreeDF(SetNodeNames);
+        ClamFFI.Clam.ForEachDFT(SetNodeNames);
         ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
 
     }
@@ -86,12 +86,11 @@ public class TreeScript : MonoBehaviour
 
                 ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(m_SelectedNode.GetComponent<NodeScript>().ToNodeData());
 
-                ClamFFI.Clam.GetDataFromClamTree(nodeWrapper);
+                ClamFFI.Clam.GetClusterData(nodeWrapper);
                 //ClamFFI.NodeData nodeData = ClamFFI.Clam.FindClamData(objectSelected.GetComponent<NodeScript>().ToNodeData());
                 nodeWrapper.Data.LogInfo();
 
                 text.text = nodeWrapper.Data.GetInfo();
-
             }
         }
     }
