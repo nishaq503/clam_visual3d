@@ -74,16 +74,10 @@ public class NodeScript : MonoBehaviour
         _rightChildID = id;
     }
 
+ 
     public ClamFFI.NodeData ToNodeData()
     {
         ClamFFI.NodeData node = new ClamFFI.NodeData(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
-
-        return node;
-    }
-
-    public NewClam.NodeData ToNodeData2()
-    {
-        NewClam.NodeData node = new NewClam.NodeData(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
 
         return node;
     }

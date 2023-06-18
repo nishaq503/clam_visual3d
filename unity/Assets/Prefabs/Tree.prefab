@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataName: arrhythmia
   cardinality: 50
-  _nodePrefab: {fileID: 1970721256304988372, guid: e381cf0583950004d9ab9c2f49f23bd4, type: 3}
+  m_NodePrefab: {fileID: 1970721256304988372, guid: e381cf0583950004d9ab9c2f49f23bd4, type: 3}

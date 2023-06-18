@@ -2,11 +2,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEditor.UI;
 using UnityEngine;
 
-namespace NewClam
+namespace ClamFFI
 {
+
+    public class NodeWrapper
+    {
+        private NodeData m_NodeData;
+
+        public NodeWrapper(NodeData nodeData)
+        {
+            m_NodeData = nodeData;
+        }
+
+        public NodeData Data
+        {
+            get { return m_NodeData; }
+            set { m_NodeData = value; }
+        }
+
+        ~NodeWrapper()
+        {
+            m_NodeData.FreeStrings();
+        }
+    }
+
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public partial struct NodeData
@@ -34,9 +57,9 @@ namespace NewClam
             argRadius = -1;
         }
 
-        public NodeData(string id, string leftID, string rightID, Vector3 pos, Color color) 
+        public NodeData(string id, string leftID, string rightID, Vector3 pos, Color color)
         {
-            this.pos = new NewClam.Vec3(pos);
+            this.pos = new ClamFFI.Vec3(pos);
             this.color = new Vec3(color);
 
             this.id = new StringFFI(id);
@@ -63,13 +86,26 @@ namespace NewClam
             Debug.Log("argRadius: " + this.argRadius);
         }
 
+        public string GetInfo()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("id: " + this.id.AsString);
+            stringBuilder.AppendLine("depth " + depth.ToString());
+            stringBuilder.AppendLine("card: " + cardinality.ToString());
+            stringBuilder.AppendLine("argC: " + argCenter.ToString());
+            stringBuilder.AppendLine("argR: " + argRadius.ToString());
+            //stringBuilder.AppendLine(this.color.ToString());
+
+           return stringBuilder.ToString();
+        }
+
         public void FreeStrings()
         {
             this.id.Free();
             this.leftID.Free();
             this.rightID.Free();
         }
-
     }
 
     [Serializable]
@@ -139,15 +175,16 @@ namespace NewClam
         {
             if (!IsNull && isOwnedByUnity)
             {
-                Debug.Log("string ffi freeing memory");
+                //Debug.Log("string ffi freeing memory");
                 Marshal.FreeCoTaskMem(data);
                 data = IntPtr.Zero;
                 len = 0;
-            }else if (!IsNull && !isOwnedByUnity)
+            }
+            else if (!IsNull && !isOwnedByUnity)
             {
                 Debug.Log("warning memory not freed from string ffi");
-                ClamFFI.Clam.FreeStringFFI(ref this);
-                Debug.Log("successfully freed rust string");
+                //ClamFFI.Clam.FreeStringFFI(ref this);
+                //Debug.Log("successfully freed rust string");
             }
             else
             {

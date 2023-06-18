@@ -47,8 +47,8 @@ namespace Assets.Elenesski.Camera.Utilities {
             isMoveForward = Input.GetKey(KeyCode.W);
             isMoveBackward = Input.GetKey(KeyCode.S);
 
-            isMoveForwardAlt = Input.GetAxis("Mouse ScrollWheel") > 0;
-            isMoveBackwardAlt = Input.GetAxis("Mouse ScrollWheel") < 0;
+            //isMoveForwardAlt = Input.GetAxis("Mouse ScrollWheel") > 0;
+            //isMoveBackwardAlt = Input.GetAxis("Mouse ScrollWheel") < 0;
 
         }
 
