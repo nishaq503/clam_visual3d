@@ -12,7 +12,7 @@ public class NodeScript : MonoBehaviour
     private string _leftChildID;
     private string _rightChildID;
 
-
+    public int test = 5;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +24,13 @@ public class NodeScript : MonoBehaviour
     {
     }
 
+    public void ExpandSubtree()
+    {
+        //ClamFFI.Clam.ForEachDFT(m_ExpandSubtree, this._id);
+    }
+
+   
+
     public void SetPosition(Vector3 pos)
     {
         GetComponent<Transform>().position = new Vector3(pos.x, -pos.y, pos.z);
@@ -32,7 +39,7 @@ public class NodeScript : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        Debug.Log("setting node " + _id + " color to " + color);
+        //Debug.Log("setting node " + _id + " color to " + color);
         GetComponent<Renderer>().material.color = color;
     }
 

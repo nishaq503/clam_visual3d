@@ -36,7 +36,9 @@ namespace ClamFFI
     {
         public Vec3 pos;
         public Vec3 color;
-        public StringFFI id, leftID, rightID;
+        public StringFFI id;
+        public StringFFI  leftID;
+        public StringFFI rightID;
         public int cardinality;
         public int depth;
         public int argCenter;

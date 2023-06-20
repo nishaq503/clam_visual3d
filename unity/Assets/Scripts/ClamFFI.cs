@@ -12,12 +12,11 @@ namespace ClamFFI
 
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230618124626";
+	public const string __DllName = "clam_ffi_20230618153444";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
         private unsafe static extern void free_string(IntPtr context, IntPtr data);
-
      
 
         [DllImport(__DllName, EntryPoint = "for_each_dft", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -29,34 +28,18 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "get_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void get_cluster_data(IntPtr handle,ref ClamFFI.NodeData inNode, out ClamFFI.NodeData outNode);
+        public static unsafe extern bool get_cluster_data(IntPtr handle,ref ClamFFI.NodeData inNode, out ClamFFI.NodeData outNode);
 
-        //public static unsafe ClamFFI.NodeData FindClamData(ClamFFI.NodeData nodeData)
-        //{
-        //    find_node(_handle, ref nodeData, out var outNode);
-        //    return outNode;
-        //}
-
-        //public static unsafe void FindNode(ClamFFI.NodeWrapper nodeWrapper)
-        //{
-        //    NodeData nodeData = nodeWrapper.Data;
-
-        //    get_clam_data(_handle, ref nodeData, out var outNode);
-
-        //    nodeWrapper.Data = outNode;
-            
-        //    //return outNode;
-        //}
-
-        public static unsafe void GetClusterData(ClamFFI.NodeWrapper nodeWrapper)
+        public static unsafe bool GetClusterData(ClamFFI.NodeWrapper nodeWrapper)
         {
             NodeData nodeData = nodeWrapper.Data;
 
-            get_cluster_data(_handle, ref nodeData, out var outNode);
-
-            nodeWrapper.Data = outNode;
-
-            //return outNode;
+            bool found = get_cluster_data(_handle, ref nodeData, out var outNode);
+            if(found)
+            {
+                nodeWrapper.Data = outNode;
+            }
+            return found;
         }
 
         [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -85,7 +68,6 @@ namespace ClamFFI
 
             return init_clam(out _handle, byteName, len, cardinality);
         }
-
 
         public unsafe static void FreeString(IntPtr data)
         {
