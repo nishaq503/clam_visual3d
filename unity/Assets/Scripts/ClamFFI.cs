@@ -12,7 +12,7 @@ namespace ClamFFI
 
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230621135214";
+	public const string __DllName = "clam_ffi_20230621160825";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -20,9 +20,9 @@ namespace ClamFFI
      
 
         [DllImport(__DllName, EntryPoint = "for_each_dft", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int for_each_dft(IntPtr ptr, NodeVisitor callback, string startNode);
+        private static extern FFIError for_each_dft(IntPtr ptr, NodeVisitor callback, string startNode);
 
-        public static int ForEachDFT(NodeVisitor callback, string startNode = "root")
+        public static FFIError ForEachDFT(NodeVisitor callback, string startNode = "root")
         {
             return for_each_dft(_handle, callback, startNode);
         }

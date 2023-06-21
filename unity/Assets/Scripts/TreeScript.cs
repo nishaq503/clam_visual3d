@@ -50,7 +50,15 @@ namespace ClamFFI
             int numNodes = ClamFFI.Clam.GetNumNodes();
             Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
 
-            ClamFFI.Clam.ForEachDFT(SetNodeNames);
+            FFIError e = ClamFFI.Clam.ForEachDFT(SetNodeNames);
+
+            if(e == FFIError.Ok){
+                print("ok)");
+
+            }
+            else{
+                print("ERROR " + e);
+            }
             ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
             SetLines();
 
