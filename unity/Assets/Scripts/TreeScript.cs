@@ -5,6 +5,8 @@ using TMPro;
 using System;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using Tests;
+using UnityEditor.Experimental.GraphView;
 
 
 namespace ClamFFI
@@ -26,14 +28,23 @@ namespace ClamFFI
             return m_Tree;
         }
 
+        void OnApplicationQuit()
+        {
+            Debug.Log("Application ending after " + Time.time + " seconds");
+            //m_Tree = new Dictionary<string, GameObject>();
+            //m_SelectedNode = null;
+            ClamFFI.Clam.ShutdownClam();
+        }
+
         void Start()
         {
-            int clam_result = ClamFFI.Clam.InitClam(dataName, cardinality);
-            if (clam_result == 0)
+            FFIError clam_result = ClamFFI.Clam.InitClam(dataName, cardinality);
+            if (clam_result != FFIError.Ok)
             {
                 Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", dataName));
                 return;
             }
+            //print(ClamFFI.Clam.GetNumNodes());
             m_Tree = new Dictionary<string, GameObject>();
 
             int numNodes = ClamFFI.Clam.GetNumNodes();
@@ -140,6 +151,16 @@ namespace ClamFFI
         {
             HandleLMC();
             HandleRMC();
+            //RestartSim();
+        }
+
+        void RestartSim()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                //print("quitting app");
+                Application.Quit();
+            }
         }
 
         void HandleLMC()
@@ -175,8 +196,8 @@ namespace ClamFFI
                     Debug.Log("searching for node " + m_SelectedNode.GetComponent<NodeScript>().GetId());
 
                     ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(m_SelectedNode.GetComponent<NodeScript>().ToNodeData());
-                    bool found = ClamFFI.Clam.GetClusterData(nodeWrapper);
-                    if (found)
+                    FFIError found = ClamFFI.Clam.GetClusterData(nodeWrapper);
+                    if (found == FFIError.Ok)
                     {
                         nodeWrapper.Data.LogInfo();
                         text.text = nodeWrapper.Data.GetInfo();
@@ -207,8 +228,13 @@ namespace ClamFFI
                     //ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
                     if (selectedNode != null)
                     {
-                        ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetLeftChildID());
-                        ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetRightChildID());
+                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetLeftChildID());
+                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetRightChildID());
+                        var hasLC = m_Tree.TryGetValue(selectedNode.GetComponent<NodeScript>().GetLeftChildID(), out var lc);
+                        if (hasLC)
+                        {
+                            SetIsActiveToChildren(selectedNode, !lc.activeSelf);
+                        }
                     }
                     //bool found = ClamFFI.Clam.GetClusterData(nodeWrapper);
                     //if (found)
@@ -264,6 +290,35 @@ namespace ClamFFI
                 Debug.Log("reingoldify key not found - " + nodeData.id);
             }
         }
+
+        void SetIsActiveToChildren(GameObject node, bool isActive)
+        {
+            print("asdibasbaf");
+            //bool hasValue = m_Tree.TryGetValue(id, out var node);
+            //if (hasValue)
+            {
+                //node.SetActive(isActive);
+                var lid = node.GetComponent<NodeScript>().GetLeftChildID();
+                var rid = node.GetComponent<NodeScript>().GetRightChildID();
+                var hasLC = m_Tree.TryGetValue(lid, out var leftChild);
+                var hasRC = m_Tree.TryGetValue(rid, out var rightChild);
+
+                if (hasLC && hasRC)
+                {
+                    leftChild.SetActive(isActive);
+                    rightChild.SetActive(isActive);
+
+                    SetIsActiveToChildren(leftChild, isActive);
+                    SetIsActiveToChildren(rightChild, isActive);
+
+                }
+            }
+            //else
+            //{
+            //}
+        }
     }
 
+
+    
 }

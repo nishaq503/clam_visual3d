@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using UnityEditor.UI;
 using UnityEngine;
 
 namespace ClamFFI
@@ -44,20 +43,21 @@ namespace ClamFFI
         public int argCenter;
         public int argRadius;
 
-        public NodeData(int n)
-        {
-            pos = new Vec3();
-            color = new Vec3();
 
-            id = new StringFFI();
-            leftID = new StringFFI();
-            rightID = new StringFFI();
+        //public NodeData(int n)
+        //{
+        //    pos = new Vec3();
+        //    color = new Vec3();
 
-            cardinality = -1;
-            depth = -1;
-            argCenter = -1;
-            argRadius = -1;
-        }
+        //    id = new StringFFI();
+        //    leftID = new StringFFI();
+        //    rightID = new StringFFI();
+
+        //    cardinality = -1;
+        //    depth = -1;
+        //    argCenter = -1;
+        //    argRadius = -1;
+        //}
 
         public NodeData(string id, string leftID, string rightID, Vector3 pos, Color color)
         {

@@ -12,7 +12,7 @@ namespace ClamFFI
 
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230618153444";
+	public const string __DllName = "clam_ffi_20230621135214";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -28,14 +28,14 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "get_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern bool get_cluster_data(IntPtr handle,ref ClamFFI.NodeData inNode, out ClamFFI.NodeData outNode);
+        public static unsafe extern FFIError get_cluster_data(IntPtr handle,ref ClamFFI.NodeData inNode, out ClamFFI.NodeData outNode);
 
-        public static unsafe bool GetClusterData(ClamFFI.NodeWrapper nodeWrapper)
+        public static unsafe FFIError GetClusterData(ClamFFI.NodeWrapper nodeWrapper)
         {
             NodeData nodeData = nodeWrapper.Data;
 
-            bool found = get_cluster_data(_handle, ref nodeData, out var outNode);
-            if(found)
+            FFIError found = get_cluster_data(_handle, ref nodeData, out var outNode);
+            if(found == FFIError.Ok)
             {
                 nodeWrapper.Data = outNode;
             }
@@ -43,9 +43,9 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int create_reingold_layout(IntPtr ptr, NodeVisitor callback);
+        private static extern FFIError create_reingold_layout(IntPtr ptr, NodeVisitor callback);
 
-        public static int CreateReingoldLayout(NodeVisitor callback)
+        public static FFIError CreateReingoldLayout(NodeVisitor callback)
         {
             return create_reingold_layout(_handle, callback);
         }
@@ -59,14 +59,24 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
+        private static extern FFIError init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
 
-        public static int InitClam(string dataName, uint cardinality)
+        public static FFIError InitClam(string dataName, uint cardinality)
         {
             byte[] byteName = Encoding.UTF8.GetBytes(dataName);
             int len = byteName.Length;
 
             return init_clam(out _handle, byteName, len, cardinality);
+        }
+
+        
+
+        [DllImport(__DllName, EntryPoint = "shutdown_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern FFIError shutdown_clam(out IntPtr ptr);
+
+        public static FFIError ShutdownClam()
+        {
+            return shutdown_clam(out _handle);
         }
 
         public unsafe static void FreeString(IntPtr data)
