@@ -18,6 +18,9 @@ namespace ClamFFI
         private GameObject m_SelectedNode;
         private Color m_SelectedNodeActualColor;
 
+        //cheating fix later
+        Vector2 m_DepthRange;
+
         public Dictionary<string, GameObject> GetTree()
         {
             return m_Tree;
@@ -31,7 +34,7 @@ namespace ClamFFI
             ClamFFI.Clam.ShutdownClam();
         }
 
-        void Start()
+        public void Init()
         {
             FFIError clam_result = ClamFFI.Clam.InitClam(dataName, cardinality);
             if (clam_result != FFIError.Ok)
@@ -47,16 +50,22 @@ namespace ClamFFI
 
             FFIError e = ClamFFI.Clam.ForEachDFT(SetNodeNames);
 
-            if(e == FFIError.Ok){
+            if (e == FFIError.Ok)
+            {
                 print("ok)");
 
             }
-            else{
+            else
+            {
                 print("ERROR " + e);
             }
             ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
             SetLines();
 
+        }
+        void Start()
+        {
+            
 
             //m_NodeMenu = this.AddComponent<Dropdown>();
             //List<string> list = new List<string> { "option1", "option2" };
@@ -150,69 +159,47 @@ namespace ClamFFI
             //}
         }
 
+        public void SetDepthRange(Vector2 depthRange)
+        {
+            Debug.Log("TREE  Depth: (" + ((int)depthRange.x).ToString() + ", " + (depthRange.y).ToString() + ")");
+            m_DepthRange = depthRange;
+            ClamFFI.Clam.ForEachDFT(UpdateNodesActiveByDepth);
+
+        }
+
+        void UpdateNodesActiveByDepth(ref ClamFFI.NodeData nodeData)
+        {
+            GameObject node;
+
+            bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+            if (hasValue)
+            {
+                if (nodeData.depth < m_DepthRange.x || nodeData.depth > m_DepthRange.y)
+                {
+                    node.SetActive(false);
+                }
+
+                if (nodeData.depth >= m_DepthRange.x && nodeData.depth <= m_DepthRange.y)
+                {
+                    node.SetActive(true);
+                }
+                //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+                //node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            }
+            else
+            {
+                Debug.Log("reingoldify key not found - " + nodeData.id);
+            }
+        }
+
         void Update()
         {
-            HandleLMC();
-            HandleRMC();
-            MyQuit();
+            //HandleLMC();
+            //HandleRMC();
+            //MyQuit();
         }
 
-        void MyQuit()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                //print("quitting app");
-                Application.Quit();
-            }
-        }
-
-        void HandleLMC()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit hitInfo;
-
-                if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
-                {
-                    if (m_SelectedNode != null)
-                    {
-                        if (m_SelectedNode.GetComponent<NodeScript>().GetId() == hitInfo.collider.gameObject.GetComponent<NodeScript>().GetId())
-                        {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                            m_SelectedNode = null;
-                            text.text = "";
-                            return;
-                        }
-                        else
-                        {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                        }
-                    }
-
-                    m_SelectedNode = hitInfo.collider.gameObject;
-                    m_SelectedNodeActualColor = m_SelectedNode.GetComponent<NodeScript>().GetColor();
-                    m_SelectedNode.GetComponent<NodeScript>().SetColor(new Color(0.0f, 0.0f, 1.0f));
-
-                    Debug.Log(m_SelectedNode.GetComponent<NodeScript>().GetId() + " was clicked");
-                    Debug.Log("searching for node " + m_SelectedNode.GetComponent<NodeScript>().GetId());
-
-                    ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(m_SelectedNode.GetComponent<NodeScript>().ToNodeData());
-                    FFIError found = ClamFFI.Clam.GetClusterData(nodeWrapper);
-                    if (found == FFIError.Ok)
-                    {
-                        nodeWrapper.Data.LogInfo();
-                        text.text = nodeWrapper.Data.GetInfo();
-                    }
-                    else
-                    {
-                        Debug.LogError("node not found");
-                    }
-
-                }
-            }
-        }
+       
 
         void HandleRMC()
         {
@@ -253,7 +240,7 @@ namespace ClamFFI
             }
         }
 
-        void DeactivateChildren(ref ClamFFI.NodeData nodeData)
+        public void DeactivateChildren(ref ClamFFI.NodeData nodeData)
         {
             GameObject node;
 
@@ -294,7 +281,7 @@ namespace ClamFFI
             }
         }
 
-        void SetIsActiveToChildren(GameObject node, bool isActive)
+        public void SetIsActiveToChildren(GameObject node, bool isActive)
         {
             print("asdibasbaf");
             //bool hasValue = m_Tree.TryGetValue(id, out var node);
