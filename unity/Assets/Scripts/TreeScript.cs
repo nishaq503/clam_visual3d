@@ -2,11 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TMPro;
-using System;
-using UnityEngine.UI;
-using Unity.VisualScripting;
-using Tests;
-using UnityEditor.Experimental.GraphView;
 
 
 namespace ClamFFI
@@ -159,10 +154,10 @@ namespace ClamFFI
         {
             HandleLMC();
             HandleRMC();
-            //RestartSim();
+            MyQuit();
         }
 
-        void RestartSim()
+        void MyQuit()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {

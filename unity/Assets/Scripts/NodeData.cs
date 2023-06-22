@@ -40,6 +40,8 @@ namespace ClamFFI
         public StringFFI rightID;
         public int cardinality;
         public int depth;
+        public float radius;
+        public float lfd;
         public int argCenter;
         public int argRadius;
 
@@ -70,6 +72,8 @@ namespace ClamFFI
 
             cardinality = -1;
             depth = -1;
+            radius = -1.0f;
+            lfd = -1.0f;
             argCenter = -1;
             argRadius = -1;
         }
@@ -95,6 +99,8 @@ namespace ClamFFI
             stringBuilder.AppendLine("id: " + this.id.AsString);
             stringBuilder.AppendLine("depth " + depth.ToString());
             stringBuilder.AppendLine("card: " + cardinality.ToString());
+            stringBuilder.AppendLine("radius: " + radius.ToString());
+            stringBuilder.AppendLine("lfd: " + lfd.ToString());
             stringBuilder.AppendLine("argC: " + argCenter.ToString());
             stringBuilder.AppendLine("argR: " + argRadius.ToString());
             //stringBuilder.AppendLine(this.color.ToString());
