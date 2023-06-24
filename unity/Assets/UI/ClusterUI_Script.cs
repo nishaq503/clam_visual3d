@@ -15,6 +15,7 @@ public class ClusterUI_Script
     VisualTreeAsset m_VisualAsset;
 
     TextField m_SelectedClusterInfo;
+    Label m_ClusterInfo;
     MinMaxSlider m_DepthSlider;
 
 
@@ -25,13 +26,33 @@ public class ClusterUI_Script
         m_VisualAsset = listElementTemplate;
 
         m_SelectedClusterInfo = root.Q<TextField>("SelectedClusterInfo");
+        //m_SelectedClusterInfo.selectionColor = Color.green;
         m_DepthSlider = root.Q<MinMaxSlider>("DepthSlider");
 
-        SetSelectedClusterInfo("");
+        m_ClusterInfo = root.Q<Label>("ClusterInfo");
+
+        
+        //SetSelectedClusterInfo("");
         m_SelectedClusterInfo.Unbind();
-
+        //m_SelectedClusterInfo.style.unityTextOutlineColor = Color.red;
+        // Apply the custom USS style
+        //m_SelectedClusterInfo.styleSheets.Add(Resources.Load<StyleSheet>("text")); // Replace with the correct USS file path
         m_DepthSlider.label = "Depth: (" + m_DepthSlider.minValue.ToString() + ", " + m_DepthSlider.maxValue.ToString() + ")";
+        SetSelectedClusterInfo("");
+        //// Create a new TextField element
+        //TextField textField = new TextField();
 
+        //// Set the placeholder text
+        //textField.value = "Enter text...";
+        //textField.style.backgroundColor = Color.blue;
+        //// Access the style of the TextField
+        //var textFieldStyle = textField.style;
+
+        //// Set the text color
+        //textFieldStyle.color = Color.red; // Change to the desired color
+        //// Add the TextField to the root visual element
+        //// You can change 'rootVisualElement' to any other visual element you want to add the text field toD
+        //root.Add(textField);
         //m_DepthSlider.RegisterCallback<ChangeEvent<Vector2>>(MyCallBack);
         //MyCallBac1234k();
 
@@ -44,9 +65,10 @@ public class ClusterUI_Script
 
     public void SetSelectedClusterInfo(string value)
     {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("Selected Cluster");
         if (value == new string(""))
         {
-            StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine("id: ");
             stringBuilder.AppendLine("depth ");
@@ -57,10 +79,14 @@ public class ClusterUI_Script
             stringBuilder.AppendLine("argR: ");
 
             m_SelectedClusterInfo.value = stringBuilder.ToString();
+            m_ClusterInfo.text = stringBuilder.ToString();
+
         }
         else
         {
-            m_SelectedClusterInfo.value = value;
+            stringBuilder.AppendLine(value);
+            m_SelectedClusterInfo.value = stringBuilder.ToString();
+            m_ClusterInfo.text = stringBuilder.ToString();
 
         }
     }
@@ -68,6 +94,11 @@ public class ClusterUI_Script
     public MinMaxSlider DepthSlider()
     {
         return m_DepthSlider;
+    }
+
+    public Label ClusterInfo()
+    {
+        return m_ClusterInfo;
     }
 
     void MyCallBac1234k()

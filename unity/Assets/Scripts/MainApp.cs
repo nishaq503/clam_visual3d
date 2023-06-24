@@ -35,6 +35,7 @@ public class MainApp : MonoBehaviour
             //Debug.LogFormat(" New slider values: {0} .. {1}", evt.newValue.x, evt.newValue.y);
             //Debug.Log("Depth: (" + ((int)evt.newValue.x).ToString() + ", " + ((int)evt.newValue.y).ToString() + ")");
             m_ClusterUIScript.DepthSlider().label = "Depth: (" + ((int)evt.newValue.x).ToString() + ", " + ((int)evt.newValue.y).ToString() + ")";
+            //m_ClusterUIScript.ClusterInfo().text= "Depth: (" + ((int)evt.newValue.x).ToString() + ", " + ((int)evt.newValue.y).ToString() + ")";
             GetTree().SetDepthRange(evt.newValue);
         });
     }
