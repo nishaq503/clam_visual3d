@@ -11,7 +11,7 @@ namespace ClamFFI
         public string dataName = "arrhythmia";
         public uint cardinality = 50;
         public GameObject nodePrefab;
-        public TMP_Text text;
+        //public TMP_Text text;
 
 
         private Dictionary<string, GameObject> m_Tree;
@@ -31,7 +31,7 @@ namespace ClamFFI
             ClamFFI.Clam.ShutdownClam();
         }
 
-        void Start()
+        public void Init()
         {
             FFIError clam_result = ClamFFI.Clam.InitClam(dataName, cardinality);
             if (clam_result != FFIError.Ok)
@@ -64,6 +64,8 @@ namespace ClamFFI
             //m_NodeMenu.GetComponent<Transform>().position = new Vector3(0, 0, 0);
 
         }
+
+
 
         void SetLines()
         {
@@ -152,106 +154,10 @@ namespace ClamFFI
 
         void Update()
         {
-            HandleLMC();
-            HandleRMC();
-            MyQuit();
+            
         }
 
-        void MyQuit()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                //print("quitting app");
-                Application.Quit();
-            }
-        }
-
-        void HandleLMC()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit hitInfo;
-
-                if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
-                {
-                    if (m_SelectedNode != null)
-                    {
-                        if (m_SelectedNode.GetComponent<NodeScript>().GetId() == hitInfo.collider.gameObject.GetComponent<NodeScript>().GetId())
-                        {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                            m_SelectedNode = null;
-                            text.text = "";
-                            return;
-                        }
-                        else
-                        {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                        }
-                    }
-
-                    m_SelectedNode = hitInfo.collider.gameObject;
-                    m_SelectedNodeActualColor = m_SelectedNode.GetComponent<NodeScript>().GetColor();
-                    m_SelectedNode.GetComponent<NodeScript>().SetColor(new Color(0.0f, 0.0f, 1.0f));
-
-                    Debug.Log(m_SelectedNode.GetComponent<NodeScript>().GetId() + " was clicked");
-                    Debug.Log("searching for node " + m_SelectedNode.GetComponent<NodeScript>().GetId());
-
-                    ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(m_SelectedNode.GetComponent<NodeScript>().ToNodeData());
-                    FFIError found = ClamFFI.Clam.GetClusterData(nodeWrapper);
-                    if (found == FFIError.Ok)
-                    {
-                        nodeWrapper.Data.LogInfo();
-                        text.text = nodeWrapper.Data.GetInfo();
-                    }
-                    else
-                    {
-                        Debug.LogError("node not found");
-                    }
-
-                }
-            }
-        }
-
-        void HandleRMC()
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit hitInfo;
-
-                if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
-                {
-
-
-                    var selectedNode = hitInfo.collider.gameObject;
-
-                    //ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
-                    if (selectedNode != null)
-                    {
-                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetLeftChildID());
-                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetRightChildID());
-                        var hasLC = m_Tree.TryGetValue(selectedNode.GetComponent<NodeScript>().GetLeftChildID(), out var lc);
-                        if (hasLC)
-                        {
-                            SetIsActiveToChildren(selectedNode, !lc.activeSelf);
-                        }
-                    }
-                    //bool found = ClamFFI.Clam.GetClusterData(nodeWrapper);
-                    //if (found)
-                    //{
-                    //    nodeWrapper.Data.LogInfo();
-                    //    text.text = nodeWrapper.Data.GetInfo();
-                    //}
-                    //else
-                    //{
-                    //    Debug.LogError("node not found");
-                    //}
-                }
-            }
-        }
+       
 
         void DeactivateChildren(ref ClamFFI.NodeData nodeData)
         {
@@ -294,7 +200,7 @@ namespace ClamFFI
             }
         }
 
-        void SetIsActiveToChildren(GameObject node, bool isActive)
+        public void SetIsActiveToChildren(GameObject node, bool isActive)
         {
             print("asdibasbaf");
             //bool hasValue = m_Tree.TryGetValue(id, out var node);
