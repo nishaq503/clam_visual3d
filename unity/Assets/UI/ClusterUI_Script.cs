@@ -93,6 +93,8 @@ public class ClusterUI_Script
         }
 
         m_ClusterInfo = root.Q<Label>("ClusterInfo");
+        //var depthMinDropDown = root.Q<Dropdown>("DepthMin");
+        //depthMinDropDown.
         m_ClusterInfoLabel = root.Q<Label>("ClusterInfoLabel");
         //m_DepthSlider.Unbind();
 
