@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 1970721256304988372, guid: e381cf0583950004d9ab9c2f49f23bd4, type: 3}
   treePrefab: {fileID: 1110373972}
+  m_ClusterScriptTemplate: {fileID: 0}
 --- !u!1001 &348505403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -256,6 +257,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059897222642527441, guid: 6f8b23280dafe724896ac1d0bd7e9a58, type: 3}
       propertyPath: m_Name
+      value: Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059897222642527441, guid: 6f8b23280dafe724896ac1d0bd7e9a58, type: 3}
+      propertyPath: m_TagString
       value: Tree
       objectReference: {fileID: 0}
     m_RemovedComponents: []

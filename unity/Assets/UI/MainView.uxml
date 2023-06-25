@@ -1,10 +1,40 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/text.uss?fileID=7433441132597879392&amp;guid=a2420cbb8291eb64794815b863af7698&amp;type=3#text" />
-    <ui:VisualElement name="RightAnchor" style="flex-grow: 1; align-items: flex-end; justify-content: center; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; width: auto; overflow: visible;">
-        <ui:VisualElement name="RightPanel" style="flex-grow: 1; width: 250px; left: 0; background-color: rgb(51, 45, 45); align-items: stretch; justify-content: flex-start; border-left-width: 2px; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(12, 10, 10); border-right-color: rgb(12, 10, 10); border-top-color: rgb(12, 10, 10); border-bottom-color: rgb(12, 10, 10);">
-            <ui:Label text="test" display-tooltip-when-elided="true" name="ClusterInfo" style="color: rgba(8, 214, 0, 255);" />
-            <ui:TextField picking-mode="Ignore" label="Selected Cluster" name="SelectedClusterInfo" multiline="true" focusable="false" class="text" style="align-items: center; justify-content: center; background-color: rgb(90, 96, 92); flex-direction: column; margin-top: 5px; -unity-font-style: normal; -unity-text-align: middle-center; white-space: nowrap; -unity-text-outline-color: rgb(0, 0, 0); border-left-color: rgb(195, 195, 195); border-right-color: rgb(195, 195, 195); border-top-color: rgb(195, 195, 195); border-bottom-color: rgb(195, 195, 195); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; overflow: hidden; -unity-background-image-tint-color: rgb(26, 26, 26); color: rgb(12, 12, 12);" />
-            <ui:MinMaxSlider picking-mode="Ignore" label="Depth Range:" min-value="0" max-value="100" low-limit="0" high-limit="100" name="DepthSlider" style="white-space: nowrap;" />
+    <ui:VisualElement name="Main" style="flex-grow: 1; align-items: flex-end; justify-content: center; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; width: auto; overflow: visible; flex-direction: row;">
+        <ui:VisualElement name="LeftPanel" style="width: 25%; height: 100%;" />
+        <ui:VisualElement name="MiddlePanel" style="width: 50%; height: 100%;" />
+        <ui:VisualElement name="RightPanel" style="flex-grow: 1; width: 25%; left: 0; background-color: rgb(58, 58, 58); align-items: stretch; justify-content: flex-start; border-left-width: 2px; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(12, 10, 10); border-right-color: rgb(12, 10, 10); border-top-color: rgb(12, 10, 10); border-bottom-color: rgb(12, 10, 10); height: 100%;">
+            <ui:VisualElement name="ClusterInfoPanel" style="flex-direction: column; -unity-text-outline-width: 0; -unity-text-outline-color: rgb(140, 140, 140); border-bottom-color: rgb(161, 160, 160); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
+                <ui:Label text="Selected Cluster:" display-tooltip-when-elided="true" name="ClusterInfoTitle" style="flex-direction: column; -unity-font-style: bold; font-size: 18px; color: rgb(180, 180, 180); -unity-text-align: middle-center; width: 266px; flex-grow: 1;" />
+                <ui:VisualElement name="ClusterInfoElement" style="flex-direction: row;">
+                    <ui:Label text="Label" display-tooltip-when-elided="true" name="ClusterInfoLabel" style="-unity-font-style: bold; color: rgb(183, 183, 183);" />
+                    <ui:Label text="data" display-tooltip-when-elided="true" name="ClusterInfo" style="color: rgb(229, 229, 229); flex-direction: column;" />
+                </ui:VisualElement>
+                <ui:DropdownField label="Dropdown" index="-1" choices="System.Collections.Generic.List`1[System.String]" focusable="false" style="white-space: normal; -unity-text-align: upper-left; align-items: flex-start; justify-content: center; flex-wrap: nowrap; flex-direction: row;" />
+                <ui:VisualElement name="DepthDropDown" style="flex-direction: row; width: 100%; align-items: flex-start; justify-content: center; flex-shrink: 0; flex-wrap: nowrap;">
+                    <ui:DropdownField label="Depth min()" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="DepthMin" focusable="false" style="width: 50%; align-items: center; justify-content: center; flex-direction: column; -unity-text-align: upper-center;" />
+                    <ui:DropdownField label="Depth max()" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="DepthMax" focusable="false" style="width: 50%; justify-content: center; flex-direction: column; -unity-text-align: upper-center;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Depth Range:" min-value="0" max-value="100" low-limit="0" high-limit="100" name="DepthSlider1" focusable="false" style="white-space: nowrap; color: rgb(178, 178, 178); -unity-font-style: bold; border-bottom-color: rgb(233, 233, 233); border-bottom-width: 1px;" />
+            <ui:MinMaxSlider picking-mode="Ignore" label="Cardinality Range:" min-value="0" max-value="100" low-limit="0" high-limit="100" name="CardinalitySlider1" focusable="false" style="white-space: normal; color: rgb(178, 178, 178); -unity-font-style: bold; border-bottom-color: rgb(233, 233, 233); border-bottom-width: 1px; flex-wrap: wrap;" />
+            <ui:SliderInt picking-mode="Ignore" label="SliderInt" value="42" high-value="1000" focusable="false" />
+            <ui:VisualElement>
+                <ui:Label text="Depth" display-tooltip-when-elided="true" style="flex-direction: row; justify-content: center; -unity-text-align: middle-center; -unity-font-style: bold;" />
+                <ui:VisualElement style="flex-direction: row; width: 100%; flex-wrap: nowrap; align-items: center; justify-content: space-around; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:TextField picking-mode="Ignore" value="50" name="MinDepthText" focusable="true" style="width: 15%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; justify-content: flex-start; font-size: 8px;" />
+                    <ui:MinMaxSlider picking-mode="Ignore" min-value="0" max-value="100" low-limit="0" high-limit="100" name="DepthSlider" focusable="false" style="width: 70%; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;" />
+                    <ui:TextField picking-mode="Ignore" value="100" name="MaxDepthText" focusable="false" style="width: 15%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 8px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="CardSlider">
+                <ui:Label text="Cardinality&#x9;" display-tooltip-when-elided="true" style="flex-direction: row; -unity-text-align: middle-center; -unity-font-style: bold;" />
+                <ui:VisualElement style="flex-direction: row; width: 100%; flex-wrap: nowrap; align-items: center; justify-content: space-around; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:TextField picking-mode="Ignore" value="0" name="MinCardText" focusable="false" style="width: 15%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; justify-content: flex-start; font-size: 8px;" />
+                    <ui:MinMaxSlider picking-mode="Ignore" min-value="0" max-value="100" low-limit="0" high-limit="100" name="CardSlider" focusable="false" style="width: 70%; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;" />
+                    <ui:TextField picking-mode="Ignore" value="100" name="MaxCardText" focusable="false" style="width: 15%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 8px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

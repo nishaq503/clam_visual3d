@@ -96,13 +96,13 @@ namespace ClamFFI
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine("id: " + this.id.AsString);
-            stringBuilder.AppendLine("depth " + depth.ToString());
-            stringBuilder.AppendLine("card: " + cardinality.ToString());
-            stringBuilder.AppendLine("radius: " + radius.ToString());
-            stringBuilder.AppendLine("lfd: " + lfd.ToString());
-            stringBuilder.AppendLine("argC: " + argCenter.ToString());
-            stringBuilder.AppendLine("argR: " + argRadius.ToString());
+            stringBuilder.AppendLine(id.AsString);
+            stringBuilder.AppendLine(depth.ToString());
+            stringBuilder.AppendLine(cardinality.ToString());
+            stringBuilder.AppendLine(radius.ToString());
+            stringBuilder.AppendLine(lfd.ToString());
+            stringBuilder.AppendLine(argCenter.ToString());
+            stringBuilder.AppendLine(argRadius.ToString());
             //stringBuilder.AppendLine(this.color.ToString());
 
            return stringBuilder.ToString();

@@ -20,6 +20,7 @@ namespace ClamFFI
 
         //cheating fix later
         Vector2 m_DepthRange;
+        Vector2 m_CardinalityRange;
 
         public Dictionary<string, GameObject> GetTree()
         {
@@ -65,7 +66,7 @@ namespace ClamFFI
         }
         void Start()
         {
-            
+
 
             //m_NodeMenu = this.AddComponent<Dropdown>();
             //List<string> list = new List<string> { "option1", "option2" };
@@ -161,26 +162,91 @@ namespace ClamFFI
 
         public void SetDepthRange(Vector2 depthRange)
         {
-            Debug.Log("TREE  Depth: (" + ((int)depthRange.x).ToString() + ", " + (depthRange.y).ToString() + ")");
+            //Debug.Log("TREE  Depth: (" + ((int)depthRange.x).ToString() + ", " + (depthRange.y).ToString() + ")");
             m_DepthRange = depthRange;
-            ClamFFI.Clam.ForEachDFT(UpdateNodesActiveByDepth);
+            ClamFFI.Clam.ForEachDFT(UpdateNodesActiveByRange);
 
         }
 
-        void UpdateNodesActiveByDepth(ref ClamFFI.NodeData nodeData)
+        public void SetCardinalityRange(Vector2 cardinalityhRange)
+        {
+            //Debug.Log("TREE  Depth: (" + ((int)depthRange.x).ToString() + ", " + (depthRange.y).ToString() + ")");
+            m_CardinalityRange = cardinalityhRange;
+            ClamFFI.Clam.ForEachDFT(UpdateNodesActiveByRange);
+
+        }
+
+        public void SetActivityInRange(Vector2 value, string name)
+        {
+            //Debug.Log("TREE  Depth: (" + ((int)depthRange.x).ToString() + ", " + (depthRange.y).ToString() + ")");
+            if (name == "Card")
+            {
+            m_CardinalityRange = value;
+
+            }
+            else if(name == "Depth")
+            {
+                m_DepthRange = value;
+            }
+            ClamFFI.Clam.ForEachDFT(UpdateNodesActiveByRange);
+
+        }
+
+        void UpdateNodesActiveByRange(ref ClamFFI.NodeData nodeData)
         {
             GameObject node;
 
             bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
             if (hasValue)
             {
-                if (nodeData.depth < m_DepthRange.x || nodeData.depth > m_DepthRange.y)
+                //if (nodeData.depth < m_DepthRange.x || nodeData.depth > m_DepthRange.y)
+                //{
+                //    node.SetActive(false);
+                //}
+
+                //if (nodeData.depth >= m_DepthRange.x && nodeData.depth <= m_DepthRange.y)
+                //{
+                //    node.SetActive(true);
+                //}
+                if (IsNodeInRange(nodeData))
+                {
+                    node.SetActive(true);
+                    print("setting active");
+                }
+                else
                 {
                     node.SetActive(false);
-                }
+                    print("setting inactive");
 
-                if (nodeData.depth >= m_DepthRange.x && nodeData.depth <= m_DepthRange.y)
+                }
+                //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+                //node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            }
+            else
+            {
+                Debug.Log("reingoldify key not found - " + nodeData.id);
+            }
+        }
+
+        void UpdateNodesActiveByCardinality(ref ClamFFI.NodeData nodeData)
+        {
+            GameObject node;
+
+            bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+            if (hasValue)
+            {
+                //if (nodeData.cardinality < m_CardinalityRange.x || nodeData.cardinality > m_CardinalityRange.y)
+                //{
+                //    node.SetActive(false);
+                //}
+
+                //if (nodeData.cardinality >= m_CardinalityRange.x && nodeData.cardinality <= m_CardinalityRange.y)
+                //{
+                //    node.SetActive(true);
+                //}
+                if (IsNodeInRange(nodeData))
                 {
+
                     node.SetActive(true);
                 }
                 //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
@@ -199,7 +265,13 @@ namespace ClamFFI
             //MyQuit();
         }
 
-       
+        bool IsNodeInRange(ClamFFI.NodeData nodeData)
+        {
+            return nodeData.depth >= m_DepthRange.x && nodeData.depth <= m_DepthRange.y &&
+            nodeData.cardinality >= m_CardinalityRange.x && nodeData.cardinality <= m_CardinalityRange.y;
+        }
+
+
 
         void HandleRMC()
         {
@@ -310,5 +382,5 @@ namespace ClamFFI
     }
 
 
-    
+
 }
