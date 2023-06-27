@@ -271,7 +271,7 @@ namespace ClamFFI
         unsafe void SetNodeNames(ref ClamFFI.NodeData nodeData)
         {
             GameObject node = Instantiate(nodePrefab);
-
+            print("setting name " + node.GetComponent<NodeScript>().GetId());
             node.GetComponent<NodeScript>().SetID(nodeData.id.AsString);
             node.GetComponent<NodeScript>().SetLeft(nodeData.leftID.AsString);
             node.GetComponent<NodeScript>().SetRight(nodeData.rightID.AsString);
