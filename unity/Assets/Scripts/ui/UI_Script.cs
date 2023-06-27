@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Script : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class UI_Script : MonoBehaviour
     void Start()
     {
         SetSelectedClusterInfo("");
+
+        Slider slider;
     }
 
     // Update is called once per frame
