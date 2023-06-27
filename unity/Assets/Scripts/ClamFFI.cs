@@ -12,7 +12,7 @@ namespace ClamFFI
 
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230627124016";
+	public const string __DllName = "clam_ffi_20230627144826";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -56,6 +56,14 @@ namespace ClamFFI
         public static int GetNumNodes()
         {
             return get_num_nodes(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "test_cakes_rnn_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern int test_cakes_rnn_query(IntPtr handle, string cluster_name, NodeVisitor callback);
+
+        public static int TestCakesRNNQuery(string clusterName, NodeVisitor callback)
+        {
+            return test_cakes_rnn_query(_handle, clusterName, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

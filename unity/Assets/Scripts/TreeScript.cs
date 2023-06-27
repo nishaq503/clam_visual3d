@@ -8,8 +8,8 @@ namespace ClamFFI
 {
     public class TreeScript : MonoBehaviour
     {
-        public string dataName = "arrhythmia";
-        public uint cardinality = 50;
+        public string dataName = "test";
+        public uint cardinality = 1;
         public GameObject nodePrefab;
         public TMP_Text text;
 
@@ -64,6 +64,14 @@ namespace ClamFFI
             //m_NodeMenu.GetComponent<Transform>().position = new Vector3(0, 0, 0);
 
         }
+
+        public void RNN_Test()
+        {
+            print("rnn test");
+            ClamFFI.Clam.TestCakesRNNQuery("test", CakesRNNQuery);
+        }
+
+        
 
         void SetLines()
         {
@@ -272,11 +280,31 @@ namespace ClamFFI
         {
             GameObject node = Instantiate(nodePrefab);
             print("setting name " + node.GetComponent<NodeScript>().GetId());
+            nodeData.LogInfo();
             node.GetComponent<NodeScript>().SetID(nodeData.id.AsString);
             node.GetComponent<NodeScript>().SetLeft(nodeData.leftID.AsString);
             node.GetComponent<NodeScript>().SetRight(nodeData.rightID.AsString);
             m_Tree.Add(nodeData.id.AsString, node);
         }
+
+        public unsafe void CakesRNNQuery(ref ClamFFI.NodeData nodeData)
+        {
+            //GameObject node;
+
+            //bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+            //if (hasValue)
+            //{
+            //    node.GetComponent<NodeScript>().SetColor(Color.cyan);
+            //}
+            //else
+            //{
+            //    Debug.Log("reingoldify key not found - " + nodeData.id);
+            //}
+
+            
+        }
+
+
 
         unsafe void Reingoldify(ref ClamFFI.NodeData nodeData)
         {
