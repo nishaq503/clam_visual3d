@@ -12,7 +12,7 @@ namespace ClamFFI
 
     public static partial class Clam
     {
-	public const string __DllName = "clam_ffi_20230627144826";
+	public const string __DllName = "clam_ffi_20230629130408";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]

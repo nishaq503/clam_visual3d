@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TMPro;
-
+using System.Linq;
 
 namespace ClamFFI
 {
@@ -68,10 +68,22 @@ namespace ClamFFI
         public void RNN_Test()
         {
             print("rnn test");
+            m_Tree.ToList().ForEach(node =>
+            {
+                node.Value.GetComponent<NodeScript>().SetColor(Color.green);
+            });
             ClamFFI.Clam.TestCakesRNNQuery("test", CakesRNNQuery);
         }
 
-        
+        public void ResetColors()
+        {
+            m_Tree.ToList().ForEach(node =>
+            {
+                node.Value.GetComponent<NodeScript>().SetColor(Color.green);
+            });
+        }
+
+
 
         void SetLines()
         {
@@ -289,19 +301,21 @@ namespace ClamFFI
 
         public unsafe void CakesRNNQuery(ref ClamFFI.NodeData nodeData)
         {
-            //GameObject node;
+            GameObject node;
+            print("cakes query result called");
 
-            //bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
-            //if (hasValue)
-            //{
-            //    node.GetComponent<NodeScript>().SetColor(Color.cyan);
-            //}
-            //else
-            //{
-            //    Debug.Log("reingoldify key not found - " + nodeData.id);
-            //}
+            bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+            if (hasValue)
+            {
+                print("setting rnn search result color");
+                node.GetComponent<NodeScript>().SetColor(Color.cyan);
+            }
+            else
+            {
+                Debug.Log("reingoldify key not found - " + nodeData.id);
+            }
 
-            
+
         }
 
 
