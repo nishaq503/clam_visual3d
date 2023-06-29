@@ -3,6 +3,8 @@ using UnityEngine;
 
 using TMPro;
 using System.Linq;
+using Unity.VisualScripting;
+using System.Collections;
 
 namespace ClamFFI
 {
@@ -15,11 +17,16 @@ namespace ClamFFI
 
 
         private Dictionary<string, GameObject> m_Tree;
-        private GameObject m_SelectedNode;
-        private Color m_SelectedNodeActualColor;
+        //private Dictionary<string, ClamFFI.NodeData> m_SelectedNodes;
+        private string m_LastSelectedNode;
+        private List<NodeDataUnity> m_SelectedNodes;
+        private List<NodeDataUnity> m_QueryResults;
+
+        //private List<Color> m_SelectedNodeActualColors;
 
         public Dictionary<string, GameObject> GetTree()
         {
+
             return m_Tree;
         }
 
@@ -41,23 +48,31 @@ namespace ClamFFI
             }
             //print(ClamFFI.Clam.GetNumNodes());
             m_Tree = new Dictionary<string, GameObject>();
+            m_SelectedNodes = new List<NodeDataUnity>();
+            m_QueryResults = new List<NodeDataUnity>();
 
             int numNodes = ClamFFI.Clam.GetNumNodes();
             Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
 
             FFIError e = ClamFFI.Clam.ForEachDFT(SetNodeNames);
 
-            if(e == FFIError.Ok){
+            if (e == FFIError.Ok)
+            {
                 print("ok)");
 
             }
-            else{
+            else
+            {
                 print("ERROR " + e);
             }
             ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
             SetLines();
 
+            ResetColors();
 
+            ClamFFI.Clam.TestStructArray();
+
+            
             //m_NodeMenu = this.AddComponent<Dropdown>();
             //List<string> list = new List<string> { "option1", "option2" };
             //m_NodeMenu.AddOptions(list);
@@ -68,22 +83,76 @@ namespace ClamFFI
         public void RNN_Test()
         {
             print("rnn test");
-            m_Tree.ToList().ForEach(node =>
-            {
-                node.Value.GetComponent<NodeScript>().SetColor(Color.green);
-            });
+            ResetColors();
+
             ClamFFI.Clam.TestCakesRNNQuery("test", CakesRNNQuery);
         }
 
         public void ResetColors()
         {
+            m_SelectedNodes.Clear();
+            text.text = "";
             m_Tree.ToList().ForEach(node =>
             {
-                node.Value.GetComponent<NodeScript>().SetColor(Color.green);
+                node.Value.SetActive(true);
+                node.Value.GetComponent<NodeScript>().SetColor(new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f));
             });
         }
 
+        public void SelectQueryResults()
+        {
+            m_SelectedNodes.ForEach(node =>
+            {
+                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(node.color);
+            });
 
+            m_SelectedNodes.Clear();
+            m_SelectedNodes = m_QueryResults;
+            m_SelectedNodes = m_QueryResults.Select(a => a).ToList();
+            m_SelectedNodes.ForEach(node =>
+            {
+                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(new Color(0.0f, 1.0f, 1.0f));
+
+            });
+        }
+
+        public void DeselectAll()
+        {
+            m_SelectedNodes.ForEach(node =>
+            {
+                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(node.color);
+            });
+
+            m_SelectedNodes.Clear();
+           
+        }
+
+        public void HideUnselectedNodes()
+        {
+            m_Tree.ToList().ForEach(gameObject =>
+            {
+                var node = gameObject.Value;
+                var found = m_SelectedNodes.Find(n => n.id == node.GetComponent<NodeScript>().GetId());
+                if (found == null) 
+                {
+                    node.SetActive(false);
+                }
+            });
+        }
+
+        public void DistanceToOther()
+        {
+            if (m_SelectedNodes.Count != 2)
+            {
+                print("only works when two nodes are selected");
+                print("len " + m_SelectedNodes.Count);
+                return;
+            }
+
+            float distance = ClamFFI.Clam.DistanceToOther(m_SelectedNodes[0].id, m_SelectedNodes[1].id);
+            print("distance to other " + distance);
+            text.text += "distance: " + distance.ToString();
+        }
 
         void SetLines()
         {
@@ -91,10 +160,11 @@ namespace ClamFFI
             {
                 if (item.activeSelf)
                 {
+
                     bool hasLeftChild = m_Tree.TryGetValue(item.GetComponent<NodeScript>().GetLeftChildID(), out var leftChild);
                     bool hasrightChild = m_Tree.TryGetValue(item.GetComponent<NodeScript>().GetRightChildID(), out var rightChild);
 
-                    if (hasLeftChild && hasrightChild)
+                    if (hasLeftChild && hasrightChild && leftChild.activeSelf && rightChild.activeSelf)
                     {
                         {
                             List<Vector3> pos = new List<Vector3>
@@ -112,12 +182,9 @@ namespace ClamFFI
                             //l.startColor = Color.black;
                             //l.endColor = Color.black;
                             l.material.color = Color.black;
-
                         }
 
                         {
-
-
                             List<Vector3> pos = new List<Vector3>
                             {
                                 item.GetComponent<NodeScript>().GetPosition(),
@@ -132,7 +199,6 @@ namespace ClamFFI
                             //l.startColor = Color.green;
                             //l.endColor = Color.black;
                             l.material.color = Color.black;
-
                         }
                     }
                     //LineRenderer l = gameObject.AddComponent<LineRenderer>();
@@ -148,7 +214,6 @@ namespace ClamFFI
 
                     //pos.Add(new Vector3(0, 0));
                     //pos.Add(new Vector3(10, 10));
-
                 }
             }
         }
@@ -196,38 +261,35 @@ namespace ClamFFI
 
                 if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
                 {
-                    if (m_SelectedNode != null)
+                    var selectedNode = hitInfo.collider.gameObject.GetComponent<NodeScript>();
+                    if (m_SelectedNodes.Count > 0)
                     {
-                        if (m_SelectedNode.GetComponent<NodeScript>().GetId() == hitInfo.collider.gameObject.GetComponent<NodeScript>().GetId())
+                        var existingSelection = m_SelectedNodes.Find(node => node.id == selectedNode.GetId());
+                        if (existingSelection != null)
                         {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                            m_SelectedNode = null;
-                            text.text = "";
+                            selectedNode.SetColor(existingSelection.color);
+                            m_SelectedNodes.Remove(existingSelection);
+                            if (m_SelectedNodes.Count > 0)
+                            {
+                                text.text = m_SelectedNodes.Last().GetInfo();
+                            }
+                            else
+                            {
+                                text.text = "";
+                            }
                             return;
                         }
-                        else
-                        {
-                            m_SelectedNode.GetComponent<NodeScript>().SetColor(m_SelectedNodeActualColor);
-                        }
                     }
+                    
+                    print("selexting");
 
-                    m_SelectedNode = hitInfo.collider.gameObject;
-                    m_SelectedNodeActualColor = m_SelectedNode.GetComponent<NodeScript>().GetColor();
-                    m_SelectedNode.GetComponent<NodeScript>().SetColor(new Color(0.0f, 0.0f, 1.0f));
-
-                    Debug.Log(m_SelectedNode.GetComponent<NodeScript>().GetId() + " was clicked");
-                    Debug.Log("searching for node " + m_SelectedNode.GetComponent<NodeScript>().GetId());
-
-                    ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(m_SelectedNode.GetComponent<NodeScript>().ToNodeData());
-                    FFIError found = ClamFFI.Clam.GetClusterData(nodeWrapper);
+                    ClamFFI.NodeWrapper wrapper = new ClamFFI.NodeWrapper(selectedNode.ToNodeData());
+                    FFIError found = ClamFFI.Clam.GetClusterData(wrapper);
                     if (found == FFIError.Ok)
                     {
-                        nodeWrapper.Data.LogInfo();
-                        text.text = nodeWrapper.Data.GetInfo();
-                    }
-                    else
-                    {
-                        Debug.LogError("node not found");
+                        m_SelectedNodes.Add(new NodeDataUnity(wrapper.Data));
+                        selectedNode.SetColor(Color.blue);
+                        text.text = wrapper.Data.GetInfo();
                     }
 
                 }
@@ -273,7 +335,7 @@ namespace ClamFFI
             }
         }
 
-        void DeactivateChildren(ref ClamFFI.NodeData nodeData)
+        void DeactivateChildren(ref ClamFFI.NodeDataFFI nodeData)
         {
             GameObject node;
 
@@ -288,7 +350,7 @@ namespace ClamFFI
             }
         }
 
-        unsafe void SetNodeNames(ref ClamFFI.NodeData nodeData)
+        unsafe void SetNodeNames(ref ClamFFI.NodeDataFFI nodeData)
         {
             GameObject node = Instantiate(nodePrefab);
             print("setting name " + node.GetComponent<NodeScript>().GetId());
@@ -299,28 +361,28 @@ namespace ClamFFI
             m_Tree.Add(nodeData.id.AsString, node);
         }
 
-        public unsafe void CakesRNNQuery(ref ClamFFI.NodeData nodeData)
+        public unsafe void CakesRNNQuery(ref ClamFFI.NodeDataFFI nodeData)
         {
             GameObject node;
-            print("cakes query result called");
 
             bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
             if (hasValue)
             {
-                print("setting rnn search result color");
-                node.GetComponent<NodeScript>().SetColor(Color.cyan);
+                node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+                m_SelectedNodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+                m_QueryResults.Add(node.GetComponent<NodeScript>().ToUnityData());
+                text.text = nodeData.GetInfo();
+                text.text += "distance to query: " + nodeData.placeHolder.ToString();
+
+                print("distance to query: " + nodeData.placeHolder.ToString());
             }
             else
             {
-                Debug.Log("reingoldify key not found - " + nodeData.id);
+                Debug.Log("node key not found - " + nodeData.id);
             }
-
-
         }
 
-
-
-        unsafe void Reingoldify(ref ClamFFI.NodeData nodeData)
+        unsafe void Reingoldify(ref ClamFFI.NodeDataFFI nodeData)
         {
             GameObject node;
 
@@ -358,12 +420,9 @@ namespace ClamFFI
 
                 }
             }
-            //else
-            //{
-            //}
         }
     }
 
 
-    
+
 }

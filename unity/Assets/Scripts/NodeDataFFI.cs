@@ -10,14 +10,14 @@ namespace ClamFFI
 
     public class NodeWrapper
     {
-        private NodeData m_NodeData;
+        private NodeDataFFI m_NodeData;
 
-        public NodeWrapper(NodeData nodeData)
+        public NodeWrapper(NodeDataFFI nodeData)
         {
             m_NodeData = nodeData;
         }
 
-        public NodeData Data
+        public NodeDataFFI Data
         {
             get { return m_NodeData; }
             set { m_NodeData = value; }
@@ -31,12 +31,12 @@ namespace ClamFFI
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public partial struct NodeData
+    public partial struct NodeDataFFI
     {
         public Vec3 pos;
         public Vec3 color;
         public StringFFI id;
-        public StringFFI  leftID;
+        public StringFFI leftID;
         public StringFFI rightID;
         public int cardinality;
         public int depth;
@@ -44,6 +44,8 @@ namespace ClamFFI
         public float lfd;
         public int argCenter;
         public int argRadius;
+
+        public float placeHolder;
 
 
         //public NodeData(int n)
@@ -61,7 +63,7 @@ namespace ClamFFI
         //    argRadius = -1;
         //}
 
-        public NodeData(string id, string leftID, string rightID, Vector3 pos, Color color)
+        public NodeDataFFI(string id, string leftID, string rightID, Vector3 pos, Color color)
         {
             this.pos = new ClamFFI.Vec3(pos);
             this.color = new Vec3(color);
@@ -76,6 +78,27 @@ namespace ClamFFI
             lfd = -1.0f;
             argCenter = -1;
             argRadius = -1;
+            placeHolder = -1;
+
+        }
+
+        public NodeDataFFI(int n)
+        {
+            this.pos = new ClamFFI.Vec3(n, n, n);
+            this.color = new Vec3(n, n, n);
+
+            this.id = new StringFFI("testing " + n.ToString());
+            this.leftID = new StringFFI(n.ToString());
+            this.rightID = new StringFFI(n.ToString());
+
+            cardinality = n;
+            depth = n;
+            radius = n;
+            lfd = n;
+            argCenter = n;
+            argRadius = n;
+            placeHolder = n;
+
         }
 
         public void LogInfo()
@@ -105,7 +128,7 @@ namespace ClamFFI
             stringBuilder.AppendLine("argR: " + argRadius.ToString());
             //stringBuilder.AppendLine(this.color.ToString());
 
-           return stringBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
         public void FreeStrings()
