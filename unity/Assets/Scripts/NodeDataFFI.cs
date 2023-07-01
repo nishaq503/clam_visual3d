@@ -120,6 +120,8 @@ namespace ClamFFI
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine("id: " + this.id.AsString);
+            stringBuilder.AppendLine("leftID: " + this.leftID.AsString);
+            stringBuilder.AppendLine("rightID: " + this.rightID.AsString);
             stringBuilder.AppendLine("depth " + depth.ToString());
             stringBuilder.AppendLine("card: " + cardinality.ToString());
             stringBuilder.AppendLine("radius: " + radius.ToString());

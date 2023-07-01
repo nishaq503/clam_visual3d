@@ -76,6 +76,12 @@ public class NodeScript : MonoBehaviour
         _rightChildID = id;
     }
 
+    public bool IsLeaf()
+    {
+        print("-------------------------------------------------lid " + _leftChildID + ", rid " + _rightChildID);
+        return _leftChildID == "None" && _rightChildID == "None";
+    }
+
  
     public ClamFFI.NodeDataFFI ToNodeData()
     {

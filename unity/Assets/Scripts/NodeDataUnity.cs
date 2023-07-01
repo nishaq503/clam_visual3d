@@ -93,6 +93,8 @@ public class NodeDataUnity
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.AppendLine("id: " + this.id);
+        stringBuilder.AppendLine("lid: " + this.leftID);
+        stringBuilder.AppendLine("rid: " + this.rightID);
         stringBuilder.AppendLine("depth " + depth.ToString());
         stringBuilder.AppendLine("card: " + cardinality.ToString());
         stringBuilder.AppendLine("radius: " + radius.ToString());

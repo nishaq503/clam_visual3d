@@ -5,13 +5,16 @@ using TMPro;
 using System.Linq;
 using Unity.VisualScripting;
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
+using static UnityEditor.Progress;
+using UnityEditor;
 
 namespace ClamFFI
 {
     public class TreeScript : MonoBehaviour
     {
-        public string dataName = "test";
-        public uint cardinality = 1;
+        public string dataName = "arrhythmia";
+        public uint cardinality = 25;
         public GameObject nodePrefab;
         public TMP_Text text;
 
@@ -44,6 +47,15 @@ namespace ClamFFI
             if (clam_result != FFIError.Ok)
             {
                 Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", dataName));
+                if (EditorApplication.isPlaying)
+                {
+                    EditorApplication.isPlaying = false;
+                }
+                else
+                {
+                    Application.Quit();
+
+                }
                 return;
             }
             //print(ClamFFI.Clam.GetNumNodes());
@@ -66,13 +78,13 @@ namespace ClamFFI
                 print("ERROR " + e);
             }
             ClamFFI.Clam.CreateReingoldLayout(Reingoldify);
-            SetLines();
+            //SetLines();
 
             ResetColors();
 
             ClamFFI.Clam.TestStructArray();
 
-            
+
             //m_NodeMenu = this.AddComponent<Dropdown>();
             //List<string> list = new List<string> { "option1", "option2" };
             //m_NodeMenu.AddOptions(list);
@@ -124,7 +136,217 @@ namespace ClamFFI
             });
 
             m_SelectedNodes.Clear();
-           
+
+        }
+
+        public void DrawEdges()
+        {
+            DeleteAllLines();
+            print("test");
+            var nodes = m_SelectedNodes;
+            int edgeCount = 0;
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                //var entry = nodes[i];
+                //var node = entry.Value;
+                if (m_Tree.TryGetValue(nodes[i].id, out var node))
+                {
+                    //var node = m_Tree.GetValueOrDefault(nodes[i].id);
+                    print(node.GetComponent<NodeScript>().GetId());
+                    NodeWrapper nodeWrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
+                    for (int j = i + 1; j < nodes.Count; j++)
+                    {
+                        //var other = m_Tree.GetValueOrDefault(nodes[j].id);
+                        if (m_Tree.TryGetValue(nodes[j].id, out var other))
+                        {
+                            NodeWrapper otherWrapper = new NodeWrapper(other.GetComponent<NodeScript>().ToNodeData());
+                            ClamFFI.Clam.GetClusterData(nodeWrapper);
+                            ClamFFI.Clam.GetClusterData(otherWrapper);
+
+                            float distance = ClamFFI.Clam.DistanceToOther(node.GetComponent<NodeScript>().GetId(), other.GetComponent<NodeScript>().GetId());
+                            //print("distance: " + distance.ToString() + ", sum rad: " + (nodeWrapper.Data.radius + otherWrapper.Data.radius).ToString());
+                            // want edges btwn two clustesr whose distbtwn centers <= sum of radius
+                            //if (node.GetComponent<NodeScript>().IsLeaf() && other.GetComponent<NodeScript>().IsLeaf())
+                            {
+                                if (distance <= nodeWrapper.Data.radius + otherWrapper.Data.radius)
+                                {
+                                    //if (edgeCount < 10)
+                                    {
+
+                                        print("should get edge**************************************************************************");
+                                        edgeCount++;
+                                        AddEdge(node, other, edgeCount);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            print("faled1?");
+                        }
+
+
+
+
+                    }
+                }
+                else
+                {
+                    print("faled?");
+                }
+
+            }
+            //foreach (var entry in nodes)
+            //{
+            //    var node = entry.Value;
+            //    print(node.GetComponent<NodeScript>().GetId());
+            //    NodeWrapper nodeWrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
+            //    foreach (var otherEntry in nodes)
+            //    {
+            //        var other = otherEntry.Value;
+            //        if (other.GetComponent<NodeScript>().GetId() == node.GetComponent<NodeScript>().GetId())
+            //        {
+            //            continue;
+            //        }
+
+
+            //        NodeWrapper otherWrapper = new NodeWrapper(other.GetComponent<NodeScript>().ToNodeData());
+            //        ClamFFI.Clam.GetClusterData(nodeWrapper);
+            //        ClamFFI.Clam.GetClusterData(otherWrapper);
+
+            //        float distance = ClamFFI.Clam.DistanceToOther(node.GetComponent<NodeScript>().GetId(), other.GetComponent<NodeScript>().GetId());
+            //        print("distance: " + distance.ToString() + ", sum rad: " + (nodeWrapper.Data.radius + otherWrapper.Data.radius).ToString());
+            //        // want edges btwn two clustesr whose distbtwn centers <= sum of radius
+            //        if (distance <= nodeWrapper.Data.radius + otherWrapper.Data.radius)
+            //        {
+            //            //AddEdge(node, other);
+            //            print("should get edge");
+            //        }
+
+
+
+
+            //    }
+            //}
+        }
+
+        public void RandomizeLocations()
+        {
+            foreach (var node in m_SelectedNodes)
+            {
+                var x = Random.Range(0, 100);
+                var y = Random.Range(0, 100);
+                var z = Random.Range(0, 100);
+
+                if (m_Tree.TryGetValue(node.id, out var obj))
+                {
+                    obj.GetComponent<Transform>().position = new Vector3(x, y, z);
+                    for (int i = 0; i < obj.GetComponent<Transform>().childCount; i++)
+                    {
+                        GameObject child = obj.transform.GetChild(i).gameObject;
+                        child.GetComponent<Transform>().position = new Vector3(x, y, z);
+                        print(child.name);
+                        string[] names = child.name.Split();
+                        print("n1,"+ names[0] +",n2," + names[1]);
+                        if (m_Tree.TryGetValue(names[1], out var other))
+                        {
+                            print("changing line pos>");
+                            List<Vector3> pos = new List<Vector3>
+                            {
+                                obj.GetComponent<NodeScript>().GetPosition(),
+                                other.GetComponent<NodeScript>().GetPosition()
+                            };
+                            var l = obj.GetComponent<LineRenderer>();
+                            if (l != null)
+                            {
+
+                                l.startWidth = 0.1f;
+                                l.endWidth = 0.1f;
+                                l.SetPositions(pos.ToArray());
+                                l.useWorldSpace = true;
+                            }
+                            //Do something with child
+                        }
+                        else
+                        {
+                            print("failed to find????");
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        public void AddEdge(GameObject node, GameObject other, int edgeCount)
+        {
+            GameObject childOb = new GameObject(node.GetComponent<NodeScript>().GetId() + " " + other.GetComponent<NodeScript>().GetId());
+
+            //LineRenderer l1 = childOb.GetComponent<LineRenderer>();
+            //if(l1 != null)
+            //{
+            //    print("updating line pos**************");
+            //    List<Vector3> pos = new List<Vector3>
+            //    {
+            //        node.GetComponent<NodeScript>().GetPosition(),
+            //        other.GetComponent<NodeScript>().GetPosition()
+            //    };
+
+            //    l1.startWidth = 0.1f;
+            //    l1.endWidth = 0.1f;
+            //    l1.SetPositions(pos.ToArray());
+            //    l1.useWorldSpace = true;
+            //}
+            //else
+            {
+                LineRenderer l = childOb.AddComponent<LineRenderer>();
+                childOb.transform.SetParent(node.transform);
+                //if (childOb.name.Contains(node.GetComponent<NodeScript>().GetId()) && childOb.name.Contains(other.GetComponent<NodeScript>().GetId()))
+                //{
+                //    print("error edge already exists");
+                //    return;
+                //}
+
+                {
+                    List<Vector3> pos = new List<Vector3>
+                {
+                    node.GetComponent<NodeScript>().GetPosition(),
+                    other.GetComponent<NodeScript>().GetPosition()
+                };
+
+                    l.startWidth = 0.1f;
+                    l.endWidth = 0.1f;
+                    l.SetPositions(pos.ToArray());
+                    l.useWorldSpace = true;
+                    //l.startColor = Color.black;
+                    //l.endColor = Color.black;
+                    l.material.color = Color.black;
+                }
+            }
+            
+
+        }
+
+        public void SelectAllLeafNodes()
+        {
+            DeselectAll();
+
+            m_Tree.ToList().ForEach(entry =>
+            {
+                if (entry.Value.GetComponent<NodeScript>().GetLeftChildID() == "None")
+                {
+                    SelectNode(entry.Value.GetComponent<NodeScript>().GetId());
+                }
+            });
+        }
+
+        void SelectNode(string id)
+        {
+            if (m_Tree.TryGetValue(id, out var node))
+            {
+                node.GetComponent<NodeScript>().SetColor(new Color(1.0f, 0.0f, 1.0f));
+                m_SelectedNodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+            }
         }
 
         public void HideUnselectedNodes()
@@ -133,7 +355,7 @@ namespace ClamFFI
             {
                 var node = gameObject.Value;
                 var found = m_SelectedNodes.Find(n => n.id == node.GetComponent<NodeScript>().GetId());
-                if (found == null) 
+                if (found == null)
                 {
                     node.SetActive(false);
                 }
@@ -152,6 +374,19 @@ namespace ClamFFI
             float distance = ClamFFI.Clam.DistanceToOther(m_SelectedNodes[0].id, m_SelectedNodes[1].id);
             print("distance to other " + distance);
             text.text += "distance: " + distance.ToString();
+        }
+
+        void DeleteAllLines()
+        {
+            //m_Tree.ToList().ForEach(entry =>
+            //{
+            //    var line = entry.Value.GetComponent<LineRenderer>();
+            //    //FixedJoint fixedJoint = GetComponent<FixedJoint>();
+            //    if (line != null)
+            //    {
+            //        Destroy(line);
+            //    }
+            //});
         }
 
         void SetLines()
@@ -280,7 +515,7 @@ namespace ClamFFI
                             return;
                         }
                     }
-                    
+
                     print("selexting");
 
                     ClamFFI.NodeWrapper wrapper = new ClamFFI.NodeWrapper(selectedNode.ToNodeData());
