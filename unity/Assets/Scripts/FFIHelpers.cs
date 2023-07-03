@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace ClamFFI
+namespace Clam
 {
     public static class FFIHelpers
     {

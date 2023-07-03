@@ -1,4 +1,4 @@
-using ClamFFI;
+using Clam;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ public class NodeDataUnity
         argRadius = -1;
     }
 
-    public NodeDataUnity(ClamFFI.NodeDataFFI data)
+    public NodeDataUnity(Clam.NodeDataFFI data)
     {
         this.pos = data.pos.AsVector3;
         this.color = data.color.AsColor;
@@ -105,5 +105,12 @@ public class NodeDataUnity
 
         return stringBuilder.ToString();
     }
-    
+
+    public Clam.NodeDataFFI ToNodeFFI()
+    {
+        NodeDataFFI node = new Clam.NodeDataFFI(this);
+
+        return node;
+    }
+
 }

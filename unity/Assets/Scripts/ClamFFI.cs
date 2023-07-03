@@ -1,7 +1,7 @@
 
 #pragma warning disable CS8500
 #pragma warning disable CS8981
-using ClamFFI;
+using Clam;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using static UnityEditor.Progress;
 
-namespace ClamFFI
+namespace Clam
 {
-    public unsafe delegate void NodeVisitor(ref ClamFFI.NodeDataFFI baton);
+    public unsafe delegate void NodeVisitor(ref global::Clam.NodeDataFFI baton);
 
-    public static partial class Clam
+    public static partial class ClamFFI
     {
 	public const string __DllName = "clam_ffi_20230701190325";
         private static IntPtr _handle;
@@ -31,9 +31,9 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, EntryPoint = "get_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern FFIError get_cluster_data(IntPtr handle, ref ClamFFI.NodeDataFFI inNode, out ClamFFI.NodeDataFFI outNode);
+        private static unsafe extern FFIError get_cluster_data(IntPtr handle, ref global::Clam.NodeDataFFI inNode, out global::Clam.NodeDataFFI outNode);
 
-        public static unsafe FFIError GetClusterData(ClamFFI.NodeWrapper nodeWrapper)
+        public static unsafe FFIError GetClusterData(global::Clam.NodeWrapper nodeWrapper)
         {
             NodeDataFFI nodeData = nodeWrapper.Data;
 
@@ -111,9 +111,9 @@ namespace ClamFFI
         }
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string_ffi")]
-        public unsafe static extern void free_string_ffi(ref ClamFFI.StringFFI inNode, out ClamFFI.StringFFI outNode);
+        public unsafe static extern void free_string_ffi(ref global::Clam.StringFFI inNode, out global::Clam.StringFFI outNode);
 
-        public unsafe static void FreeStringFFI(ref ClamFFI.StringFFI inNode)
+        public unsafe static void FreeStringFFI(ref global::Clam.StringFFI inNode)
         {
             free_string_ffi(ref inNode, out var outNode);
         }
@@ -135,6 +135,21 @@ namespace ClamFFI
             }
 
             test_struct_array(_handle, items, items.Length);
+        }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "run_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void run_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        public static unsafe NodeDataFFI[] RunForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn )
+        {
+            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                items[i] = nodes[i].ToNodeFFI();
+            }
+
+            run_force_directed_sim(_handle, items, items.Length, cbFn);
+            return items;
         }
 
     }

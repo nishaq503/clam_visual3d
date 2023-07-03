@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ClamFFI
+namespace Clam
 {
     /// Possible errors in our library.
     public enum FFIError

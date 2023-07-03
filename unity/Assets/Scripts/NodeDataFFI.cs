@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
 
-namespace ClamFFI
+namespace Clam
 {
 
     public class NodeWrapper
@@ -65,7 +65,7 @@ namespace ClamFFI
 
         public NodeDataFFI(string id, string leftID, string rightID, Vector3 pos, Color color)
         {
-            this.pos = new ClamFFI.Vec3(pos);
+            this.pos = new global::Clam.Vec3(pos);
             this.color = new Vec3(color);
 
             this.id = new StringFFI(id);
@@ -81,10 +81,27 @@ namespace ClamFFI
             placeHolder = -1;
 
         }
+        public NodeDataFFI(NodeDataUnity data)
+        {
+            this.pos = new Vec3(data.pos);
+            this.color = new Vec3(data.color);
 
+            this.id = new StringFFI(data.id);
+            this.leftID = new StringFFI(data.leftID);
+            this.rightID = new StringFFI(data.rightID);
+
+            cardinality = data.cardinality;
+            depth = data.depth;
+            radius = data.radius;
+            lfd = data.lfd;
+            argCenter = data.argCenter;
+            argRadius = data.argRadius;
+            placeHolder = -1;
+
+        }
         public NodeDataFFI(int n)
         {
-            this.pos = new ClamFFI.Vec3(n, n, n);
+            this.pos = new global::Clam.Vec3(n, n, n);
             this.color = new Vec3(n, n, n);
 
             this.id = new StringFFI("testing " + n.ToString());
@@ -194,7 +211,7 @@ namespace ClamFFI
             {
                 var text = Marshal.PtrToStringUTF8(data);
                 len = text.Length;
-                ClamFFI.Clam.FreeStringFFI(ref this);
+                global::Clam.ClamFFI.FreeStringFFI(ref this);
                 data = Marshal.StringToCoTaskMemUTF8(text);
                 isOwnedByUnity = true;
             }

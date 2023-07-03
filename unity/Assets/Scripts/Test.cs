@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using ClamFFI;
+using Clam;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -185,7 +185,7 @@ namespace Tests
         public const string __DllName = "clam_ffi_20230617184333";
         private static IntPtr _handle;
 
-        public unsafe delegate void NodeVisitor2(ref ClamFFI.NodeDataFFI baton);
+        public unsafe delegate void NodeVisitor2(ref Clam.NodeDataFFI baton);
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
         public unsafe static extern void free_string(IntPtr context, IntPtr data);
@@ -208,11 +208,11 @@ namespace Tests
         }
 
         [DllImport(__DllName, EntryPoint = "test_string_struct_complex", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void test_string_struct_complex(ref ClamFFI.NodeDataFFI inNode, out ClamFFI.NodeDataFFI outNode);
+        public static unsafe extern void test_string_struct_complex(ref Clam.NodeDataFFI inNode, out Clam.NodeDataFFI outNode);
 
         public static unsafe void TestStringStructComplex()
         {
-            ClamFFI.NodeDataFFI nodeData = new ClamFFI.NodeDataFFI("ab", "123", "456", new Vector3(0.0f, 1.0f, 2.0f), new Color(0.5f, 0.6f, 0.7f));
+            Clam.NodeDataFFI nodeData = new Clam.NodeDataFFI("ab", "123", "456", new Vector3(0.0f, 1.0f, 2.0f), new Color(0.5f, 0.6f, 0.7f));
             test_string_struct_complex(ref nodeData, out var outNode);
 
             Debug.Log("nodeData data after " + nodeData.id.AsString);
@@ -243,11 +243,11 @@ namespace Tests
 
 
         [DllImport(__DllName, EntryPoint = "test_node_rust_alloc", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static unsafe extern void test_node_rust_alloc(ref ClamFFI.NodeDataFFI inNode, out ClamFFI.NodeDataFFI outNode);
+        public static unsafe extern void test_node_rust_alloc(ref Clam.NodeDataFFI inNode, out Clam.NodeDataFFI outNode);
 
         public static unsafe void TestNodeRustAlloc()
         {
-            ClamFFI.NodeDataFFI nodeData = new ClamFFI.NodeDataFFI();
+            Clam.NodeDataFFI nodeData = new Clam.NodeDataFFI();
             test_node_rust_alloc(ref nodeData, out var outNode);
 
             Debug.Log("nodeData data after 123456 " + outNode.id.AsString);
@@ -272,7 +272,7 @@ namespace Tests
 
         }
 
-        unsafe static void SetNodeNames(ref ClamFFI.NodeDataFFI nodeData)
+        unsafe static void SetNodeNames(ref Clam.NodeDataFFI nodeData)
         {
             //ClamFFI.NodeData nodeData = new ClamFFI.NodeData(baton);
             Debug.Log("pos x " + nodeData.pos.x);
