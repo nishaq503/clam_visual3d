@@ -8,6 +8,7 @@ using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using static UnityEditor.Progress;
 using UnityEditor;
+using System.Security.Cryptography;
 
 namespace Clam
 {
@@ -16,16 +17,20 @@ namespace Clam
         public string dataName = "arrhythmia";
         public uint cardinality = 25;
         public GameObject nodePrefab;
+        public GameObject springPrefab;
         public TMP_Text text;
 
 
         //private Dictionary<string, ClamFFI.NodeData> m_SelectedNodes;
         private Dictionary<string, GameObject> m_Tree;
         private string m_LastSelectedNode;
-        private List<NodeDataUnity> m_SelectedNodes;
-        private List<NodeDataUnity> m_QueryResults;
+        private List<GameObject> m_SelectedNodes;
+        private List<GameObject> m_QueryResults;
 
         private TempUI m_TempUI;
+        private bool m_IsPhysicsRunning = false;
+        private int m_MaxPhysicsIters = 1000;
+        private int m_PhysicsIter = 0;
 
         //private List<Color> m_SelectedNodeActualColors;
 
@@ -61,8 +66,8 @@ namespace Clam
             }
             //print(ClamFFI.Clam.GetNumNodes());
             m_Tree = new Dictionary<string, GameObject>();
-            m_SelectedNodes = new List<NodeDataUnity>();
-            m_QueryResults = new List<NodeDataUnity>();
+            m_SelectedNodes = new List<GameObject>();
+            m_QueryResults = new List<GameObject>();
 
             int numNodes = Clam.ClamFFI.GetNumNodes();
             Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
@@ -83,8 +88,7 @@ namespace Clam
             m_TempUI = new TempUI(m_Tree, m_SelectedNodes, m_QueryResults, nodePrefab, text);
             ResetColors();
 
-            Clam.ClamFFI.TestStructArray();
-
+            //Clam.ClamFFI.TestStructArray();
 
             //m_NodeMenu = this.AddComponent<Dropdown>();
             //List<string> list = new List<string> { "option1", "option2" };
@@ -93,8 +97,14 @@ namespace Clam
 
         }
 
+        public void ColorByDistToQuery()
+        {
+            m_TempUI.ColorAllByDistToQuery();
+        }
+
         public void RunForceDirectedSim()
         {
+            m_IsPhysicsRunning = true;
             if (m_SelectedNodes.Count == 0)
             {
                 Debug.LogError("error cant run physics sim - no nodes selected");
@@ -104,18 +114,75 @@ namespace Clam
             {
                 Debug.LogWarning("physics sim being run with only one node");
             }
-            Clam.ClamFFI.RunForceDirectedSim(m_SelectedNodes, UpdatePhysicsSim);
+
+            print("initializing physics sim");
+           
+            List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+            foreach (GameObject node in m_SelectedNodes)
+            {
+                nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+            }
+            Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
         }
 
         public void UpdatePhysicsSim(ref NodeDataFFI nodeData)
         {
 
+            if (m_Tree.TryGetValue(nodeData.id.AsString, out var node))
+            {
+                node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            }
+            else
+            {
+                Debug.Log("physics upodate key not found - " + nodeData.id);
+            }
+        }
+
+        public void EdgeDrawer(ref NodeDataFFI nodeData)
+        {
+            if (this.m_Tree.TryGetValue(nodeData.id.AsString, out var node))
+            {
+                if (this.m_Tree.TryGetValue(nodeData.leftID.AsString, out var other))
+                {
+                    //m_TempUI.AddEdge(node, other, 0);
+
+                    var spring = Instantiate(springPrefab);
+
+                    spring.GetComponent<SpringScript>().SetNodes(node, other);
+
+                }
+            }
+        }
+
+        public void DrawEdges()
+        {
+            List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+            foreach (GameObject node in m_SelectedNodes)
+            {
+                nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+            }
+            ClamFFI.DetectEdges(nodes, EdgeDrawer);
         }
 
         public void RNN_Test()
         {
             m_TempUI.RNN_Test();
         }
+
+        public void ResetAll()
+        {
+            m_TempUI.Reset();
+            Clam.ClamFFI.CreateReingoldLayout(Reingoldify);
+            GameObject[] gos = GameObject.FindGameObjectsWithTag("Spring");
+            Debug.Log("found " + gos.Length.ToString() + " springs");
+            foreach (GameObject go in gos)
+            {
+                Destroy(go);
+            }
+        }
+
+
+
 
 
 
@@ -131,6 +198,100 @@ namespace Clam
             m_TempUI.SelectQueryResults();
         }
 
+        public void ClamRadius()
+        {
+
+            m_TempUI.ClamRadius();
+        }
+
+        public void EstimateQueryLocation()
+        {
+            var obj = Instantiate(nodePrefab);
+            List<Vector3> given = new List<Vector3>();
+            List < float> dist = new List<float>();
+
+            foreach(var node in m_QueryResults)
+            {
+                given.Add(node.transform.position);
+                dist.Add(node.GetComponent<NodeScript>().distanceToQuery);
+
+            }
+
+            obj.transform.position = SolveQueryPos(given, dist);
+            obj.GetComponent<Renderer>().material.color = Color.red;
+        }
+
+    //    Point solve(const vector<Point>& given, const vector<double>& dist) {
+    //  Point res;
+    //        double alpha = ALPHA;
+    //  for (int iter = 0; iter<ITER; iter++) {
+    //      Point delta;
+    //      for (int i = 0; i<given.size(); i++) {
+    //        double d = res.dist(given[i]);
+    //        Point diff = (given[i] - res) * (alpha * (d - dist[i]) / max(dist[i], d));
+    //        delta = delta + diff;
+    //      }
+    //    delta = delta* (1.0 / given.size()); 
+    //      alpha *= RATIO;   
+    //      res = res + delta;
+    //  }
+    //return res;
+    //}
+
+        Vector3 SolveQueryPos(List<Vector3> given, List<float> dist)
+        {
+            //const int iter = 2000;
+            float alpha = 2.0f;
+            const float ratio = 0.99f;
+
+            Vector3 res = new Vector3(0,0,0);
+            for(int iter =0; iter < 1000; iter++)
+            {
+                Vector3 delta = new Vector3(0, 0, 0);
+                for(int i =0; i < given.Count;i++)
+                {
+                    float d = Vector3.Distance(res, given[i]);
+                    Vector3 diff = (given[i] - res);
+                    float val =  (alpha * (d - dist[i]) / Mathf.Max(dist[i],d));
+                    Vector3 diff2 = new Vector3(diff.x * val, diff.y * val, diff.z * val);
+                    delta += diff2;
+                }
+
+                delta = delta * (1.0f / given.Count);
+                alpha *= ratio;
+                res = res + delta;
+            }
+
+            return res;
+        }
+
+        public void HighlightQueryResults()
+        {
+
+            //foreach(var node in m_QueryResults)
+            //{
+            //    //if(m_Tree.TryGetValue(node.id, out var obj))
+            //    {
+            //        node.GetComponent<NodeScript>().SetColor(node.color);
+            //    }
+            //}
+        }
+
+        public void SelectAllActive()
+        {
+            m_SelectedNodes.Clear();
+            foreach (var node in m_Tree)
+            {
+                if (node.Value.activeSelf)
+                {
+                    m_SelectedNodes.Add(node.Value);
+                }
+            }
+
+            Debug.Log("num selected: " + m_SelectedNodes.Count);
+
+        }
+
         public void DeselectAll()
         {
 
@@ -138,12 +299,12 @@ namespace Clam
 
         }
 
-        public void DrawEdges()
-        {
-            DeleteAllLines();
+        //public void DrawEdges()
+        //{
+        //    DeleteAllLines();
 
-            m_TempUI.DrawEdges();
-        }
+        //    m_TempUI.DrawEdges();
+        //}
 
         public void RandomizeLocations()
         {
@@ -160,14 +321,21 @@ namespace Clam
             m_TempUI.SelectAllLeafNodes();
         }
 
-        void SelectNode(string id)
+        public void SampleLeafNodes()
         {
-            if (m_Tree.TryGetValue(id, out var node))
-            {
-                node.GetComponent<NodeScript>().SetColor(new Color(1.0f, 0.0f, 1.0f));
-                m_SelectedNodes.Add(node.GetComponent<NodeScript>().ToUnityData());
-            }
+            int numLeaves = 10;
+            m_TempUI.SampleLeafNodes(numLeaves);
         }
+
+        //public void SelectNode(string id)
+        //{
+        //    //if (m_Tree.TryGetValue(id, out var node))
+        //    //{
+        //    //    node.GetComponent<NodeScript>().SetColor(new Color(1.0f, 0.0f, 1.0f));
+        //    //    m_SelectedNodes.Add(node);
+        //    //}
+        //    m_TempUI.SelectNode(id);
+        //}
 
         public void HideUnselectedNodes()
         {
@@ -192,7 +360,7 @@ namespace Clam
                 }
             });
         }
-        void SetParentChildLines()
+        public void SetParentChildLines()
         {
             foreach (var item in m_Tree.Values)
             {
@@ -256,12 +424,103 @@ namespace Clam
             }
         }
 
+        public void DemoPhysics()
+        {
+            m_IsPhysicsRunning = true;
+            //m_TempUI.SampleLeafNodes(45);
+            m_TempUI.SelectAllLeafNodes();
+            RNN_Test();
+            HideUnselectedNodes();
+            RandomizeLocations();
+            if (m_SelectedNodes.Count == 0)
+            {
+                Debug.LogError("error cant run physics sim - no nodes selected");
+                return;
+            }
+            else if (m_SelectedNodes.Count < 2)
+            {
+                Debug.LogWarning("physics sim being run with only one node");
+            }
+
+            print("initializing physics sim");
+            foreach (GameObject node in m_SelectedNodes)
+            {
+                //if (m_Tree.TryGetValue(node.id, out var obj))
+                //{
+                //    node.pos = obj.GetComponent<NodeScript>().GetPosition();
+                //}
+            }
+            List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+            foreach (GameObject node in m_SelectedNodes)
+            {
+                nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+            }
+            Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
+
+        }
 
         void Update()
         {
+            if (m_IsPhysicsRunning)
+            {
+
+                if (m_PhysicsIter < m_MaxPhysicsIters)
+                {
+                    ApplyForces();
+                    m_PhysicsIter++;
+                }
+                else
+                {
+                    ClamFFI.ShutdownPhysics();
+                    print("finished sim");
+                    m_IsPhysicsRunning = false;
+                }
+            }
             HandleLMC();
             HandleRMC();
             MyQuit();
+        }
+
+        public void ApplyForces()
+        {
+            print("applying forces");
+            Clam.ClamFFI.ApplyForces(UpdatePhysicsSim);
+            m_PhysicsIter++;
+            //foreach (var obj in m_SelectedNodes)
+            //{
+            //    //if (m_Tree.TryGetValue(node.id, out var obj))
+            //    {
+            //        for (int i = 0; i < obj.GetComponent<Transform>().childCount; i++)
+            //        {
+            //            GameObject child = obj.transform.GetChild(i).gameObject;
+            //            string[] names = child.name.Split();
+            //            if (m_Tree.TryGetValue(names[1], out var other))
+            //            {
+            //                List<Vector3> pos = new List<Vector3>
+            //                {
+            //                    obj.GetComponent<NodeScript>().GetPosition(),
+            //                    other.GetComponent<NodeScript>().GetPosition()
+            //                };
+            //                var l = child.GetComponent<LineRenderer>();
+            //                if (l != null)
+            //                {
+            //                    Debug.Log("n1," + names[0] + ",n2," + names[1]);
+            //                    Debug.Log("changing line pos>");
+            //                    l.SetPositions(pos.ToArray());
+            //                }
+            //                else
+            //                {
+            //                    Debug.Log("line rendeer null");
+            //                }
+            //                //Do something with child
+            //            }
+            //            else
+            //            {
+            //                Debug.Log("failed to find????");
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         void MyQuit()

@@ -45,7 +45,7 @@ namespace Clam
         public int argCenter;
         public int argRadius;
 
-        public float placeHolder;
+        public float distToQuery;
 
 
         //public NodeData(int n)
@@ -78,7 +78,7 @@ namespace Clam
             lfd = -1.0f;
             argCenter = -1;
             argRadius = -1;
-            placeHolder = -1;
+            distToQuery = -1;
 
         }
         public NodeDataFFI(NodeDataUnity data)
@@ -96,7 +96,7 @@ namespace Clam
             lfd = data.lfd;
             argCenter = data.argCenter;
             argRadius = data.argRadius;
-            placeHolder = -1;
+            distToQuery = -1;
 
         }
         public NodeDataFFI(int n)
@@ -114,7 +114,7 @@ namespace Clam
             lfd = n;
             argCenter = n;
             argRadius = n;
-            placeHolder = n;
+            distToQuery = n;
 
         }
 

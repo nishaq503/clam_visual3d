@@ -1,3 +1,4 @@
+using System.Text;
 using UnityEngine;
 
 public class NodeScript : MonoBehaviour
@@ -8,10 +9,14 @@ public class NodeScript : MonoBehaviour
     private string _rightChildID;
 
     public int test = 5;
+    public bool isSelected = false;
+    private Color m_ActualColor;
+
+    public float distanceToQuery = -1.0f;
     // Start is called before the first frame update
     void Start()
     {
-
+        m_ActualColor = new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f);
     }
 
     // Update is called once per frame
@@ -23,8 +28,7 @@ public class NodeScript : MonoBehaviour
     {
         //ClamFFI.Clam.ForEachDFT(m_ExpandSubtree, this._id);
     }
-
-   
+    
 
     public void SetPosition(Vector3 pos)
     {
@@ -59,6 +63,15 @@ public class NodeScript : MonoBehaviour
     public Color GetColor()
     {
         return GetComponent<Renderer>().material.color;
+    }
+    public Color GetActualColor()
+    {
+        return m_ActualColor;
+    }
+
+    public void SetActualColor(Color color)
+    {
+        m_ActualColor = color;
     }
 
     public void SetID(string id)

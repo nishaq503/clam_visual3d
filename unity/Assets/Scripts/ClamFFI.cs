@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
 using static UnityEditor.Progress;
 
 namespace Clam
@@ -15,7 +16,7 @@ namespace Clam
 
     public static partial class ClamFFI
     {
-	public const string __DllName = "clam_ffi_20230701190325";
+	public const string __DllName = "clam_ffi_20230709120424";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -74,6 +75,14 @@ namespace Clam
         public static int GetNumNodes()
         {
             return get_num_nodes(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "shutdown_physics", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern FFIError shutdown_physics(IntPtr handle);
+
+        public static FFIError ShutdownPhysics()
+        {
+            return shutdown_physics(_handle);
         }
 
         [DllImport(__DllName, EntryPoint = "test_cakes_rnn_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -138,19 +147,64 @@ namespace Clam
         }
 
         [System.Security.SecurityCritical]
-        [DllImport(__DllName, EntryPoint = "run_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern void run_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-        public static unsafe NodeDataFFI[] RunForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn )
+        [DllImport(__DllName, EntryPoint = "color_by_dist_to_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void color_by_dist_to_query(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        public static unsafe void ColorByDistToQuery(List<NodeDataUnity> nodes, NodeVisitor cbFn)
         {
             NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
             for (int i = 0; i < nodes.Count; i++)
             {
-                items[i] = nodes[i].ToNodeFFI();
+                //var id = nodes[i].id;
+                items[i] = new NodeDataFFI(nodes[i]);
             }
 
-            run_force_directed_sim(_handle, items, items.Length, cbFn);
-            return items;
+            color_by_dist_to_query(_handle, items, items.Length, cbFn);
+
+
+
         }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "detect_edges", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void detect_edges(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        public static unsafe void DetectEdges(List<NodeDataUnity> nodes, NodeVisitor cbFn)
+        {
+            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                //var id = nodes[i].id;
+                items[i] = new NodeDataFFI(nodes[i]);
+            }
+
+            detect_edges(_handle, items, items.Length, cbFn);
+        }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "init_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void init_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        public static unsafe void InitForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn)
+        {
+            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                //var id = nodes[i].id;
+                items[i] = new NodeDataFFI(nodes[i]);
+            }
+
+            init_force_directed_sim(_handle, items, items.Length, cbFn);
+            
+        }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "apply_forces", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void apply_forces(IntPtr handle, NodeVisitor cb_fn);
+        public static unsafe void ApplyForces(NodeVisitor cbFn)
+        {
+            apply_forces(_handle, cbFn);
+        }
+
+
+
 
     }
 }

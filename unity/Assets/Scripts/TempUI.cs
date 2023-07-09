@@ -8,6 +8,7 @@ using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using static UnityEditor.Progress;
 using UnityEditor;
+using Unity.VisualScripting.FullSerializer;
 
 namespace Clam
 {
@@ -21,23 +22,36 @@ namespace Clam
         //private Dictionary<string, ClamFFI.NodeData> m_SelectedNodes;
         private Dictionary<string, GameObject> m_Tree;
         private string m_LastSelectedNode;
-        private List<NodeDataUnity> m_SelectedNodes;
-        private List<NodeDataUnity> m_QueryResults;
+        private List<GameObject> m_SelectedNodes;
+        private List<GameObject> m_QueryResults;
 
-        public TempUI(Dictionary<string, GameObject> tree, List<NodeDataUnity> selectedNodes, List<NodeDataUnity> queryResults, GameObject nodePrefab, TMP_Text text)
+
+        private bool m_IsQuerySelected = false;
+        private Color m_DefaultColor;
+        private Color m_SelectedColor;
+        private Color m_QueryHitFullColor;
+        private Color m_QueryHitPartialColor;
+        //private bool m_IsQuerySelected = false;
+
+        public TempUI(Dictionary<string, GameObject> tree, List<GameObject> selectedNodes, List<GameObject> queryResults, GameObject nodePrefab, TMP_Text text)
         {
             m_Tree = tree;
             m_SelectedNodes = selectedNodes;
             m_QueryResults = queryResults;
             this.nodePrefab = nodePrefab;
             this.text = text;
+
+            m_DefaultColor = new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f);
+            m_SelectedColor = new Color(0.0f, 0.0f, 1.0f);
+            m_QueryHitFullColor = new Color(0.0f, 01.0f, 0.0f);
+            m_QueryHitPartialColor = new Color(0.0f, 1.0f, 1.0f);
         }
 
 
         public void RNN_Test()
         {
             Debug.Log("rnn test");
-            ResetColors();
+            //ResetColors();
 
             global::Clam.ClamFFI.TestCakesRNNQuery("test", CakesRNNQuery);
         }
@@ -50,12 +64,14 @@ namespace Clam
             if (hasValue)
             {
                 node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
-                m_SelectedNodes.Add(node.GetComponent<NodeScript>().ToUnityData());
-                m_QueryResults.Add(node.GetComponent<NodeScript>().ToUnityData());
+                node.GetComponent<NodeScript>().SetActualColor(nodeData.color.AsColor);
+                node.GetComponent<NodeScript>().distanceToQuery = nodeData.distToQuery;
+                m_SelectedNodes.Add(node);
+                m_QueryResults.Add(node);
                 text.text = nodeData.GetInfo();
-                text.text += "distance to query: " + nodeData.placeHolder.ToString();
+                text.text += "distance to query: " + nodeData.distToQuery.ToString();
 
-                Debug.Log("distance to query: " + nodeData.placeHolder.ToString());
+                Debug.Log("distance to query: " + nodeData.distToQuery.ToString());
             }
             else
             {
@@ -65,6 +81,30 @@ namespace Clam
 
         public void ResetColors()
         {
+            m_Tree.ToList().ForEach(node =>
+            {
+                //node.Value.SetActive(true);
+                if (node.Value.activeSelf)
+                {
+                    node.Value.GetComponent<NodeScript>().SetColor(new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f));
+                }
+            });
+        }
+
+        public void ClamRadius()
+        {
+            foreach (var node in m_SelectedNodes)
+            {
+                NodeWrapper nodeWrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
+                Clam.ClamFFI.GetClusterData(nodeWrapper);
+
+                node.GetComponent<Transform>().localScale = new Vector3(nodeWrapper.Data.radius * 100, nodeWrapper.Data.radius * 100, nodeWrapper.Data.radius * 100);
+            }
+        }
+
+
+        public void Reset()
+        {
             m_SelectedNodes.Clear();
             text.text = "";
             m_Tree.ToList().ForEach(node =>
@@ -72,31 +112,143 @@ namespace Clam
                 node.Value.SetActive(true);
                 node.Value.GetComponent<NodeScript>().SetColor(new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f));
             });
+            
+        }
+
+        public void HighLightQueryResults()
+        {
+            m_IsQuerySelected = !m_IsQuerySelected;
+            if (m_IsQuerySelected)
+            {
+                foreach (var node in m_QueryResults)
+                {
+                    node.GetComponent<NodeScript>().SetColor(node.GetComponent<NodeScript>().GetActualColor());
+                }
+            }
+            else
+            {
+                foreach (var node in m_QueryResults)
+                {
+                    node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
+                }
+            }
+            
         }
 
         public void SelectQueryResults()
         {
-            m_SelectedNodes.ForEach(node =>
-            {
-                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(node.color);
-            });
+            m_IsQuerySelected = !m_IsQuerySelected;
 
-            m_SelectedNodes.Clear();
-            m_SelectedNodes = m_QueryResults;
-            m_SelectedNodes = m_QueryResults.Select(a => a).ToList();
-            m_SelectedNodes.ForEach(node =>
+            if (m_IsQuerySelected)
             {
-                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(new Color(0.0f, 1.0f, 1.0f));
+                foreach (var node in m_QueryResults)
+                {
+                    SelectNode(node);
+                    node.GetComponent<NodeScript>().SetColor(node.GetComponent<NodeScript>().GetActualColor());
+                }
+                Debug.Log("num selected: " + m_SelectedNodes.Count);
 
-            });
+                //m_SelectedNodes.ForEach(node =>
+                //{
+                //    m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(node.color);
+                //});
+
+                //m_SelectedNodes.Clear();
+                //m_SelectedNodes = m_QueryResults;
+                //m_SelectedNodes = m_QueryResults.Select(a => a).ToList();
+                //m_SelectedNodes.ForEach(node =>
+                //{
+                //    m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(new Color(0.0f, 1.0f, 1.0f));
+
+                //});
+
+
+            }
+            else
+            {
+                foreach (var node in m_QueryResults)
+                {
+                    DeSelectNode(node);
+                }
+            }
+
+
         }
+
+
+        public void ColorAllByDistToQuery()
+        {
+            Debug.Log("num selected: " + m_SelectedNodes.Count);
+
+            List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+            foreach (var obj in m_SelectedNodes)
+            {
+                //obj.GetComponent<NodeScript>().SetColor(new Color(1.0f, 1.0f, 1.0f));
+                nodes.Add(obj.GetComponent<NodeScript>().ToUnityData());
+            }
+            ClamFFI.ColorByDistToQuery(nodes, ColorByDistToQuery);
+
+        }
+
+        public void ColorByDistToQuery(ref NodeDataFFI nodeData)
+        {
+            if (m_Tree.TryGetValue(nodeData.id.AsString, out var nodeObj))
+            {
+                nodeObj.GetComponent<NodeScript>().distanceToQuery = nodeData.distToQuery;
+                //nodeObj.GetComponent<NodeScript>().SetColor(new Color(1.0f , 1.0f, 1.0f));
+                nodeObj.GetComponent<NodeScript>().SetColor(new Color(1.0f - nodeData.distToQuery, 1.0f - nodeData.distToQuery, 1.0f - nodeData.distToQuery));
+                Debug.Log("setting color by query dist : " + nodeData.distToQuery);
+            }
+            else
+            {
+                Debug.LogError("node not found in color by query");
+            }
+        }
+
+        public void SelectNode(GameObject node)
+        {
+            node.GetComponent<NodeScript>().SetColor(m_SelectedColor);
+            m_SelectedNodes.Add(node);
+            //text.text = node.GetComponent<NodeScript>().distanceToQuery.ToString();
+
+            NodeWrapper wrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
+            ClamFFI.GetClusterData(wrapper);
+            text.text = wrapper.Data.GetInfo();
+            if (node.GetComponent<NodeScript>().distanceToQuery >= 0.0f)
+            {
+                text.text += "dist to query: " + node.GetComponent<NodeScript>().distanceToQuery.ToString();
+            }
+            Debug.Log("num selected: " + m_SelectedNodes.Count);
+
+        }
+
+        public void DeSelectNode(GameObject node)
+        {
+            node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
+            m_SelectedNodes.Remove(node);
+            text.text = "";
+        }
+
+        public void DemoPhysics()
+        {
+            //SampleLeafNodes(40);
+            SelectAllLeafNodes();
+            SelectQueryResults();
+            RNN_Test();
+            HideUnselectedNodes();
+            RandomizeLocations();
+            //ClamFFI.InitForceDirectedSim()
+
+        }
+
+
 
         public void DeselectAll()
         {
-            m_SelectedNodes.ForEach(node =>
-            {
-                m_Tree.GetValueOrDefault(node.id).GetComponent<NodeScript>().SetColor(node.color);
-            });
+            //m_SelectedNodes.ForEach(node =>
+            //{
+            //    node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
+            //});
 
             m_SelectedNodes.Clear();
 
@@ -111,25 +263,25 @@ namespace Clam
                 var y = Random.Range(0, 100);
                 var z = Random.Range(0, 100);
 
-                if (m_Tree.TryGetValue(node.id, out var obj))
-                {
-                    obj.GetComponent<Transform>().position = new Vector3(x, y, z);
-                }
+                //if (m_Tree.TryGetValue(node.id, out var obj))
+
+                node.GetComponent<Transform>().position = new Vector3(x, y, z);
+
             }
 
             foreach (var node in m_SelectedNodes)
             {
-                if (m_Tree.TryGetValue(node.id, out var obj))
+                //if (m_Tree.TryGetValue(node.id, out var obj))
                 {
-                    for (int i = 0; i < obj.GetComponent<Transform>().childCount; i++)
+                    for (int i = 0; i < node.GetComponent<Transform>().childCount; i++)
                     {
-                        GameObject child = obj.transform.GetChild(i).gameObject;
+                        GameObject child = node.transform.GetChild(i).gameObject;
                         string[] names = child.name.Split();
                         if (m_Tree.TryGetValue(names[1], out var other))
                         {
                             List<Vector3> pos = new List<Vector3>
                             {
-                                obj.GetComponent<NodeScript>().GetPosition(),
+                                node.GetComponent<NodeScript>().GetPosition(),
                                 other.GetComponent<NodeScript>().GetPosition()
                             };
                             var l = child.GetComponent<LineRenderer>();
@@ -256,18 +408,29 @@ namespace Clam
             {
                 if (entry.Value.GetComponent<NodeScript>().GetLeftChildID() == "None")
                 {
-                    SelectNode(entry.Value.GetComponent<NodeScript>().GetId());
+                    SelectNode(entry.Value);
                 }
             });
         }
 
-        void SelectNode(string id)
+        public void SampleLeafNodes(int numLeaves)
         {
-            if (m_Tree.TryGetValue(id, out var node))
-            {
-                node.GetComponent<NodeScript>().SetColor(new Color(1.0f, 0.0f, 1.0f));
-                m_SelectedNodes.Add(node.GetComponent<NodeScript>().ToUnityData());
-            }
+
+            DeselectAll();
+            var rand = new System.Random();
+            //m_Tree.OrderBy(x => rand.Next()).ToList().ForEach(entry =>
+            //{
+
+            //    if (entry.Value.GetComponent<NodeScript>().GetLeftChildID() == "None" && selected++ <= numLeaves)
+            //    {
+            //        SelectNode(entry.Value);
+            //    }
+            //});
+            m_Tree.Values.ToList().Where(node => node.GetComponent<NodeScript>().IsLeaf() && m_QueryResults.Contains(node) == false).OrderBy(x => rand.Next()).Take(numLeaves).ToList().ForEach(obj => SelectNode(obj));
+
+
+
+
         }
 
         public void HideUnselectedNodes()
@@ -275,7 +438,7 @@ namespace Clam
             m_Tree.ToList().ForEach(gameObject =>
             {
                 var node = gameObject.Value;
-                var found = m_SelectedNodes.Find(n => n.id == node.GetComponent<NodeScript>().GetId());
+                var found = m_SelectedNodes.Find(n => n.GetComponent<NodeScript>().GetId() == node.GetComponent<NodeScript>().GetId());
                 if (found == null)
                 {
                     node.SetActive(false);
@@ -292,9 +455,19 @@ namespace Clam
                 return;
             }
 
-            float distance = global::Clam.ClamFFI.DistanceToOther(m_SelectedNodes[0].id, m_SelectedNodes[1].id);
+            float distance = global::Clam.ClamFFI.DistanceToOther(m_SelectedNodes[0].GetComponent<NodeScript>().GetId(), m_SelectedNodes[1].GetComponent<NodeScript>().GetId());
             Debug.Log("distance to other " + distance);
             text.text += "distance: " + distance.ToString();
+        }
+
+        void Deselect(GameObject node)
+        {
+            node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
+            m_SelectedNodes.Remove(node);
+            if (!m_SelectedNodes.Contains(node))
+            {
+                text.text = "";
+            }
         }
 
         public void HandleLMC()
@@ -307,35 +480,38 @@ namespace Clam
 
                 if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
                 {
-                    var selectedNode = hitInfo.collider.gameObject.GetComponent<NodeScript>();
+                    var selectedNode = hitInfo.collider.gameObject;
                     if (m_SelectedNodes.Count > 0)
                     {
-                        var existingSelection = m_SelectedNodes.Find(node => node.id == selectedNode.GetId());
+                        var existingSelection = m_SelectedNodes.Find(node => node.GetComponent<NodeScript>().GetId() == selectedNode.GetComponent<NodeScript>().GetId());
                         if (existingSelection != null)
                         {
-                            selectedNode.SetColor(existingSelection.color);
-                            m_SelectedNodes.Remove(existingSelection);
-                            if (m_SelectedNodes.Count > 0)
-                            {
-                                text.text = m_SelectedNodes.Last().GetInfo();
-                            }
-                            else
-                            {
-                                text.text = "";
-                            }
+                            //selectedNode.SetColor(m_DefaultColor);
+                            //m_SelectedNodes.Remove(existingSelection);
+                            Deselect(existingSelection);
+                            //text.text = "";
+                            //if (m_SelectedNodes.Count > 0)
+                            //{
+                            //    text.text = m_SelectedNodes.Last().GetInfo();
+                            //}
+                            //else
+                            //{
+                            //    text.text = "";
+                            //}
                             return;
                         }
                     }
 
                     Debug.Log("selexting");
 
-                    global::Clam.NodeWrapper wrapper = new global::Clam.NodeWrapper(selectedNode.ToNodeData());
+                    global::Clam.NodeWrapper wrapper = new global::Clam.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
                     FFIError found = global::Clam.ClamFFI.GetClusterData(wrapper);
                     if (found == FFIError.Ok)
                     {
-                        m_SelectedNodes.Add(new NodeDataUnity(wrapper.Data));
-                        selectedNode.SetColor(Color.blue);
-                        text.text = wrapper.Data.GetInfo();
+                        //m_SelectedNodes.Add(selectedNode);
+                        //selectedNode.GetComponent<NodeScript>().SetColor(m_SelectedColor);
+                        //text.text = wrapper.Data.GetInfo();
+                        SelectNode(selectedNode);
                     }
 
                 }
@@ -422,91 +598,7 @@ namespace Clam
 
 
 
-        public void DrawEdges()
-        {
-            //DeleteAllLines();
-            Debug.Log("test");
-            var nodes = m_SelectedNodes;
-            int edgeCount = 0;
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var entry = nodes[i];
-                //var node = entry.Value;
-                if (m_Tree.TryGetValue(nodes[i].id, out var node))
-                {
-                    //var node = m_Tree.GetValueOrDefault(nodes[i].id);
-                    //Debug.Log(node.GetComponent<NodeScript>().GetId());
-                    NodeWrapper nodeWrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
-                    for (int j = i + 1; j < nodes.Count; j++)
-                    {
-                        //var other = m_Tree.GetValueOrDefault(nodes[j].id);
-                        if (m_Tree.TryGetValue(nodes[j].id, out var other))
-                        {
-                            NodeWrapper otherWrapper = new NodeWrapper(other.GetComponent<NodeScript>().ToNodeData());
-                            global::Clam.ClamFFI.GetClusterData(nodeWrapper);
-                            global::Clam.ClamFFI.GetClusterData(otherWrapper);
-
-                            float distance = global::Clam.ClamFFI.DistanceToOther(node.GetComponent<NodeScript>().GetId(), other.GetComponent<NodeScript>().GetId());
-                            //Debug.Log("distance: " + distance.ToString() + ", sum rad: " + (nodeWrapper.Data.radius + otherWrapper.Data.radius).ToString());
-                            // want edges btwn two clustesr whose distbtwn centers <= sum of radius
-                            //if (node.GetComponent<NodeScript>().IsLeaf() && other.GetComponent<NodeScript>().IsLeaf())
-                            {
-                                if (distance <= nodeWrapper.Data.radius + otherWrapper.Data.radius)
-                                {
-                                    //if (edgeCount < 10)
-                                    {
-                                        Debug.Log("should get edge**************************************************************************");
-                                        edgeCount++;
-                                        AddEdge(node, other, edgeCount);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log("faled1?");
-                        }
-                    }
-                }
-                else
-                {
-                    Debug.Log("faled?");
-                }
-
-            }
-            //foreach (var entry in nodes)
-            //{
-            //    var node = entry.Value;
-            //    Debug.Log(node.GetComponent<NodeScript>().GetId());
-            //    NodeWrapper nodeWrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
-            //    foreach (var otherEntry in nodes)
-            //    {
-            //        var other = otherEntry.Value;
-            //        if (other.GetComponent<NodeScript>().GetId() == node.GetComponent<NodeScript>().GetId())
-            //        {
-            //            continue;
-            //        }
-
-
-            //        NodeWrapper otherWrapper = new NodeWrapper(other.GetComponent<NodeScript>().ToNodeData());
-            //        ClamFFI.Clam.GetClusterData(nodeWrapper);
-            //        ClamFFI.Clam.GetClusterData(otherWrapper);
-
-            //        float distance = ClamFFI.Clam.DistanceToOther(node.GetComponent<NodeScript>().GetId(), other.GetComponent<NodeScript>().GetId());
-            //        Debug.Log("distance: " + distance.ToString() + ", sum rad: " + (nodeWrapper.Data.radius + otherWrapper.Data.radius).ToString());
-            //        // want edges btwn two clustesr whose distbtwn centers <= sum of radius
-            //        if (distance <= nodeWrapper.Data.radius + otherWrapper.Data.radius)
-            //        {
-            //            //AddEdge(node, other);
-            //            Debug.Log("should get edge");
-            //        }
-
-
-
-
-            //    }
-            //}
-        }
+        
     }
 
 
