@@ -13,5 +13,12 @@ namespace Clam
         NullPointerPassed = 1,
         InvalidStringPassed = 2,
         HandleInitFailed = 3,
+        GraphBuildFailed = 4,
+        QueryIsNull,
+        PhysicsAlreadyShutdown,
+        DivisionByZero,
+        PhysicsRunning,
+        PhysicsFinished,
+        PhysicsNotReady,
     }
 }

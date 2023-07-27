@@ -48,12 +48,12 @@ namespace Clam
         }
 
 
-        public void RNN_Test()
+        public void RNN_Test(float searchRadius)
         {
             Debug.Log("rnn test");
             //ResetColors();
 
-            global::Clam.ClamFFI.TestCakesRNNQuery("test", CakesRNNQuery);
+            global::Clam.ClamFFI.TestCakesRNNQuery(searchRadius, CakesRNNQuery);
         }
 
         public unsafe void CakesRNNQuery(ref global::Clam.NodeDataFFI nodeData)
@@ -207,34 +207,38 @@ namespace Clam
 
         public void SelectNode(GameObject node)
         {
-            node.GetComponent<NodeScript>().SetColor(m_SelectedColor);
+            node.GetComponent<NodeScript>().Select();
+            //Debug.Log("node selected");
             m_SelectedNodes.Add(node);
-            //text.text = node.GetComponent<NodeScript>().distanceToQuery.ToString();
+            ////text.text = node.GetComponent<NodeScript>().distanceToQuery.ToString();
 
-            NodeWrapper wrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
-            ClamFFI.GetClusterData(wrapper);
-            text.text = wrapper.Data.GetInfo();
-            if (node.GetComponent<NodeScript>().distanceToQuery >= 0.0f)
-            {
-                text.text += "dist to query: " + node.GetComponent<NodeScript>().distanceToQuery.ToString();
-            }
-            Debug.Log("num selected: " + m_SelectedNodes.Count);
+            //NodeWrapper wrapper = new NodeWrapper(node.GetComponent<NodeScript>().ToNodeData());
+            //ClamFFI.GetClusterData(wrapper);
+            //text.text = wrapper.Data.GetInfo();
+            //if (node.GetComponent<NodeScript>().distanceToQuery >= 0.0f)
+            //{
+            //    text.text += "dist to query: " + node.GetComponent<NodeScript>().distanceToQuery.ToString();
+            //}
+            //Debug.Log("num selected: " + m_SelectedNodes.Count);
+
+
+
 
         }
 
         public void DeSelectNode(GameObject node)
         {
-            node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
+            node.GetComponent<NodeScript>().Deselect();
             m_SelectedNodes.Remove(node);
             text.text = "";
         }
 
-        public void DemoPhysics()
+        public void DemoPhysics(float searchRadius)
         {
             //SampleLeafNodes(40);
             SelectAllLeafNodes();
             SelectQueryResults();
-            RNN_Test();
+            RNN_Test(searchRadius);
             HideUnselectedNodes();
             RandomizeLocations();
             //ClamFFI.InitForceDirectedSim()
@@ -245,12 +249,13 @@ namespace Clam
 
         public void DeselectAll()
         {
-            //m_SelectedNodes.ForEach(node =>
-            //{
-            //    node.GetComponent<NodeScript>().SetColor(m_DefaultColor);
-            //});
+            m_SelectedNodes.ForEach(node =>
+            {
+                node.GetComponent<NodeScript>().Deselect();
+            });
 
             m_SelectedNodes.Clear();
+            text.text = "";
 
         }
 
@@ -489,6 +494,8 @@ namespace Clam
                             //selectedNode.SetColor(m_DefaultColor);
                             //m_SelectedNodes.Remove(existingSelection);
                             Deselect(existingSelection);
+                            //selectedNode.GetComponent<NodeScript>().Deselect();
+
                             //text.text = "";
                             //if (m_SelectedNodes.Count > 0)
                             //{
@@ -512,6 +519,8 @@ namespace Clam
                         //selectedNode.GetComponent<NodeScript>().SetColor(m_SelectedColor);
                         //text.text = wrapper.Data.GetInfo();
                         SelectNode(selectedNode);
+                        //selectedNode.GetComponent<NodeScript>().Deselect();
+
                     }
 
                 }

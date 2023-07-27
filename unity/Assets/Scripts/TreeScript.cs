@@ -20,17 +20,24 @@ namespace Clam
         public GameObject springPrefab;
         public TMP_Text text;
 
+        public TMP_Text ClusterText;
+        public GameObject ClusterUI;
+
 
         //private Dictionary<string, ClamFFI.NodeData> m_SelectedNodes;
         private Dictionary<string, GameObject> m_Tree;
         private string m_LastSelectedNode;
         private List<GameObject> m_SelectedNodes;
         private List<GameObject> m_QueryResults;
+        private List<GameObject> m_GraphNodes;
 
         private TempUI m_TempUI;
         private bool m_IsPhysicsRunning = false;
         private int m_MaxPhysicsIters = 1000;
         private int m_PhysicsIter = 0;
+
+        private float m_EdgeScalar = 25.0f;
+        private float m_SearchRadius = 0.05f;
 
         //private List<Color> m_SelectedNodeActualColors;
 
@@ -116,7 +123,7 @@ namespace Clam
             }
 
             print("initializing physics sim");
-           
+
             List<NodeDataUnity> nodes = new List<NodeDataUnity>();
             foreach (GameObject node in m_SelectedNodes)
             {
@@ -166,7 +173,7 @@ namespace Clam
 
         public void RNN_Test()
         {
-            m_TempUI.RNN_Test();
+            m_TempUI.RNN_Test(m_SearchRadius);
         }
 
         public void ResetAll()
@@ -208,9 +215,9 @@ namespace Clam
         {
             var obj = Instantiate(nodePrefab);
             List<Vector3> given = new List<Vector3>();
-            List < float> dist = new List<float>();
+            List<float> dist = new List<float>();
 
-            foreach(var node in m_QueryResults)
+            foreach (var node in m_QueryResults)
             {
                 given.Add(node.transform.position);
                 dist.Add(node.GetComponent<NodeScript>().distanceToQuery);
@@ -221,22 +228,22 @@ namespace Clam
             obj.GetComponent<Renderer>().material.color = Color.red;
         }
 
-    //    Point solve(const vector<Point>& given, const vector<double>& dist) {
-    //  Point res;
-    //        double alpha = ALPHA;
-    //  for (int iter = 0; iter<ITER; iter++) {
-    //      Point delta;
-    //      for (int i = 0; i<given.size(); i++) {
-    //        double d = res.dist(given[i]);
-    //        Point diff = (given[i] - res) * (alpha * (d - dist[i]) / max(dist[i], d));
-    //        delta = delta + diff;
-    //      }
-    //    delta = delta* (1.0 / given.size()); 
-    //      alpha *= RATIO;   
-    //      res = res + delta;
-    //  }
-    //return res;
-    //}
+        //    Point solve(const vector<Point>& given, const vector<double>& dist) {
+        //  Point res;
+        //        double alpha = ALPHA;
+        //  for (int iter = 0; iter<ITER; iter++) {
+        //      Point delta;
+        //      for (int i = 0; i<given.size(); i++) {
+        //        double d = res.dist(given[i]);
+        //        Point diff = (given[i] - res) * (alpha * (d - dist[i]) / max(dist[i], d));
+        //        delta = delta + diff;
+        //      }
+        //    delta = delta* (1.0 / given.size()); 
+        //      alpha *= RATIO;   
+        //      res = res + delta;
+        //  }
+        //return res;
+        //}
 
         Vector3 SolveQueryPos(List<Vector3> given, List<float> dist)
         {
@@ -244,15 +251,15 @@ namespace Clam
             float alpha = 2.0f;
             const float ratio = 0.99f;
 
-            Vector3 res = new Vector3(0,0,0);
-            for(int iter =0; iter < 1000; iter++)
+            Vector3 res = new Vector3(0, 0, 0);
+            for (int iter = 0; iter < 1000; iter++)
             {
                 Vector3 delta = new Vector3(0, 0, 0);
-                for(int i =0; i < given.Count;i++)
+                for (int i = 0; i < given.Count; i++)
                 {
                     float d = Vector3.Distance(res, given[i]);
                     Vector3 diff = (given[i] - res);
-                    float val =  (alpha * (d - dist[i]) / Mathf.Max(dist[i],d));
+                    float val = (alpha * (d - dist[i]) / Mathf.Max(dist[i], d));
                     Vector3 diff2 = new Vector3(diff.x * val, diff.y * val, diff.z * val);
                     delta += diff2;
                 }
@@ -429,6 +436,7 @@ namespace Clam
             m_IsPhysicsRunning = true;
             //m_TempUI.SampleLeafNodes(45);
             m_TempUI.SelectAllLeafNodes();
+            m_GraphNodes = m_SelectedNodes;
             RNN_Test();
             HideUnselectedNodes();
             RandomizeLocations();
@@ -455,7 +463,8 @@ namespace Clam
             {
                 nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
             }
-            Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
+            //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
+            Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar, m_MaxPhysicsIters, EdgeDrawer, UpdatePhysicsSim);
 
         }
 
@@ -463,20 +472,24 @@ namespace Clam
         {
             if (m_IsPhysicsRunning)
             {
-
-                if (m_PhysicsIter < m_MaxPhysicsIters)
+                if (ClamFFI.PhysicsUpdateAsync() == FFIError.PhysicsFinished)
                 {
-                    ApplyForces();
-                    m_PhysicsIter++;
-                }
-                else
-                {
-                    ClamFFI.ShutdownPhysics();
-                    print("finished sim");
                     m_IsPhysicsRunning = false;
+                    print("physics finished");
                 }
+                //if (m_PhysicsIter < m_MaxPhysicsIters)
+                //{
+                //    ApplyForces();
+                //    m_PhysicsIter++;
+                //}
+                //else
+                //{
+                //    ClamFFI.ShutdownPhysics();
+                //    print("finished sim");
+                //    m_IsPhysicsRunning = false;
+                //}
             }
-            HandleLMC();
+            //HandleLMC();
             HandleRMC();
             MyQuit();
         }
@@ -484,7 +497,7 @@ namespace Clam
         public void ApplyForces()
         {
             print("applying forces");
-            Clam.ClamFFI.ApplyForces(UpdatePhysicsSim);
+            Clam.ClamFFI.ApplyForces(m_EdgeScalar, UpdatePhysicsSim);
             m_PhysicsIter++;
             //foreach (var obj in m_SelectedNodes)
             //{
@@ -532,7 +545,13 @@ namespace Clam
             }
         }
 
-        void HandleLMC()
+        void OnLMC()
+        {
+            print("test onlmc1234");
+            m_TempUI.HandleLMC();
+        }
+
+        public void HandleLMC()
         {
             m_TempUI.HandleLMC();
         }

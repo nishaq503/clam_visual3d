@@ -1,5 +1,12 @@
 using System.Text;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+
+public interface IClickable
+{
+    void OnClick();
+}
 
 public class NodeScript : MonoBehaviour
 {
@@ -9,26 +16,55 @@ public class NodeScript : MonoBehaviour
     private string _rightChildID;
 
     public int test = 5;
-    public bool isSelected = false;
+    private bool m_IsSelected = false;
     private Color m_ActualColor;
-
+    private InputAction click;
     public float distanceToQuery = -1.0f;
+
+    //void Awake()
+    //{
+    //    click = new InputAction(binding: "<Mouse>/leftButton");
+    //    click.performed += ctx => {
+    //        RaycastHit hit;
+    //        Vector3 coor = Mouse.current.position.ReadValue();
+    //        if (Physics.Raycast(Camera.main.ScreenPointToRay(coor), out hit))
+    //        {
+    //            hit.collider.GetComponent<IClickable>()?.OnClick();
+    //        }
+    //    };
+    //    click.Enable();
+    //}
     // Start is called before the first frame update
     void Start()
     {
         m_ActualColor = new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f);
     }
-
+    //public void OnClick()
+    //{
+    //    Debug.Log("somebody clicked me" + " " + _id);
+    //}
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void Select()
+    {
+        SetColor(new Color(0.0f, 0.0f, 1.0f));
+        m_IsSelected = true;
+    }
+
+    public void Deselect()
+    {
+        SetColor(new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f));
+        m_IsSelected = false;
     }
 
     public void ExpandSubtree()
     {
         //ClamFFI.Clam.ForEachDFT(m_ExpandSubtree, this._id);
     }
-    
+
 
     public void SetPosition(Vector3 pos)
     {
@@ -40,6 +76,11 @@ public class NodeScript : MonoBehaviour
     {
         //Debug.Log("setting node " + _id + " color to " + color);
         GetComponent<Renderer>().material.color = color;
+    }
+
+    public bool IsSelected()
+    {
+        return m_IsSelected;
     }
 
     public string GetId()
@@ -95,7 +136,7 @@ public class NodeScript : MonoBehaviour
         return _leftChildID == "None" && _rightChildID == "None";
     }
 
- 
+
     public Clam.NodeDataFFI ToNodeData()
     {
         Clam.NodeDataFFI node = new Clam.NodeDataFFI(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());

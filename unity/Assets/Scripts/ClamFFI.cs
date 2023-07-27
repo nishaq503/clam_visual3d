@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -16,7 +17,7 @@ namespace Clam
 
     public static partial class ClamFFI
     {
-	public const string __DllName = "clam_ffi_20230709120424";
+	public const string __DllName = "clam_ffi_20230713122112";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -86,11 +87,11 @@ namespace Clam
         }
 
         [DllImport(__DllName, EntryPoint = "test_cakes_rnn_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern int test_cakes_rnn_query(IntPtr handle, string cluster_name, NodeVisitor callback);
+        private static extern int test_cakes_rnn_query(IntPtr handle, float searchRadius, NodeVisitor callback);
 
-        public static int TestCakesRNNQuery(string clusterName, NodeVisitor callback)
+        public static int TestCakesRNNQuery(float searchRadius, NodeVisitor callback)
         {
-            return test_cakes_rnn_query(_handle, clusterName, callback);
+            return test_cakes_rnn_query(_handle, searchRadius, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -192,15 +193,38 @@ namespace Clam
             }
 
             init_force_directed_sim(_handle, items, items.Length, cbFn);
-            
+
+        }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "launch_physics_thread", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void launch_physics_thread(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb, NodeVisitor update_cb);
+        public static unsafe void LaunchPhysicsThread(List<NodeDataUnity> nodes, float scalar, int maxIters, NodeVisitor edgeCB, NodeVisitor updateCB)
+        {
+            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                //var id = nodes[i].id;
+                items[i] = new NodeDataFFI(nodes[i]);
+            }
+
+            launch_physics_thread(_handle, items, items.Length, scalar, maxIters, edgeCB, updateCB);
+        }
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "physics_update_async", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern FFIError physics_update_async(IntPtr handle);
+        public static unsafe FFIError PhysicsUpdateAsync()
+        {
+            return physics_update_async(_handle);
         }
 
         [System.Security.SecurityCritical]
         [DllImport(__DllName, EntryPoint = "apply_forces", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern void apply_forces(IntPtr handle, NodeVisitor cb_fn);
-        public static unsafe void ApplyForces(NodeVisitor cbFn)
+        private static unsafe extern void apply_forces(IntPtr handle, float edgeScalar, NodeVisitor cb_fn);
+        public static unsafe void ApplyForces(float edgeScalar, NodeVisitor cbFn)
         {
-            apply_forces(_handle, cbFn);
+            apply_forces(_handle, edgeScalar, cbFn);
         }
 
 
