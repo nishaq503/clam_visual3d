@@ -1,6 +1,3 @@
-using Clam;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +5,7 @@ public class InputHandler : MonoBehaviour
 {
     public GameObject Tree;
     public GameObject ClusterUI;
+    public GameObject ClusterUI_Toolkit;
 
     // Start is called before the first frame update
     void Start()
@@ -21,10 +19,12 @@ public class InputHandler : MonoBehaviour
         
     }
 
-    void OnLMC(InputValue value)
-    {
-        //Tree.GetComponent<TreeScript>().HandleLMC();
-        ClusterUI.GetComponent<ClusterUIScript>().OnLMC();
-        
-    }
+    //void OnLMC(InputValue value)
+    //{
+    //    //Tree.GetComponent<TreeScript>().HandleLMC();
+    //    //ClusterUI.GetComponent<ClusterUIScript>().OnLMC();
+    //    Debug.Log("cluster ui script lmc");
+
+
+    //}
 }

@@ -3,12 +3,6 @@ using UnityEngine;
 
 using TMPro;
 using System.Linq;
-using Unity.VisualScripting;
-using System.Collections;
-using UnityEditor.Experimental.GraphView;
-using static UnityEditor.Progress;
-using UnityEditor;
-using Unity.VisualScripting.FullSerializer;
 
 namespace Clam
 {

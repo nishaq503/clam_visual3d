@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="MainBackground" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="Left" style="width: 25%;" />
+        <ui:VisualElement name="Middle" style="width: 50%;" />
+        <ui:VisualElement name="Right" style="width: 25%; background-color: rgb(89, 89, 89);">
+            <ui:Label text="Selected Cluster Info:" display-tooltip-when-elided="true" name="ClusterInfoTitle" />
+            <ui:VisualElement name="ClusterText" style="flex-direction: row;">
+                <ui:Label display-tooltip-when-elided="true" name="ClusterInfoLabel" />
+                <ui:Label display-tooltip-when-elided="true" name="ClusterInfo" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

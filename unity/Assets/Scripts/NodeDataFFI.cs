@@ -149,6 +149,23 @@ namespace Clam
 
             return stringBuilder.ToString();
         }
+        public string GetInfoForUI()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine(this.id.AsString);
+            stringBuilder.AppendLine(depth.ToString());
+            stringBuilder.AppendLine(cardinality.ToString());
+            stringBuilder.AppendLine(radius.ToString());
+            stringBuilder.AppendLine(lfd.ToString());
+            stringBuilder.AppendLine(argCenter.ToString());
+            stringBuilder.AppendLine(argRadius.ToString());
+
+            return stringBuilder.ToString();
+
+        }
+
+
 
         public void FreeStrings()
         {

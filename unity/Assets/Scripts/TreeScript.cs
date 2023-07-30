@@ -1,14 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 using TMPro;
 using System.Linq;
-using Unity.VisualScripting;
-using System.Collections;
-using UnityEditor.Experimental.GraphView;
-using static UnityEditor.Progress;
 using UnityEditor;
-using System.Security.Cryptography;
 
 namespace Clam
 {
@@ -57,20 +52,20 @@ namespace Clam
         void Start()
         {
             FFIError clam_result = Clam.ClamFFI.InitClam(dataName, cardinality);
-            if (clam_result != FFIError.Ok)
-            {
-                Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", dataName));
-                if (EditorApplication.isPlaying)
-                {
-                    EditorApplication.isPlaying = false;
-                }
-                else
-                {
-                    Application.Quit();
+            //if (clam_result != FFIError.Ok)
+            //{
+            //    Debug.Log(System.String.Format("Error: tree for {0} not created. Check debug log file.", dataName));
+            //    if (EditorApplication.isPlaying)
+            //    {
+            //        EditorApplication.isPlaying = false;
+            //    }
+            //    else
+            //    {
+            //        Application.Quit();
 
-                }
-                return;
-            }
+            //    }
+            //    return;
+            //}
             //print(ClamFFI.Clam.GetNumNodes());
             m_Tree = new Dictionary<string, GameObject>();
             m_SelectedNodes = new List<GameObject>();
