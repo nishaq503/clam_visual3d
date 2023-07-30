@@ -1,9 +1,12 @@
 using Clam;
 using System.Collections.Generic;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 public class MainView : MonoBehaviour
 {
@@ -17,7 +20,8 @@ public class MainView : MonoBehaviour
     //TextField m_SelectedClusterInfo;
     Label m_ClusterInfo;
     Label m_ClusterInfoLabel;
-
+    Button m_Button;
+    Toggle m_Toggle;
     private List<GameObject> m_SelectedClusters;
 
     void OnEnable()
@@ -28,9 +32,41 @@ public class MainView : MonoBehaviour
 
         m_ClusterInfo = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfo");
         m_ClusterInfoLabel = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfoLabel");
+        m_Button = m_UIDocument.rootVisualElement.Q<Button>("MyButton");
+        m_Toggle = m_UIDocument.rootVisualElement.Q<Toggle>("MyToggle");
 
         InitClusterInfoLabel();
-       
+
+        //m_Button.RegisterValueChangedCallback((evt) => { Debug.Log("Change Event received"); });
+        //m_Toggle.RegisterValueChangedCallback(x => { Debug.Log("toggle pressed"); });
+        m_Toggle.RegisterCallback<ClickEvent>(x => Debug.Log("toggle clicked"));
+        m_Toggle.RegisterValueChangedCallback(x => Debug.Log("toggle clicked2"));
+        RegisterHandler(m_Button);
+
+        m_Button.clicked += PrintHello;
+
+    }
+
+    void PrintHello()
+    {
+        Debug.Log("hello from button!");
+    }
+
+    private void RegisterHandler(Button button)
+    {
+        //button.RegisterCallback<ClickEvent>(PrintClickMessage);
+        //button.RegisterValueChangedCallback( (evt) => { Debug.Log("Change Event received"); });
+        button.RegisterCallback<MouseDownEvent>(evt => { Debug.Log("testing for fucks sake work"); });
+    }
+
+    private void PrintClickMessage(ClickEvent evt)
+    {
+
+        //Because of the names we gave the buttons and toggles, we can use the
+        //button name to find the toggle name.
+        Button button = evt.currentTarget as Button;
+
+        Debug.Log("Button was clicked!");
     }
 
     public void InitClusterInfoLabel()
@@ -58,7 +94,6 @@ public class MainView : MonoBehaviour
 
     public void OnLMC(InputValue value)
     {
-        Debug.Log("cluster ui script lmc");
         Vector3 mousePosition = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hitInfo;
