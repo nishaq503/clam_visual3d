@@ -471,93 +471,93 @@ namespace Clam
 
         public void HandleLMC()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit hitInfo;
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    Vector3 mousePosition = Input.mousePosition;
+            //    Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            //    RaycastHit hitInfo;
 
-                if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
-                {
-                    var selectedNode = hitInfo.collider.gameObject;
-                    if (m_SelectedNodes.Count > 0)
-                    {
-                        var existingSelection = m_SelectedNodes.Find(node => node.GetComponent<NodeScript>().GetId() == selectedNode.GetComponent<NodeScript>().GetId());
-                        if (existingSelection != null)
-                        {
-                            //selectedNode.SetColor(m_DefaultColor);
-                            //m_SelectedNodes.Remove(existingSelection);
-                            Deselect(existingSelection);
-                            //selectedNode.GetComponent<NodeScript>().Deselect();
+            //    if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
+            //    {
+            //        var selectedNode = hitInfo.collider.gameObject;
+            //        if (m_SelectedNodes.Count > 0)
+            //        {
+            //            var existingSelection = m_SelectedNodes.Find(node => node.GetComponent<NodeScript>().GetId() == selectedNode.GetComponent<NodeScript>().GetId());
+            //            if (existingSelection != null)
+            //            {
+            //                //selectedNode.SetColor(m_DefaultColor);
+            //                //m_SelectedNodes.Remove(existingSelection);
+            //                Deselect(existingSelection);
+            //                //selectedNode.GetComponent<NodeScript>().Deselect();
 
-                            //text.text = "";
-                            //if (m_SelectedNodes.Count > 0)
-                            //{
-                            //    text.text = m_SelectedNodes.Last().GetInfo();
-                            //}
-                            //else
-                            //{
-                            //    text.text = "";
-                            //}
-                            return;
-                        }
-                    }
+            //                //text.text = "";
+            //                //if (m_SelectedNodes.Count > 0)
+            //                //{
+            //                //    text.text = m_SelectedNodes.Last().GetInfo();
+            //                //}
+            //                //else
+            //                //{
+            //                //    text.text = "";
+            //                //}
+            //                return;
+            //            }
+            //        }
 
-                    Debug.Log("selexting");
+            //        Debug.Log("selexting");
 
-                    global::Clam.NodeWrapper wrapper = new global::Clam.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
-                    FFIError found = global::Clam.ClamFFI.GetClusterData(wrapper);
-                    if (found == FFIError.Ok)
-                    {
-                        //m_SelectedNodes.Add(selectedNode);
-                        //selectedNode.GetComponent<NodeScript>().SetColor(m_SelectedColor);
-                        //text.text = wrapper.Data.GetInfo();
-                        SelectNode(selectedNode);
-                        //selectedNode.GetComponent<NodeScript>().Deselect();
+            //        global::Clam.NodeWrapper wrapper = new global::Clam.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
+            //        FFIError found = global::Clam.ClamFFI.GetClusterData(wrapper);
+            //        if (found == FFIError.Ok)
+            //        {
+            //            //m_SelectedNodes.Add(selectedNode);
+            //            //selectedNode.GetComponent<NodeScript>().SetColor(m_SelectedColor);
+            //            //text.text = wrapper.Data.GetInfo();
+            //            SelectNode(selectedNode);
+            //            //selectedNode.GetComponent<NodeScript>().Deselect();
 
-                    }
+            //        }
 
-                }
-            }
+            //    }
+            //}
         }
 
         public void HandleRMC()
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                RaycastHit hitInfo;
+            //if (Input.GetMouseButtonDown(1))
+            //{
+            //    Vector3 mousePosition = Input.mousePosition;
+            //    Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            //    RaycastHit hitInfo;
 
-                if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
-                {
+            //    if (Physics.Raycast(ray.origin, ray.direction * 10, out hitInfo, Mathf.Infinity))
+            //    {
 
 
-                    var selectedNode = hitInfo.collider.gameObject;
+            //        var selectedNode = hitInfo.collider.gameObject;
 
-                    //ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
-                    if (selectedNode != null)
-                    {
-                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetLeftChildID());
-                        //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetRightChildID());
-                        var hasLC = m_Tree.TryGetValue(selectedNode.GetComponent<NodeScript>().GetLeftChildID(), out var lc);
-                        if (hasLC)
-                        {
-                            SetIsActiveToChildren(selectedNode, !lc.activeSelf);
-                        }
-                    }
-                    //bool found = ClamFFI.Clam.GetClusterData(nodeWrapper);
-                    //if (found)
-                    //{
-                    //    nodeWrapper.Data.LogInfo();
-                    //    text.text = nodeWrapper.Data.GetInfo();
-                    //}
-                    //else
-                    //{
-                    //    Debug.LogError("node not found");
-                    //}
-                }
-            }
+            //        //ClamFFI.NodeWrapper nodeWrapper = new ClamFFI.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
+            //        if (selectedNode != null)
+            //        {
+            //            //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetLeftChildID());
+            //            //ClamFFI.Clam.ForEachDFT(DeactivateChildren, selectedNode.GetComponent<NodeScript>().GetRightChildID());
+            //            var hasLC = m_Tree.TryGetValue(selectedNode.GetComponent<NodeScript>().GetLeftChildID(), out var lc);
+            //            if (hasLC)
+            //            {
+            //                SetIsActiveToChildren(selectedNode, !lc.activeSelf);
+            //            }
+            //        }
+            //        //bool found = ClamFFI.Clam.GetClusterData(nodeWrapper);
+            //        //if (found)
+            //        //{
+            //        //    nodeWrapper.Data.LogInfo();
+            //        //    text.text = nodeWrapper.Data.GetInfo();
+            //        //}
+            //        //else
+            //        //{
+            //        //    Debug.LogError("node not found");
+            //        //}
+            //    }
+            //}
         }
 
         void SetIsActiveToChildren(GameObject node, bool isActive)

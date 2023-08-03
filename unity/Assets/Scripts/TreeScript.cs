@@ -183,11 +183,6 @@ namespace Clam
             }
         }
 
-
-
-
-
-
         public void ResetColors()
         {
 
@@ -533,11 +528,11 @@ namespace Clam
 
         void MyQuit()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                //print("quitting app");
-                Application.Quit();
-            }
+            //if (Input.GetKeyDown(KeyCode.Escape))
+            //{
+            //    //print("quitting app");
+            //    Application.Quit();
+            //}
         }
 
         void OnLMC()

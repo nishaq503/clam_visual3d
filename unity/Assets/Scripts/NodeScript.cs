@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -19,6 +20,9 @@ public class NodeScript : MonoBehaviour
     private Color m_ActualColor;
     private InputAction click;
     public float distanceToQuery = -1.0f;
+
+    public bool Selected{ get { return m_IsSelected; } }
+
 
     //void Awake()
     //{
@@ -49,14 +53,21 @@ public class NodeScript : MonoBehaviour
 
     public void Select()
     {
-        SetColor(new Color(0.0f, 0.0f, 1.0f));
-        m_IsSelected = true;
+        if (m_IsSelected)
+        {
+            SetColor(m_ActualColor);
+            m_IsSelected = false;
+        }
+        else
+        {
+            SetColor(new Color(0.0f, 0.0f, 1.0f));
+            m_IsSelected = true;
+        }
     }
 
     public void Deselect()
     {
-        SetColor(new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f));
-        m_IsSelected = false;
+
     }
 
     public void ExpandSubtree()
