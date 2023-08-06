@@ -2,6 +2,7 @@ using Clam;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -47,6 +48,8 @@ class SafeTextField
         m_MaxField.doubleClickSelectsWord = true;
         m_MaxField.doubleClickSelectsWord = true;
     }
+
+    
 
     void ClickCallBack(ClickEvent e)
     {

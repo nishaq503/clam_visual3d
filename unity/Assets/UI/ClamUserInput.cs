@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class ClamUserInput : MonoBehaviour
 {
@@ -27,10 +28,18 @@ public class ClamUserInput : MonoBehaviour
         if (uiActive)
         {
             Debug.Log("locking");
-
+            var focusedElement = GetFocusedElement();
+            if (focusedElement != null)
+            {
+                
+                //focusedElement.focusable = false;
+                focusedElement.Blur();
+            }
             playerInput.SwitchCurrentActionMap("Player");
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             m_ClusterUI.GetComponent<ClusterUI_View>().Lock();
+
+
 
         }
         else
@@ -39,6 +48,14 @@ public class ClamUserInput : MonoBehaviour
             playerInput.SwitchCurrentActionMap("WorldUI");
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             m_ClusterUI.GetComponent<ClusterUI_View>().UnLock();
+
+            var focusedElement = GetFocusedElement();
+            if (focusedElement != null)
+            {
+
+                //focusedElement.focusable = false;
+                focusedElement.Blur();
+            }
         }
         UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
     }
@@ -87,6 +104,29 @@ public class ClamUserInput : MonoBehaviour
     void OnExit()
     {
         Application.Quit();
+    }
+
+    public static Focusable GetFocusedElement()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            return null;
+        }
+
+        GameObject selectedGameObject = eventSystem.currentSelectedGameObject;
+        if (selectedGameObject == null)
+        {
+            return null;
+        }
+
+        PanelEventHandler panelEventHandler = selectedGameObject.GetComponent<PanelEventHandler>();
+        if (panelEventHandler != null)
+        {
+            return panelEventHandler.panel.focusController.focusedElement;
+        }
+
+        return null;
     }
 
     private bool PointerIsUIHit(Vector2 position)
