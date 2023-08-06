@@ -22,7 +22,7 @@ def replace_word_in_file(filename, new_libname):
 def update_unity(new_libname):
 
     # filename = 'unity/Assets/Plugins/FFI.cs'
-    filename = 'unity/Assets/Scripts/ClamFFI.cs'
+    filename = 'unity/Assets/Scripts/FFI/ClamFFI.cs'
     data = replace_word_in_file(filename, new_libname)
     with open(filename, 'w') as file:
         file.writelines(data)

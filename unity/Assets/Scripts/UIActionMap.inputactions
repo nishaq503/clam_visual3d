@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "UIActionMap",
     "maps": [
         {
             "name": "DefaultActionMap",
@@ -19,7 +19,7 @@
                 {
                     "name": "",
                     "id": "00dc8136-2f14-4d08-96bd-48979a7cbdd5",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "DefaultScheme",

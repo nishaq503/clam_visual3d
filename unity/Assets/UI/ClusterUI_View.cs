@@ -2,6 +2,7 @@ using Clam;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 
@@ -35,24 +36,75 @@ class SafeTextField
         m_MaxField.focusable = false;
 
 
-        m_MaxField.RegisterValueChangedCallback(IntegerValidation);
-        m_MinField.RegisterValueChangedCallback(IntegerValidation);
+        m_MaxField.RegisterValueChangedCallback(MaxIntegerValidation);
+        m_MinField.RegisterValueChangedCallback(MinIntegerValidation);
+
+        //m_MinField.RegisterCallback<ClickEvent>(ClickCallBack);
+        //m_MinField.RegisterCallback<MouseDownEvent>(ClickCallBack1);
+
+        m_MinField.tripleClickSelectsLine = true;
+        m_MinField.doubleClickSelectsWord = true;
+        m_MaxField.doubleClickSelectsWord = true;
+        m_MaxField.doubleClickSelectsWord = true;
     }
 
-    void IntegerValidation(ChangeEvent<string> changeEvent)
+    void ClickCallBack(ClickEvent e)
+    {
+        Debug.Log("cilck event?");
+        if (m_MinField.ContainsPoint(e.position))
+        {
+            Debug.Log("clicked min0!");
+            m_MinField.Focus();
+        }
+        if (m_MinField.ContainsPoint(e.localPosition))
+        {
+            Debug.Log("clicked min1!");
+            m_MinField.Focus();
+        }
+
+        if (m_MinField.ContainsPoint(e.originalMousePosition))
+        {
+            Debug.Log("clicked min2!");
+            m_MinField.Focus();
+        }
+
+        if (m_MinField.ContainsPoint(Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue())))
+        {
+            Debug.Log("clicked min3!");
+            m_MinField.Focus();
+        }
+    }
+
+    void ClickCallBack1(MouseDownEvent e)
+    {
+        Debug.Log("cilck event?");
+        if (m_MinField.ContainsPoint(e.localMousePosition))
+        {
+            Debug.Log("clicked min01!");
+            m_MinField.Focus();
+        }
+        if (m_MinField.ContainsPoint(e.mousePosition))
+        {
+            Debug.Log("clicked min11!");
+            m_MinField.Focus();
+        }
+
+        if (m_MinField.ContainsPoint(e.originalMousePosition))
+        {
+            Debug.Log("clicked min21!");
+            m_MinField.Focus();
+        }
+
+        if (m_MinField.ContainsPoint(Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue())))
+        {
+            Debug.Log("clicked min31!");
+            m_MinField.Focus();
+        }
+    }
+
+    void MinIntegerValidation(ChangeEvent<string> changeEvent)
     {
         var textField = changeEvent.target as TextField;
-        //if (!int.TryParse(changeEvent.newValue, out int value))
-        //{
-        //    textField.value = changeEvent.previousValue;
-        //}
-        ////else
-        ////{
-        ////    if ( value < m_MinValueThreshold || value > m_MaxValueThreshold)
-        ////    {
-        ////        textField.value = changeEvent.previousValue;
-        ////    }
-        ////}
 
         if (!ValidateCharacters(changeEvent.newValue, "0123456789"))
         {
@@ -62,7 +114,27 @@ class SafeTextField
         else
         {
             int value = int.Parse(changeEvent.newValue);
-            if (value < m_MinValueThreshold || value > m_MaxValueThreshold)
+            if (value < m_MinValueThreshold || value > m_MaxValueThreshold || value > int.Parse(m_MinField.value))
+            {
+                textField.value = changeEvent.previousValue;
+
+            }
+        }
+    }
+
+    void MaxIntegerValidation(ChangeEvent<string> changeEvent)
+    {
+        var textField = changeEvent.target as TextField;
+
+        if (!ValidateCharacters(changeEvent.newValue, "0123456789"))
+        {
+            textField.value = changeEvent.previousValue;
+
+        }
+        else
+        {
+            int value = int.Parse(changeEvent.newValue);
+            if (value < m_MinValueThreshold || value > m_MaxValueThreshold || value < int.Parse(m_MinField.value))
             {
                 textField.value = changeEvent.previousValue;
 
@@ -73,7 +145,7 @@ class SafeTextField
     {
         foreach (var c in value)
         {
-            if( c < '0' || c > '9')
+            if (c < '0' || c > '9')
             {
                 return false;
             }
@@ -111,7 +183,7 @@ class SafeTextField
 //        m_MinField = new IntegerField();
 //        m_MinField.name = name + "Min";
 //        depth.Add(m_MinField);
-        
+
 //        m_MaxField = new IntegerField();
 //        m_MaxField.name = name + "Min";
 //        depth.Add(m_MinField);
@@ -201,20 +273,6 @@ public class ClusterUI_View : MonoBehaviour
 
     }
 
-    private void OnFocusInTextField(FocusInEvent evt)
-    {
-        // If the text field just received focus and the user might want to write
-        // or edit the text inside, the placeholder text should be cleared (if active)
-
-        var textField = evt.target as TextField;
-        textField.value = "";
-
-    }
-
-    void PrintHello()
-    {
-        Debug.Log("hello from button!");
-    }
 
     private void RegisterHandler(Button button)
     {
