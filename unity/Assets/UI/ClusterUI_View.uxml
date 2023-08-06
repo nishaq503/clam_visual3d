@@ -10,13 +10,13 @@
             </ui:VisualElement>
             <ui:VisualElement name="Depth" style="flex-direction: row;">
                 <ui:Label text="Depth" display-tooltip-when-elided="true" name="DepthLabel" style="justify-content: center; align-items: center; width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: middle-center;" />
-                <ui:TextField picking-mode="Ignore" name="DepthMin" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
-                <ui:TextField picking-mode="Ignore" name="DepthMax" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+                <ui:TextField picking-mode="Ignore" name="DepthMin" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+                <ui:TextField picking-mode="Ignore" name="DepthMax" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
             </ui:VisualElement>
             <ui:VisualElement name="Cardinality" style="flex-direction: row;">
                 <ui:Label text="Cardinality" display-tooltip-when-elided="true" name="CardinalityLabel" style="justify-content: center; align-items: center; width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: middle-center;" />
-                <ui:TextField picking-mode="Ignore" name="CardinalityMin" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
-                <ui:TextField picking-mode="Ignore" name="CardinalityMax" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+                <ui:TextField picking-mode="Ignore" name="CardinalityMin" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+                <ui:TextField picking-mode="Ignore" name="CardinalityMax" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

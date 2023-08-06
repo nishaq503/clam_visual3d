@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1b5141847f358434981bdf255d58afd7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - virtualCamera: {instanceID: 0}
+  - sensorCube: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - sensorCylinder: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  executionOrder: 0
+  icon: {fileID: 2800000, guid: 498498993d8878845bc5a2e1ae4610da, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

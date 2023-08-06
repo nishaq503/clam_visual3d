@@ -71,5 +71,10 @@ public class ClamUserInput : MonoBehaviour
             }
         }
     }
-        
+
+    void OnExit()
+    {
+        Application.Quit();
+    }
+
 }

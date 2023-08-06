@@ -11,15 +11,23 @@ class SafeTextField
     Label m_Label;
     TextField m_MinField;
     TextField m_MaxField;
+    int m_MinValueThreshold;
+    int m_MaxValueThreshold;
     //IntegerField m_IntegerField;
 
-    public SafeTextField(string name, UIDocument document)
+    public SafeTextField(string name, UIDocument document, int minValue, int maxValue)
     {
+        m_MinValueThreshold = minValue;
+        m_MaxValueThreshold = maxValue;
+
+
         //m_Toggle = document.rootVisualElement.Q<Toggle>(name + "Toggle");
         m_Label = document.rootVisualElement.Q<Label>(name + "Label");
         m_MinField = document.rootVisualElement.Q<TextField>(name + "Min");
         m_MaxField = document.rootVisualElement.Q<TextField>(name + "Max");
 
+        m_MinField.value = minValue.ToString();
+        m_MaxField.value = maxValue.ToString();
         //m_Toggle.value = false;
         //m_Toggle.focusable = false;
         m_Label.focusable = false;
@@ -28,14 +36,37 @@ class SafeTextField
 
 
         m_MaxField.RegisterValueChangedCallback(IntegerValidation);
+        m_MinField.RegisterValueChangedCallback(IntegerValidation);
     }
 
     void IntegerValidation(ChangeEvent<string> changeEvent)
     {
         var textField = changeEvent.target as TextField;
+        //if (!int.TryParse(changeEvent.newValue, out int value))
+        //{
+        //    textField.value = changeEvent.previousValue;
+        //}
+        ////else
+        ////{
+        ////    if ( value < m_MinValueThreshold || value > m_MaxValueThreshold)
+        ////    {
+        ////        textField.value = changeEvent.previousValue;
+        ////    }
+        ////}
+
         if (!ValidateCharacters(changeEvent.newValue, "0123456789"))
         {
             textField.value = changeEvent.previousValue;
+
+        }
+        else
+        {
+            int value = int.Parse(changeEvent.newValue);
+            if (value < m_MinValueThreshold || value > m_MaxValueThreshold)
+            {
+                textField.value = changeEvent.previousValue;
+
+            }
         }
     }
     bool ValidateCharacters(string value, string validCharacters)
@@ -125,7 +156,7 @@ public class ClusterUI_View : MonoBehaviour
     SafeTextField m_DepthField;
     SafeTextField m_CardinalityField;
 
-    void OnEnable()
+    void Start()
     {
         Debug.Log("hello from cluster_View");
         m_SelectedClusters = new List<GameObject>();
@@ -139,8 +170,8 @@ public class ClusterUI_View : MonoBehaviour
 
         InitClusterInfoLabel();
 
-        m_DepthField = new SafeTextField("Depth", m_UIDocument);
-        m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument);
+        m_DepthField = new SafeTextField("Depth", m_UIDocument, 0, ClamFFI.TreeHeight());
+        m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality());
     }
 
     public void Lock()

@@ -18,7 +18,7 @@ public class MainApp : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_ClamTree = new ClamTree(nodePrefab, springPrefab, dataName, cardinality);
         //m_ClusterUI = Instantiate(clusterUI_Prefab);

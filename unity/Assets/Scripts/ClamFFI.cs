@@ -13,7 +13,7 @@ namespace Clam
 
     public static partial class ClamFFI
     {
-	public const string __DllName = "clam_ffi_20230713122112";
+	public const string __DllName = "clam_ffi_20230805155615";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -72,6 +72,22 @@ namespace Clam
         public static int GetNumNodes()
         {
             return get_num_nodes(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "cardinality", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int cardinality(IntPtr handle);
+
+        public static int Cardinality()
+        {
+            return cardinality(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "tree_height", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int tree_height(IntPtr handle);
+
+        public static int TreeHeight()
+        {
+            return tree_height(_handle);
         }
 
         [DllImport(__DllName, EntryPoint = "shutdown_physics", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
