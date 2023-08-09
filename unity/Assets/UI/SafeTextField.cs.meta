@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: f1f5d911d1de9df48bc49df0718d2f5f
+guid: ee1fcdf9f877b534a87741d8cf7bec93
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - m_SafeInputFieldTemplate: {fileID: 9197481963319205126, guid: 24d73cb72668964489b29c6972cb381c, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

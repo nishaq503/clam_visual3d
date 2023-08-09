@@ -13,7 +13,7 @@ namespace Clam
 
     public static partial class ClamFFI
     {
-	public const string __DllName = "clam_ffi_20230806132008";
+	public const string __DllName = "clam_ffi_20230809131511";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -42,6 +42,21 @@ namespace Clam
             }
             return found;
         }
+
+        //[DllImport(__DllName, EntryPoint = "get_root_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        //private static unsafe extern FFIError get_root_data(IntPtr handle, ref global::Clam.NodeDataFFI inNode, out global::Clam.NodeDataFFI outNode);
+
+        //public static unsafe FFIError GetClamRootData(global::Clam.NodeWrapper nodeWrapper)
+        //{
+        //    NodeDataFFI nodeData = nodeWrapper.Data;
+
+        //    FFIError found = get_root_data(_handle, ref nodeData, out var outNode);
+        //    if (found == FFIError.Ok)
+        //    {
+        //        nodeWrapper.Data = outNode;
+        //    }
+        //    return found;
+        //}
 
         [DllImport(__DllName, EntryPoint = "distance_to_other", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static unsafe extern float distance_to_other(IntPtr handle, string node1, string node2);
@@ -89,6 +104,40 @@ namespace Clam
         {
             return tree_height(_handle);
         }
+
+        [DllImport(__DllName, EntryPoint = "radius", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern double radius(IntPtr handle);
+
+        public static double Radius()
+        {
+            return radius(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "lfd", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern double lfd(IntPtr handle);
+
+        public static double LFD()
+        {
+            return lfd(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "arg_center", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int arg_center(IntPtr handle);
+
+        public static int ArgCenter()
+        {
+            return arg_center(_handle);
+        }
+
+        [DllImport(__DllName, EntryPoint = "arg_radius", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern int arg_radius(IntPtr handle);
+
+        public static int ArgRadius()
+        {
+            return arg_radius(_handle);
+        }
+
+   
 
         [DllImport(__DllName, EntryPoint = "shutdown_physics", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static extern FFIError shutdown_physics(IntPtr handle);

@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="SafeText" style="flex-direction: row;">
-        <ui:Toggle style="width: 10%; flex-wrap: nowrap;" />
-        <ui:Label text="Label" display-tooltip-when-elided="true" style="width: 30%; justify-content: center; align-items: center; -unity-text-align: middle-center;" />
-        <ui:TextField picking-mode="Ignore" value="text" text="filler text" style="width: 50%; flex-wrap: nowrap;" />
-    </ui:VisualElement>
-</ui:UXML>

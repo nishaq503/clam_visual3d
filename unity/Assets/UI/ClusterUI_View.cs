@@ -1,264 +1,90 @@
 using Clam;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-
-
-class SafeTextField
-{
-    //Toggle m_Toggle;
-    Label m_Label;
-    TextField m_MinField;
-    TextField m_MaxField;
-    int m_MinValueThreshold;
-    int m_MaxValueThreshold;
-    //IntegerField m_IntegerField;
-
-    public SafeTextField(string name, UIDocument document, int minValue, int maxValue)
-    {
-        m_MinValueThreshold = minValue;
-        m_MaxValueThreshold = maxValue;
-
-
-        //m_Toggle = document.rootVisualElement.Q<Toggle>(name + "Toggle");
-        m_Label = document.rootVisualElement.Q<Label>(name + "Label");
-        m_MinField = document.rootVisualElement.Q<TextField>(name + "Min");
-        m_MaxField = document.rootVisualElement.Q<TextField>(name + "Max");
-
-        m_MinField.value = minValue.ToString();
-        m_MaxField.value = maxValue.ToString();
-        //m_Toggle.value = false;
-        //m_Toggle.focusable = false;
-        m_Label.focusable = false;
-        m_MinField.focusable = false;
-        m_MaxField.focusable = false;
-
-
-        m_MaxField.RegisterValueChangedCallback(MaxIntegerValidation);
-        m_MinField.RegisterValueChangedCallback(MinIntegerValidation);
-
-        //m_MinField.RegisterCallback<ClickEvent>(ClickCallBack);
-        //m_MinField.RegisterCallback<MouseDownEvent>(ClickCallBack1);
-
-        m_MinField.tripleClickSelectsLine = true;
-        m_MinField.doubleClickSelectsWord = true;
-        m_MaxField.doubleClickSelectsWord = true;
-        m_MaxField.doubleClickSelectsWord = true;
-    }
-
-    
-
-    void ClickCallBack(ClickEvent e)
-    {
-        Debug.Log("cilck event?");
-        if (m_MinField.ContainsPoint(e.position))
-        {
-            Debug.Log("clicked min0!");
-            m_MinField.Focus();
-        }
-        if (m_MinField.ContainsPoint(e.localPosition))
-        {
-            Debug.Log("clicked min1!");
-            m_MinField.Focus();
-        }
-
-        if (m_MinField.ContainsPoint(e.originalMousePosition))
-        {
-            Debug.Log("clicked min2!");
-            m_MinField.Focus();
-        }
-
-        if (m_MinField.ContainsPoint(Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue())))
-        {
-            Debug.Log("clicked min3!");
-            m_MinField.Focus();
-        }
-    }
-
-    void ClickCallBack1(MouseDownEvent e)
-    {
-        Debug.Log("cilck event?");
-        if (m_MinField.ContainsPoint(e.localMousePosition))
-        {
-            Debug.Log("clicked min01!");
-            m_MinField.Focus();
-        }
-        if (m_MinField.ContainsPoint(e.mousePosition))
-        {
-            Debug.Log("clicked min11!");
-            m_MinField.Focus();
-        }
-
-        if (m_MinField.ContainsPoint(e.originalMousePosition))
-        {
-            Debug.Log("clicked min21!");
-            m_MinField.Focus();
-        }
-
-        if (m_MinField.ContainsPoint(Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue())))
-        {
-            Debug.Log("clicked min31!");
-            m_MinField.Focus();
-        }
-    }
-
-    void MinIntegerValidation(ChangeEvent<string> changeEvent)
-    {
-        var textField = changeEvent.target as TextField;
-
-        if (!ValidateCharacters(changeEvent.newValue, "0123456789"))
-        {
-            textField.value = changeEvent.previousValue;
-
-        }
-        else
-        {
-            int value = int.Parse(changeEvent.newValue);
-            if (value < m_MinValueThreshold || value > m_MaxValueThreshold || value > int.Parse(m_MinField.value))
-            {
-                textField.value = changeEvent.previousValue;
-
-            }
-        }
-    }
-
-    void MaxIntegerValidation(ChangeEvent<string> changeEvent)
-    {
-        var textField = changeEvent.target as TextField;
-
-        if (!ValidateCharacters(changeEvent.newValue, "0123456789"))
-        {
-            textField.value = changeEvent.previousValue;
-
-        }
-        else
-        {
-            int value = int.Parse(changeEvent.newValue);
-            if (value < m_MinValueThreshold || value > m_MaxValueThreshold || value < int.Parse(m_MinField.value))
-            {
-                textField.value = changeEvent.previousValue;
-
-            }
-        }
-    }
-    bool ValidateCharacters(string value, string validCharacters)
-    {
-        foreach (var c in value)
-        {
-            if (c < '0' || c > '9')
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void Lock()
-    {
-        m_MinField.focusable = m_MaxField.focusable = false;
-        m_MaxField.isReadOnly = m_MinField.isReadOnly = true;
-    }
-
-    public void UnLock()
-    {
-        m_MinField.focusable = m_MaxField.focusable = true;
-        m_MaxField.isReadOnly = m_MinField.isReadOnly = false;
-    }
-}
-
-//class MinMaxIntField
-//{
-//    public Label m_Label;
-//    public IntegerField m_MinField;
-//    public IntegerField m_MaxField;
-
-//    public MinMaxIntField(string name, UIDocument document)
-//    {
-//        var depth = document.rootVisualElement.Q<VisualElement>(name);
-//        m_Label = new Label(name);
-//        m_Label.name = name + "Label";
-//        depth.Add(m_Label);
-
-//        m_MinField = new IntegerField();
-//        m_MinField.name = name + "Min";
-//        depth.Add(m_MinField);
-
-//        m_MaxField = new IntegerField();
-//        m_MaxField.name = name + "Min";
-//        depth.Add(m_MinField);
-
-//        m_Label.focusable = false;
-//        m_MinField.focusable = false;
-//        m_MaxField.focusable = false;
-//    }
-
-//    public void Lock()
-//    {
-//        m_MinField.focusable = m_MaxField.focusable = false;
-//        m_MaxField.isReadOnly = m_MinField.isReadOnly = true;
-//    }
-
-//    public void UnLock()
-//    {
-//        m_MinField.focusable = m_MaxField.focusable = true;
-//        m_MaxField.isReadOnly = m_MinField.isReadOnly = false;
-//    }
-//}
 
 public class ClusterUI_View : MonoBehaviour
 {
     [SerializeField]
-    VisualTreeAsset m_ListEntryTemplate;
+    VisualTreeAsset m_SafeInputFieldTemplate;
 
     private UIDocument m_UIDocument;
 
-    VisualTreeAsset m_VisualAsset;
-
-    //TextField m_SelectedClusterInfo;
     Label m_ClusterInfo;
     Label m_ClusterInfoLabel;
-    Button m_Button;
-    Toggle m_Toggle;
-    TextField m_TextField;
-    private List<GameObject> m_SelectedClusters;
 
-    VisualElement depth;
+    //SafeTextField m_DepthField;
+    //SafeTextField m_CardinalityField;
 
-    SafeTextField m_DepthField;
-    SafeTextField m_CardinalityField;
+    Dictionary<string, SafeTextField> m_InputFields;
+
+
+    //public float radius;
+    //public float lfd;
+    //public int argCenter;
+    //public int argRadius;
+
 
     void Start()
     {
-        Debug.Log("hello from cluster_View");
-        m_SelectedClusters = new List<GameObject>();
         m_UIDocument = GetComponent<UIDocument>();
 
         m_ClusterInfo = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfo");
         m_ClusterInfoLabel = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfoLabel");
-        //m_Button = m_UIDocument.rootVisualElement.Q<Button>("MyButton");
-        //m_Toggle = m_UIDocument.rootVisualElement.Q<Toggle>("MyToggle");
-        m_TextField = m_UIDocument.rootVisualElement.Q<TextField>("MyTextField");
 
         InitClusterInfoLabel();
+        var rightField = m_UIDocument.rootVisualElement.Q<VisualElement>("Right");
 
-        m_DepthField = new SafeTextField("Depth", m_UIDocument, 0, ClamFFI.TreeHeight());
-        m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality());
+        m_InputFields = new Dictionary<string, SafeTextField>
+        {
+            { "Depth", new SafeTextField("Depth", m_UIDocument, 0, ClamFFI.TreeHeight()) },
+            { "Cardinality", new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality()) },
+            //{ "Radius", new SafeTextField("Radius", rightField, 0, ClamFFI.Radius())
+            //{ "lfd", new SafeTextField("Radius", rightField, 0, ClamFFI.Radius()) }
+            { "ArgRadius", new SafeTextField("ArgRadius", rightField, 0, ClamFFI.ArgRadius()) },
+            { "ArgCenter", new SafeTextField("ArgCenter", rightField, 0, ClamFFI.ArgCenter()) }
+
+
+        };
+
+        //var inputField = m_SafeInputFieldTemplate.Instantiate();
+
+        //VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ui/SafeInputFieldTemplate.uxml");
+        //VisualTreeAsset uiAsset2 = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ui/MyInputField.uxml");k
+        //VisualTreeAsset uiAsset3 = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ui/inputTemplate.uxml");
+
+        //VisualElement ui = uiAsset.Instantiate();
+
+        //rightField.Add(ui);
+        //rightField.Add(uiAsset2.Instantiate());
+        //rightField.Add(uiAsset3.Instantiate());
+        //inputField.userData
+        //inputField.Q<Label>()
+        //rightField.Add(m_InputFieldTemplate.Instantiate());
+
+
+        //m_DepthField = new SafeTextField("Depth", m_UIDocument, 0, ClamFFI.TreeHeight());
+        //m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality());
     }
 
     public void Lock()
     {
-        m_DepthField.Lock();
-        m_CardinalityField.Lock();
+
+        m_InputFields.ToList().ForEach(item => item.Value.Lock());
+        //m_DepthField.Lock();
+        //m_CardinalityField.Lock();
     }
 
     public void UnLock()
     {
-        m_DepthField.UnLock();
-        m_CardinalityField.UnLock();
+
+        m_InputFields.ToList().ForEach(item => item.Value.UnLock());
+
+        //m_DepthField.UnLock();
+        //m_CardinalityField.UnLock();
     }
 
     public void DisplayClusterInfo(NodeDataFFI data)
@@ -271,33 +97,9 @@ public class ClusterUI_View : MonoBehaviour
         m_ClusterInfo.text = "";
     }
 
-    void InitializeTextFields()
-    {
-
-    }
-
-
-    private void RegisterHandler(Button button)
-    {
-        //button.RegisterCallback<ClickEvent>(PrintClickMessage);
-        //button.RegisterValueChangedCallback( (evt) => { Debug.Log("Change Event received"); });
-        button.RegisterCallback<MouseDownEvent>(evt => { Debug.Log("testing for fucks sake work"); });
-    }
-
-    private void PrintClickMessage(ClickEvent evt)
-    {
-
-        //Because of the names we gave the buttons and toggles, we can use the
-        //button name to find the toggle name.
-        Button button = evt.currentTarget as Button;
-
-        Debug.Log("Button was clicked!");
-    }
-
     public void InitClusterInfoLabel()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        //stringBuilder.AppendLine("Selected Cluster");
 
         stringBuilder.AppendLine("id: ");
         stringBuilder.AppendLine("depth: ");
@@ -307,14 +109,12 @@ public class ClusterUI_View : MonoBehaviour
         stringBuilder.AppendLine("argC: ");
         stringBuilder.AppendLine("argR: ");
 
-        //m_SelectedClusterInfo.value = stringBuilder.ToString();
         m_ClusterInfoLabel.text = stringBuilder.ToString();
-
     }
 
     public void SetSelectedClusterInfo(string value)
     {
         m_ClusterInfo.text = value;
     }
-
 }
+
