@@ -17,7 +17,7 @@ public class ClamTree : MonoBehaviour
     private float m_EdgeScalar = 25.0f;
     private float m_SearchRadius = 0.05f;
 
-    public ClamTree(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
+    public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
     {
         m_NodePrefab = nodePrefab;
         m_SpringPrefab = springPrefab;

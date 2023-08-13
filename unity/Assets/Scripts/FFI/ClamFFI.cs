@@ -13,6 +13,8 @@ namespace Clam
 
     public static partial class ClamFFI
     {
+
+
 	public const string __DllName = "clam_ffi_20230809131511";
         private static IntPtr _handle;
 

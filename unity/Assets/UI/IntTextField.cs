@@ -1,4 +1,5 @@
 using Clam;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -9,20 +10,25 @@ using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI;
 
 
-class SafeTextField<T>
+class IntTextField
 {
     Label m_Label;
     TextField m_MinField;
     TextField m_MaxField;
-    T m_MinValueThreshold;
-    T m_MaxValueThreshold;
+    int m_MinValueThreshold;
+    int m_MaxValueThreshold;
 
+    //Delegate m_Callback;
+    Func<bool> m_Callback;
+    
     //VisualTreeAsset m_Template;
 
-    public SafeTextField(string name, UIDocument document, T minValue, T maxValue)
+    public IntTextField(string name, UIDocument document, int minValue, int maxValue, Func<bool> callback)
     {
         m_MinValueThreshold = minValue;
         m_MaxValueThreshold = maxValue;
+
+        m_Callback = callback;
 
 
         m_Label = document.rootVisualElement.Q<Label>(name + "Label");
@@ -47,10 +53,12 @@ class SafeTextField<T>
 
 
 
-    public SafeTextField(string name, VisualElement parent, T minValue, T maxValue)
+    public IntTextField(string name, VisualElement parent, int minValue, int maxValue, Func<bool> callback)
     {
         m_MinValueThreshold = minValue;
         m_MaxValueThreshold = maxValue;
+
+        m_Callback = callback;
 
         var template = Resources.Load<VisualTreeAsset>("ui/SafeInputFieldTemplate");
 
@@ -88,22 +96,21 @@ class SafeTextField<T>
         }
         else
         {
-            if (m_MinValueThreshold.GetType() == typeof(double))
-            {
+            //if (m_MinValueThreshold.GetType() == typeof(double))
+            //{
 
-                double minValue = (double)(object)m_MinValueThreshold;
-                double maxValue = (double)(object)m_MaxValueThreshold;
-                double curMax = double.Parse(m_MaxField.value);
-                double value = double.Parse(changeEvent.newValue);
+            //    double minValue = (double)(object)m_MinValueThreshold;
+            //    double maxValue = (double)(object)m_MaxValueThreshold;
+            //    double curMax = double.Parse(m_MaxField.value);
+            //    double value = double.Parse(changeEvent.newValue);
 
-                if (value < minValue || value > maxValue || value > curMax)
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-            }
+            //    if (value < minValue || value > maxValue || value > curMax)
+            //    {
+            //        //textField.value = changeEvent.previousValue;
+            //        return false;
+            //    }
+            //}
 
-            else if (m_MinValueThreshold.GetType() == typeof(int))
             {
                 if (changeEvent.newValue.Contains('.'))
                 {
@@ -138,9 +145,12 @@ class SafeTextField<T>
         else
         {
             // do stuff
+            m_Callback();
+            
+
         }
 
-       
+
     }
 
     void MaxFieldCallback(ChangeEvent<string> changeEvent)
@@ -154,6 +164,7 @@ class SafeTextField<T>
         else
         {
             // do stuff
+            m_Callback();
         }
     }
 
@@ -168,21 +179,7 @@ class SafeTextField<T>
         }
         else
         {
-            if (m_MinValueThreshold.GetType() == typeof(double))
-            {
 
-                double minValue = (double)(object)m_MinValueThreshold;
-                double maxValue = (double)(object)m_MaxValueThreshold;
-                double curMin = double.Parse(m_MinField.value);
-                double value = double.Parse(changeEvent.newValue);
-
-                if (value < minValue || value > maxValue || value < curMin)
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-            }
-            else if (m_MinValueThreshold.GetType() == typeof(int))
             {
                 if (changeEvent.newValue.Contains('.'))
                 {
@@ -201,7 +198,7 @@ class SafeTextField<T>
                 }
             }
 
-  
+
             return true;
 
         }
@@ -210,7 +207,7 @@ class SafeTextField<T>
     {
         foreach (var c in value)
         {
-            if ((c < '0' || c > '9') && c != '.')
+            if ((c < '0' || c > '9'))
             {
                 return false;
             }
@@ -231,19 +228,59 @@ class SafeTextField<T>
         m_MaxField.isReadOnly = m_MinField.isReadOnly = false;
     }
 
-    public Vector2Int MinMaxInt()
+    public Tuple<int, int> MinMaxRange()
     {
-        return new Vector2Int(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
+        return new Tuple<int, int>(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
     }
 
-    public Vector2 MinMaxFloat()
+    public bool IsWithinRange(NodeWrapper wrapper)
     {
-        return new Vector2(float.Parse(m_MinField.value), float.Parse(m_MaxField.value));
+
+        List<Tuple<string, int>> comparisons = new List<Tuple<string, int>>();
+        comparisons.Add(new Tuple<string, int>("Depth", wrapper.Data.depth));
+        comparisons.Add(new Tuple<string, int>("Cardinality", wrapper.Data.cardinality));
+        comparisons.Add(new Tuple<string, int>("ArgRadius", wrapper.Data.argRadius));
+        comparisons.Add(new Tuple<string, int>("ArgCenter", wrapper.Data.argCenter));
+
+        foreach ((string name, int value) in comparisons)
+        {
+            if (m_Label.text == name)
+            {
+                Debug.Log("foudn comp for " + name);
+                (int min, int max) = MinMaxRange();
+                if (value < min || value > max)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+        //if (m_Label.text == "Depth")
+        //{
+        //    var range = MinMaxRange();
+        //    if (wrapper.Data.depth < range.Item1 || wrapper.Data.depth > range.Item2)
+        //    {
+        //        return false;
+        //    }
+        //}
+        //else if(m_Label.text == "Cardinality")
     }
 
-    //public bool IsValid(NodeWrapper wrapper)
-    //{
+    public bool IsWithinRange(int value)
+    {
 
-    //}
-}
+        (int min, int max) = MinMaxRange();
+        //if (value < min || value > max)
+        //{
+        //    return false;
+        //}
+        //return true;
+
+        return (value >= min && value <= max);
+    }
+
+
+    }
 

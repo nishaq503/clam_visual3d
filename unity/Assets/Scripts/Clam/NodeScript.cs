@@ -51,7 +51,7 @@ public class NodeScript : MonoBehaviour
     {
     }
 
-    public void Select()
+    public void ToggleSelect()
     {
         if (m_IsSelected)
         {
@@ -65,9 +65,24 @@ public class NodeScript : MonoBehaviour
         }
     }
 
+    public void Select()
+    {
+        //if (m_IsSelected)
+        //{
+        //    SetColor(m_ActualColor);
+        //    m_IsSelected = false;
+        //}
+        //else
+        {
+            SetColor(new Color(0.0f, 0.0f, 1.0f));
+            m_IsSelected = true;
+        }
+    }
+
     public void Deselect()
     {
-
+        SetColor(m_ActualColor);
+        m_IsSelected = false;
     }
 
     public void ExpandSubtree()

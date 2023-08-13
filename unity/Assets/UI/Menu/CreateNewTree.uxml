@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="MainBackground" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgb(85, 196, 229);">
+        <ui:VisualElement name="MenuBackgfround" style="align-items: center; justify-content: center; width: 50%; height: 60%; flex-grow: 0; background-color: rgb(115, 110, 110); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-left-color: rgba(0, 0, 0, 255); border-right-color: rgba(0, 0, 0, 255); border-top-color: rgba(0, 0, 0, 255); border-bottom-color: rgba(0, 0, 0, 255);">
+            <ui:Label text="Create New" display-tooltip-when-elided="true" name="ClamLabel" style="font-size: 24px;" />
+            <ui:VisualElement name="DatasetInput" style="flex-direction: row; align-items: center; justify-content: center; width: 40%;">
+                <ui:Label text="Dataset" display-tooltip-when-elided="true" name="DatasetInputLabel" style="width: 40%; -unity-text-align: middle-center;" />
+                <ui:TextField picking-mode="Ignore" name="DatasetInputField" style="width: 60%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="CardinalityInput" style="flex-direction: row; align-items: center; justify-content: center; width: 40%;">
+                <ui:Label text="Cardinality" display-tooltip-when-elided="true" name="CardinalityInputLabel" style="width: 40%; -unity-text-align: middle-center;" />
+                <ui:TextField picking-mode="Ignore" name="CardinalityInputField" style="width: 60%;" />
+            </ui:VisualElement>
+            <ui:Button text="Create" display-tooltip-when-elided="true" name="CreateButton" style="width: 25%; border-left-color: rgba(19, 18, 18, 255); border-right-color: rgba(19, 18, 18, 255); border-top-color: rgba(19, 18, 18, 255); border-bottom-color: rgba(19, 18, 18, 255); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
+            <ui:Button text="Back" display-tooltip-when-elided="true" name="ExitButton" style="width: 25%; border-left-color: rgba(0, 0, 0, 255); border-right-color: rgba(0, 0, 0, 255); border-top-color: rgba(0, 0, 0, 255); border-bottom-color: rgba(0, 0, 0, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -60,6 +60,11 @@ public class ClamUserInput : MonoBehaviour
         UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
     }
 
+    public void SetTree(Dictionary<string, GameObject> tree)
+    {
+        m_ClusterUI.GetComponent<ClusterUI_View>().SetTree(tree);
+    }
+
     public void OnLMC()
     {
         Debug.Log("selecting onlmc");
@@ -94,7 +99,7 @@ public class ClamUserInput : MonoBehaviour
                         m_ClusterUI.GetComponent<ClusterUI_View>().ClearClusterInfo();
 
                     }
-                    selectedNode.GetComponent<NodeScript>().Select();
+                    selectedNode.GetComponent<NodeScript>().ToggleSelect();
 
                 }
             }

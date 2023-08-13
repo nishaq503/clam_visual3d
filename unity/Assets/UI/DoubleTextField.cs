@@ -1,7 +1,5 @@
 using Clam;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -9,17 +7,17 @@ using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI;
 
 
-class SafeTextField<T>
+class DoubleTextField
 {
     Label m_Label;
     TextField m_MinField;
     TextField m_MaxField;
-    T m_MinValueThreshold;
-    T m_MaxValueThreshold;
+    double m_MinValueThreshold;
+    double m_MaxValueThreshold;
 
     //VisualTreeAsset m_Template;
 
-    public SafeTextField(string name, UIDocument document, T minValue, T maxValue)
+    public DoubleTextField(string name, UIDocument document, double minValue, double maxValue)
     {
         m_MinValueThreshold = minValue;
         m_MaxValueThreshold = maxValue;
@@ -47,7 +45,7 @@ class SafeTextField<T>
 
 
 
-    public SafeTextField(string name, VisualElement parent, T minValue, T maxValue)
+    public DoubleTextField(string name, VisualElement parent, double minValue, double maxValue)
     {
         m_MinValueThreshold = minValue;
         m_MaxValueThreshold = maxValue;
@@ -88,7 +86,7 @@ class SafeTextField<T>
         }
         else
         {
-            if (m_MinValueThreshold.GetType() == typeof(double))
+            //if (m_MinValueThreshold.GetType() == typeof(double))
             {
 
                 double minValue = (double)(object)m_MinValueThreshold;
@@ -103,24 +101,7 @@ class SafeTextField<T>
                 }
             }
 
-            else if (m_MinValueThreshold.GetType() == typeof(int))
-            {
-                if (changeEvent.newValue.Contains('.'))
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-                int minValue = (int)(object)m_MinValueThreshold;
-                int maxValue = (int)(object)m_MaxValueThreshold;
-                int curMax = int.Parse(m_MaxField.value);
-                int value = int.Parse(changeEvent.newValue);
-
-                if (value < minValue || value > maxValue || value > curMax)
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-            }
+           
 
             return true;
 
@@ -140,7 +121,7 @@ class SafeTextField<T>
             // do stuff
         }
 
-       
+
     }
 
     void MaxFieldCallback(ChangeEvent<string> changeEvent)
@@ -168,7 +149,7 @@ class SafeTextField<T>
         }
         else
         {
-            if (m_MinValueThreshold.GetType() == typeof(double))
+            //if (m_MinValueThreshold.GetType() == typeof(double))
             {
 
                 double minValue = (double)(object)m_MinValueThreshold;
@@ -182,26 +163,9 @@ class SafeTextField<T>
                     return false;
                 }
             }
-            else if (m_MinValueThreshold.GetType() == typeof(int))
-            {
-                if (changeEvent.newValue.Contains('.'))
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-                int minValue = (int)(object)m_MinValueThreshold;
-                int maxValue = (int)(object)m_MaxValueThreshold;
-                int curMin = int.Parse(m_MinField.value);
-                int value = int.Parse(changeEvent.newValue);
+            
 
-                if (value < minValue || value > maxValue || value < curMin)
-                {
-                    //textField.value = changeEvent.previousValue;
-                    return false;
-                }
-            }
 
-  
             return true;
 
         }
@@ -236,10 +200,15 @@ class SafeTextField<T>
         return new Vector2Int(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
     }
 
-    public Vector2 MinMaxFloat()
+    public Tuple<double, double> MinMaxRange()
     {
-        return new Vector2(float.Parse(m_MinField.value), float.Parse(m_MaxField.value));
+        return new Tuple<double, double>(double.Parse(m_MinField.value), double.Parse(m_MaxField.value));
     }
+
+    //public Vector2 MinMaxFloat()
+    //{
+    //    return new Vector2(float.Parse(m_MinField.value), float.Parse(m_MaxField.value));
+    //}
 
     //public bool IsValid(NodeWrapper wrapper)
     //{

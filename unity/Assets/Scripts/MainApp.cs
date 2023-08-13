@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainApp : MonoBehaviour
@@ -9,9 +10,11 @@ public class MainApp : MonoBehaviour
     public uint cardinality = 25;
     public GameObject nodePrefab;
     public GameObject springPrefab;
+    //public GameObject user;
+    //public GameObject userPrefab;
     //public GameObject clusterUI_Prefab;
 
-    private ClamTree m_ClamTree;
+    //public ClamTree clamTree;
     //private GameObject m_ClusterUI;
 
 
@@ -20,8 +23,25 @@ public class MainApp : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        m_ClamTree = new ClamTree(nodePrefab, springPrefab, dataName, cardinality);
+        GetComponent<ClamTree>().Init(nodePrefab, springPrefab, dataName, cardinality);
+        //userPrefab = Instantiate(userPrefab);
         //m_ClusterUI = Instantiate(clusterUI_Prefab);
+
+    }
+
+    private void Start()
+    {
+        //GameObject child1 = GameObject.FindChild("child1").gameObject;
+        //var user = this.GetComponent<Transform>().Find("User");
+        var user = GameObject.FindWithTag("Player");
+
+        if (user != null)
+        {
+            user.GetComponent<ClamUserInput>().SetTree(GetComponent<ClamTree>().GetTree());
+        }
+
+        //user.GetComponent<ClamUserInput>().SetTree(clamTree.GetComponent<ClamTree>().GetTree());
+
 
     }
 

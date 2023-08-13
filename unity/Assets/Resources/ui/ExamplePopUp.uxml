@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <!--<ui:VisualElement name="complex-ui-screen">
+        <ui:Toggle label="Toggle" />
+        <ui:MinMaxSlider picking-mode="Ignore" label="Min/Max Slider" min-value="10" max-value="12" low-limit="-10" high-limit="40" />
+        <ui:Label text="Label" />
+        <ui:Button text="Button" />
+        <ui:Button text="Button" />
+    </ui:VisualElement>-->
+    <ui:VisualElement name="overlay" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.71); align-items: center; justify-content: center;">
+        <ui:VisualElement name="popup" style="background-color: rgba(70, 70, 70, 255);">
+            <ui:Label text="Are You Sure?" name="message" />
+            <ui:Button text="Yes" name="ok-button" style="width: 108.3333px;" />
+            <ui:Button text="No" name="ok-button" style="width: 108.3333px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
