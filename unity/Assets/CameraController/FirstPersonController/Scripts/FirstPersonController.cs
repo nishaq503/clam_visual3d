@@ -261,6 +261,11 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
+           //if (targetSpeed > -0.5f && targetSpeed < 0.5f)
+           // {
+           //     _speed = 0.0f;
+           // }
+
             // normalise input direction
             Vector3 inputDirection = new Vector3(0.0f, _input.verticalMove.y, 0.0f).normalized;
 

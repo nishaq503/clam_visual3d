@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class MainMenu : MonoBehaviour
 {
+ 
+
     UIDocument m_UIDocument;
 
     Button m_CreateNewButton;
@@ -13,55 +15,47 @@ public class MainMenu : MonoBehaviour
     Button m_ExitButton;
 
 
-
-
     // Start is called before the first frame update
     void Start()
     {
         m_UIDocument = GetComponent<UIDocument>();
 
-
         m_CreateNewButton = m_UIDocument.rootVisualElement.Q<Button>("CreateTree");
         m_ExitButton = m_UIDocument.rootVisualElement.Q<Button>("ExitButton");
 
-
-        //m_ExitButton.clicked += () =>
-        //{
-        //    Application.Quit();
-        //};
-
-        RegisterHandler(m_ExitButton);
+        SetExitButtonCallback(m_ExitButton);
+        SetCreateButtonCallback();
     }
 
-    private void RegisterHandler(Button button)
+    private void SetCreateButtonCallback()
+    {
+        m_CreateNewButton.RegisterCallback<ClickEvent>(CreateButtonCallback);
+        
+    }
+
+    private void CreateButtonCallback(ClickEvent evt)
+    {
+        Button button = evt.currentTarget as Button;
+
+        MenuEventManager.SwitchState(Menu.CreateNewTree);
+
+    }
+
+    private void SetExitButtonCallback(Button button)
     {
         button.RegisterCallback<ClickEvent>(ExitButtonCallback);
     }
 
     private void ExitButtonCallback(ClickEvent evt)
     {
-        //++m_ClickCount;
-
-        //Because of the names we gave the buttons and toggles, we can use the
-        //button name to find the toggle name.
         Button button = evt.currentTarget as Button;
-        //string buttonNumber = button.name.Substring(m_ButtonPrefix.Length);
-        //string toggleName = "toggle" + buttonNumber;
-        //Toggle toggle = rootVisualElement.Q<Toggle>(toggleName);
 
-        Debug.Log("Button was clicked!");
 
-        //evt.StopImmediatePropagation();
+        evt.StopImmediatePropagation();
 
-        //var template = Resources.Load<VisualTreeAsset>("ui/ExakmplePopUp");
         var template = Resources.Load<VisualTreeAsset>("ui/AreYouSure");
         var instance = template.Instantiate();
-        //var background = m_UIDocument.rootVisualElement.Q<VisualElement>("MainBackground");
-        
-        //background.Add(instance);
         m_UIDocument.rootVisualElement.Add(instance);
-        //m_UIDocument.rootVisualElement.Add(new Label("testing124"));
-        ////m_UIDocument.rootVisualElement.Insert(0, instance);
         
         ShowPopup(m_UIDocument.rootVisualElement, instance);
 
@@ -72,35 +66,19 @@ public class MainMenu : MonoBehaviour
 
         noButton.clickable.clicked += () =>
         {
+            evt.StopImmediatePropagation();
+
             PopupClose(m_UIDocument.rootVisualElement, m_UIDocument.rootVisualElement.Q<VisualElement>("PopUpElement"));
         };
 
         yesButton.clickable.clicked += () =>
         {
-            //PopupClose(m_UIDocument.rootVisualElement, instance);
+            evt.StopImmediatePropagation();
+
             Application.Quit();
         };
 
-        //Application.Quit();
     }
-
-    private void YesButtonCallBack(ClickEvent evt)
-    {
-        var button = evt.currentTarget as Button;
-
-        Application.Quit();
-    }
-
-    private void NoButtonCallBack(ClickEvent evt)
-    {
-        var button = evt.currentTarget as Button;
-
-        //Application.Quit();
-
-        //m_UIDocument.rootVisualElement.Remove()
-
-    }
-
 
 
     // Update is called once per frame

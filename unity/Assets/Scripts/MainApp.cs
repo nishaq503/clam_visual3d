@@ -6,8 +6,10 @@ using UnityEngine;
 public class MainApp : MonoBehaviour
 {
 
-    public string dataName = "arrhythmia";
-    public uint cardinality = 25;
+    //public string dataName = "arrhythmia";
+    //public uint cardinality = 25;
+
+    public ClamTreeData treeData;
     public GameObject nodePrefab;
     public GameObject springPrefab;
     //public GameObject user;
@@ -23,7 +25,8 @@ public class MainApp : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        GetComponent<ClamTree>().Init(nodePrefab, springPrefab, dataName, cardinality);
+        Debug.Log("tree data" + treeData.dataName + " " + treeData.cardinality);
+        GetComponent<ClamTree>().Init(nodePrefab, springPrefab, treeData.dataName, treeData.cardinality);
         //userPrefab = Instantiate(userPrefab);
         //m_ClusterUI = Instantiate(clusterUI_Prefab);
 
