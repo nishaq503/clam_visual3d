@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="PauseMainBackground" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgb(55, 125, 176);">
+    <ui:VisualElement name="MainBackground" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgb(55, 125, 176);">
         <ui:VisualElement name="MenuBackgfround" style="align-items: center; justify-content: center; width: 50%; height: 60%; flex-grow: 0; background-color: rgb(115, 110, 110); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
             <ui:Label text="Clam Visualization" display-tooltip-when-elided="true" name="ClamLabel" style="font-size: 24px;" />
             <ui:Button text="Resume" display-tooltip-when-elided="true" name="Resume" style="width: 25%;" />

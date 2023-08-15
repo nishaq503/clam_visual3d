@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public enum Menu
 {
@@ -12,14 +13,17 @@ public enum Menu
     CreateNewTree,
     StartClam,
     Pause,
+    Lock,
+    Unlock,
+    ResumePlay
 }
 
 public class MenuEventManager : MonoBehaviour
 {
     public GameObject m_MainMenuPrefab;
     public GameObject m_CreateNewTreeMenuPrefab;
-
-
+    public GameObject m_PauseMenu;
+    public GameObject m_InitalMenu;
 
     public ClamTreeData m_TreeData;
     private GameObject m_CurrentMenu;
@@ -30,7 +34,15 @@ public class MenuEventManager : MonoBehaviour
 
     public void Start()
     {
-        SwitchToMainMenu();
+        //SwitchToMainMenu();
+        //m_CurrentMenu = Instantiate(m_InitalMenu);
+        m_CurrentMenu = Instantiate(m_InitalMenu);
+
+    }
+
+    public GameObject GetCurrentMenu()
+    {
+        return m_CurrentMenu;
     }
 
     public static MenuEventManager instance
@@ -63,12 +75,54 @@ public class MenuEventManager : MonoBehaviour
             StartListening(Menu.Main, SwitchToMainMenu);
             StartListening(Menu.CreateNewTree, SwitchToCreateTree);
             StartListening(Menu.StartClam, StartClam);
+
+            StartListening(Menu.Lock, LockUserInput);
+            StartListening(Menu.Unlock, UnLockUserInput);
+            StartListening(Menu.Pause, Pause);
         }
+        //if (m_CurrentMenu == null)
+        {
+            m_CurrentMenu = Instantiate(m_InitalMenu);
+        }
+
+    }
+
+    void Pause()
+    {
+        //var template = Resources.Load<VisualTreeAsset>("ui/PauseMenu");
+        //var instance = template.Instantiate();
+
+        var existingPauseMenu = FindObjectOfType(typeof(PauseMenu)) as PauseMenu;
+        if(existingPauseMenu != null)
+        {
+            Debug.Log("already paused");
+            return;
+        }
+
+
+        SwitchState(Menu.Unlock);
+        var pauseMenu = Instantiate(m_PauseMenu);
+        //UIHelpers.ShowPopup(pauseMenu.GetComponent<UIDocument>().rootVisualElement, pauseMenu.GetComponent<UIDocument>().rootVisualElement);
+
+        var resumeButton = pauseMenu.GetComponent<UIDocument>().rootVisualElement.Q<Button>("Resume");
+
+        resumeButton.clickable.clicked += () =>
+        {
+            //UIHelpers.PopupClose(uiDocument.rootVisualElement, pauseMenu.GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("PauseMainBackground"));
+            //this.UnLockUserInput();
+            Destroy(pauseMenu);
+        };
+
+
     }
 
     void SwitchToMainMenu()
     {
-        m_CurrentMenu = Instantiate(m_MainMenuPrefab);
+        Clam.ClamFFI.ShutdownClam();
+        SceneManager.LoadScene("Scenes/MainMenu");
+
+
+        //m_CurrentMenu = Instantiate(m_MainMenuPrefab);
     }
     void SwitchToCreateTree()
     {
@@ -88,6 +142,22 @@ public class MenuEventManager : MonoBehaviour
         m_TreeData.dataName = dataName;
         Debug.Log("swtiching scne?");
         SceneManager.LoadScene("Scenes/MainScene");
+
+    }
+
+    private void LockUserInput()
+    {
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        m_CurrentMenu.GetComponent<ClusterUI_View>().Lock();
+        UnityEngine.Cursor.visible = false;
+
+    }
+
+    private void UnLockUserInput()
+    {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        m_CurrentMenu.GetComponent<ClusterUI_View>().UnLock();
+        UnityEngine.Cursor.visible = true;
 
     }
 
@@ -125,4 +195,12 @@ public class MenuEventManager : MonoBehaviour
             thisEvent.Invoke();
         }
     }
+
+    //public static void LockUserInput()
+    //{
+    //    //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+    //    //.GetComponent<ClusterUI_View>().Lock();
+
+
+    //}
 }

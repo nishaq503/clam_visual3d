@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8364856144241963492
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5260040306730926, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_Name
+      value: MenuManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829617, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_MainMenu
+      value: 
+      objectReference: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+    - target: {fileID: 1033999518466829617, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_MainMenuPrefab
+      value: 
+      objectReference: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+    - target: {fileID: 1033999518466829617, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_CreateNewTreeMenu
+      value: 
+      objectReference: {fileID: 282500079766783759, guid: 90e0c39662228a9419d5852a9b986d6e, type: 3}
+    - target: {fileID: 1033999518466829617, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_MainMenuPrefabpart2
+      value: 
+      objectReference: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+    - target: {fileID: 1033999518466829617, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_CreateNewTreeMenuPrefab
+      value: 
+      objectReference: {fileID: 282500079766783759, guid: 90e0c39662228a9419d5852a9b986d6e, type: 3}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829618, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033999518466829619, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1033999518466829619, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+    - {fileID: 5260040306730926, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+--- !u!1 &8812543147707653320 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+  m_PrefabInstance: {fileID: 8364856144241963492}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1773597683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812543147707653320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a44613efea2374eb8118e6cb37ec05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MainMenuPrefab: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+  m_CreateNewTreeMenuPrefab: {fileID: 282500079766783759, guid: 90e0c39662228a9419d5852a9b986d6e, type: 3}
+  m_PauseMenu: {fileID: 1382387957798709202, guid: ee3333960529631498404ba86706e6c6, type: 3}
+  m_InitalMenu: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+  m_TreeData: {fileID: 11400000, guid: 7436c985af14f604f858fde450087cdb, type: 2}

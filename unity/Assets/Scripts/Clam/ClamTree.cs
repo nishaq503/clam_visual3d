@@ -6,26 +6,35 @@ using UnityEngine;
 public class ClamTree : MonoBehaviour
 {
 
-    private GameObject m_NodePrefab;
-    private GameObject m_SpringPrefab;
+    public GameObject m_NodePrefab;
+    public GameObject m_SpringPrefab;
 
     private string m_DataName;
     private uint m_Cardinality;
+
+    public ClamTreeData m_TreeData;
 
     private Dictionary<string, GameObject> m_Tree;
 
     private float m_EdgeScalar = 25.0f;
     private float m_SearchRadius = 0.05f;
 
-    public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
+    //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
+    public void Init()
     {
-        m_NodePrefab = nodePrefab;
-        m_SpringPrefab = springPrefab;
-        m_DataName = dataName;
-        m_Cardinality = cardinality;
+        //m_NodePrefab = nodePrefab;
+        //m_SpringPrefab = springPrefab;
+        //m_DataName = dataName;
+        //m_Cardinality = cardinality;
 
+        if (m_TreeData.dataName == null || m_TreeData.dataName.Length == 0)
+        {
+            Debug.Log("error with tree data");
+            Application.Quit();
+            
+        }
 
-        FFIError clam_result = Clam.ClamFFI.InitClam(dataName, cardinality);
+        FFIError clam_result = Clam.ClamFFI.InitClam(m_TreeData.dataName, m_TreeData.cardinality);
 
         m_Tree = new Dictionary<string, GameObject>();
 
@@ -50,32 +59,32 @@ public class ClamTree : MonoBehaviour
         return m_Tree;
     }
 
-     unsafe void SetNodeNames(ref Clam.NodeDataFFI nodeData)
+    unsafe void SetNodeNames(ref Clam.NodeDataFFI nodeData)
+    {
+        GameObject node = Instantiate(m_NodePrefab);
+        print("setting name " + node.GetComponent<NodeScript>().GetId());
+        nodeData.LogInfo();
+        node.GetComponent<NodeScript>().SetID(nodeData.id.AsString);
+        node.GetComponent<NodeScript>().SetLeft(nodeData.leftID.AsString);
+        node.GetComponent<NodeScript>().SetRight(nodeData.rightID.AsString);
+        m_Tree.Add(nodeData.id.AsString, node);
+    }
+
+
+
+    unsafe void Reingoldify(ref Clam.NodeDataFFI nodeData)
+    {
+        GameObject node;
+
+        bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+        if (hasValue)
         {
-            GameObject node = Instantiate(m_NodePrefab);
-            print("setting name " + node.GetComponent<NodeScript>().GetId());
-            nodeData.LogInfo();
-            node.GetComponent<NodeScript>().SetID(nodeData.id.AsString);
-            node.GetComponent<NodeScript>().SetLeft(nodeData.leftID.AsString);
-            node.GetComponent<NodeScript>().SetRight(nodeData.rightID.AsString);
-            m_Tree.Add(nodeData.id.AsString, node);
+            node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
         }
-
-
-
-        unsafe void Reingoldify(ref Clam.NodeDataFFI nodeData)
+        else
         {
-            GameObject node;
-
-            bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
-            if (hasValue)
-            {
-                node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
-                node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
-            }
-            else
-            {
-                Debug.Log("reingoldify key not found - " + nodeData.id);
-            }
+            Debug.Log("reingoldify key not found - " + nodeData.id);
         }
+    }
 }

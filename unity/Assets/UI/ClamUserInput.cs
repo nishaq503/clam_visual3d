@@ -9,13 +9,15 @@ public class ClamUserInput : MonoBehaviour
 {
 
     public PlayerInput playerInput;
-    public GameObject clusterUI_Prefab;
+    //public GameObject clusterUI_Prefab;
 
-    private GameObject m_ClusterUI;
+    //private GameObject m_ClusterUI;
 
-    public void Awake()
+    public void Start()
     {
-        m_ClusterUI = Instantiate(clusterUI_Prefab);
+        //m_ClusterUI = Instantiate(clusterUI_Prefab);
+
+        //m_ClusterUI = GameObject.Find("MenuManager").GetComponent<MenuEventManager>().GetCurrentMenu();
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
     }
@@ -36,18 +38,19 @@ public class ClamUserInput : MonoBehaviour
                 focusedElement.Blur();
             }
             playerInput.SwitchCurrentActionMap("Player");
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            m_ClusterUI.GetComponent<ClusterUI_View>().Lock();
+            //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            //m_ClusterUI.GetComponent<ClusterUI_View>().Lock();
 
-
+            MenuEventManager.SwitchState(Menu.Lock);
 
         }
         else
         {
             Debug.Log("unlocking");
             playerInput.SwitchCurrentActionMap("WorldUI");
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
-            m_ClusterUI.GetComponent<ClusterUI_View>().UnLock();
+            //UnityEngine.Cursor.lockState = CursorLockMode.None;
+            //m_ClusterUI.GetComponent<ClusterUI_View>().UnLock();
+            MenuEventManager.SwitchState(Menu.Unlock);
 
             var focusedElement = GetFocusedElement();
             if (focusedElement != null)
@@ -57,12 +60,7 @@ public class ClamUserInput : MonoBehaviour
                 focusedElement.Blur();
             }
         }
-        UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
-    }
-
-    public void SetTree(Dictionary<string, GameObject> tree)
-    {
-        m_ClusterUI.GetComponent<ClusterUI_View>().SetTree(tree);
+        //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
     }
 
     public void OnLMC()
@@ -92,11 +90,14 @@ public class ClamUserInput : MonoBehaviour
                 {
                     if (!selectedNode.GetComponent<NodeScript>().Selected)
                     {
-                        m_ClusterUI.GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
+                        //m_ClusterUI.GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
+                        MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
+
                     }
                     else
                     {
-                        m_ClusterUI.GetComponent<ClusterUI_View>().ClearClusterInfo();
+                        //m_ClusterUI.GetComponent<ClusterUI_View>().ClearClusterInfo();
+                        MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().ClearClusterInfo();
 
                     }
                     selectedNode.GetComponent<NodeScript>().ToggleSelect();
@@ -108,7 +109,10 @@ public class ClamUserInput : MonoBehaviour
 
     void OnExit()
     {
-        Application.Quit();
+        //Application.Quit();
+        playerInput.SwitchCurrentActionMap("WorldUI");
+
+        MenuEventManager.SwitchState(Menu.Pause);
     }
 
     public static Focusable GetFocusedElement()

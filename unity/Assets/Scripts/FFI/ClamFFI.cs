@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
 
 namespace Clam
 {
@@ -175,7 +176,15 @@ namespace Clam
 
         public static FFIError ShutdownClam()
         {
-            return shutdown_clam(out _handle);
+            if (_handle != null)
+            {
+                return shutdown_clam(out _handle);
+            }
+
+            Debug.Log("error clam not initialized");
+            //Debug.Log("Application ending after " + Time.time + " seconds");
+
+            return FFIError.NullPointerPassed;
         }
 
         public unsafe static void FreeString(IntPtr data)
