@@ -199,10 +199,10 @@ namespace StarterAssets
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
 
-        void OnExit()
-        {
-            Application.Quit();
-        }
+        //void OnExit()
+        //{
+        //    Application.Quit();
+        //}
 
         //public void OnChangeMap(InputValue value)
         //{

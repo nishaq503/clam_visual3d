@@ -1,16 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="GraphBuildMenu" src="project://database/Assets/UI/Menu/GraphBuildMenu.uxml?fileID=9197481963319205126&amp;guid=3a2dfaf8bc17c9042aa7ba05037dfa79&amp;type=3#GraphBuildMenu" />
     <ui:VisualElement name="MainBackground" picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="Left" picking-mode="Ignore" style="width: 25%;" />
         <ui:VisualElement name="Middle" picking-mode="Ignore" style="width: 50%;" />
         <ui:VisualElement name="Right" style="width: 25%; background-color: rgb(89, 89, 89);">
-            <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="MenuSelector" />
-            <ui:VisualElement name="ClusterInfo">
-                <ui:Label text="Selected Cluster Info" display-tooltip-when-elided="true" name="ClusterInfoTitle" style="font-size: 20px; -unity-font-style: bold; color: rgb(226, 223, 223); -unity-text-align: upper-center; border-bottom-color: rgb(227, 223, 223); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;" />
-                <ui:VisualElement name="ClusterText" style="flex-direction: row; border-bottom-color: rgb(227, 223, 223); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
-                    <ui:Label display-tooltip-when-elided="true" name="ClusterInfoLabel" style="font-size: 16px; color: rgb(227, 223, 223);" />
-                    <ui:Label display-tooltip-when-elided="true" name="ClusterInfo" style="color: rgb(227, 223, 223); font-size: 16px;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
+            <ui:DropdownField label="Menu" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="MenuSelector" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 10%;" />
+            <ui:VisualElement name="GraphMenuContainer" style="border-bottom-width: 2px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 0; border-top-width: 2px;" />
             <ui:VisualElement name="Depth" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
                 <ui:VisualElement name="DepthSlider" style="flex-direction: row; border-bottom-width: 0; border-left-color: rgb(207, 196, 196); border-right-color: rgb(207, 196, 196); border-top-color: rgb(207, 196, 196); border-bottom-color: rgb(207, 196, 196); padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; border-left-width: 0; border-right-width: 0; border-top-width: 0;">
                     <ui:Label text="Depth" display-tooltip-when-elided="true" name="DepthLabel" style="justify-content: center; align-items: center; width: 20%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: middle-center;" />
@@ -31,6 +26,7 @@
                     <ui:TextField name="CardinalityMax" is-delayed="true" style="width: 45%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:Instance template="GraphBuildMenu" name="GraphBuildMenu" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

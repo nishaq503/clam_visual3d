@@ -18,12 +18,13 @@ public class ClusterUI_View : MonoBehaviour
     private Dictionary<string, GameObject> m_Tree;
     Label m_ClusterInfo;
     Label m_ClusterInfoLabel;
+    MenuSelector m_MenuSelector;
 
     //SafeTextField m_DepthField;
     //SafeTextField m_CardinalityField;
 
     Dictionary<string, IntTextField> m_IntInputFields;
-    Dictionary<string, DoubleTextField> m_DoubleInputFields;
+    //Dictionary<string, DoubleTextField> m_DoubleInputFields;
 
 
     //public float radius;
@@ -41,6 +42,9 @@ public class ClusterUI_View : MonoBehaviour
 
         InitClusterInfoLabel();
         var rightField = m_UIDocument.rootVisualElement.Q<VisualElement>("Right");
+        m_MenuSelector = new MenuSelector(m_UIDocument, "MenuSelector");
+        //m_MenuSelector = m_UIDocument.rootVisualElement.Q<DropdownField>("MenuSelector");
+
         //var myDelegate = new Func<string, DialogResult>(MessageBox.Show);
         //TryDo.Do(myDelegate, null)
         m_IntInputFields = new Dictionary<string, IntTextField>
@@ -52,11 +56,15 @@ public class ClusterUI_View : MonoBehaviour
             //{ "ArgCenter", new IntTextField("ArgCenter", rightField, 0, ClamFFI.ArgCenter(), new Func < bool >(InputFieldChangeCallback)) }
         };
 
-        m_DoubleInputFields = new Dictionary<string, DoubleTextField>
-        {
-            { "Radius", new DoubleTextField("Radius", rightField, 0, ClamFFI.Radius()) },
-            { "lfd", new DoubleTextField("lfd", rightField, 0, ClamFFI.LFD()) }
-        };
+        //m_DoubleInputFields = new Dictionary<string, DoubleTextField>
+        //{
+        //    { "Radius", new DoubleTextField("Radius", rightField, 0, ClamFFI.Radius()) },
+        //    { "lfd", new DoubleTextField("lfd", rightField, 0, ClamFFI.LFD()) }
+        //};
+
+        m_Tree = MenuEventManager.instance.GetTree();
+
+        //InitMenuSelector();
 
         //var inputField = m_SafeInputFieldTemplate.Instantiate();
 
@@ -78,6 +86,8 @@ public class ClusterUI_View : MonoBehaviour
         //m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality());
     }
 
+
+
     bool InputFieldChangeCallback()
     {
         foreach (var item in m_Tree.ToList())
@@ -90,15 +100,6 @@ public class ClusterUI_View : MonoBehaviour
 
             NodeWrapper wrapper = new NodeWrapper(cluster.GetComponent<NodeScript>().ToNodeData());
             ClamFFI.GetClusterData(wrapper);
-
-            //foreach(var textField in m_IntInputFields)
-            //{
-            //    if (textField.Value.IsWithinRange(wrapper))
-            //    {
-            //        cluster.GetComponent<NodeScript>().Select();
-            //    }
-            //}
-            bool valid = true;
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
@@ -124,125 +125,141 @@ public class ClusterUI_View : MonoBehaviour
                 }
             }
 
-            //{
-            //    if (m_IntInputFields.TryGetValue("ArgCenter", out var argCenterField))
-            //    {
-            //        //var range = textField.MinMaxRange();
-            //        if (!argCenterField.IsWithinRange(wrapper.Data.argCenter))
-            //        {
-            //            cluster.GetComponent<NodeScript>().Deselect();
-
-            //            //cluster.GetComponent<NodeScript>().Select();
-            //            continue;
-            //        }
-            //    }
-            //}
-
-            //{
-            //    if (m_IntInputFields.TryGetValue("ArgRadius", out var argRadiusField))
-            //    {
-            //        //var range = textField.MinMaxRange();
-            //        if (!argRadiusField.IsWithinRange(wrapper.Data.argRadius))
-            //        {
-            //            cluster.GetComponent<NodeScript>().Deselect();
-
-            //            continue;
-            //        }
-            //    }
-            //}
             cluster.GetComponent<NodeScript>().Select();
-
-
-            //List<Tuple<string, int>> comparisons = new List<Tuple<string, int>>();
-            //comparisons.Add(new Tuple<string, int>("Depth", wrapper.Data.depth));
-            //comparisons.Add(new Tuple<string, int>("Cardinality", wrapper.Data.cardinality));   
-            //comparisons.Add(new Tuple<string, int>("ArgRadius", wrapper.Data.argRadius));
-            //comparisons.Add(new Tuple<string, int>("ArgCenter", wrapper.Data.argCenter));
-
-            //foreach (var comp in comparisons)
-            //{
-            //    if (m_IntInputFields.TryGetValue("Depth", out var textField))
-            //    {
-            //        var range = textField.MinMaxRange();
-            //        if (wrapper.Data.depth >= range.Item1 && wrapper.Data.depth <= range.Item2)
-            //        {
-            //            cluster.GetComponent<NodeScript>().Select();
-            //        }
-            //    }
-            //}
-
-            //{
-            //    if (m_IntInputFields.TryGetValue("Cardinality", out var textField))
-            //    {
-            //        var range = textField.MinMaxRange();
-            //        if (wrapper.Data.cardinality >= range.Item1 && wrapper.Data.cardinality <= range.Item2)
-            //        {
-            //            cluster.GetComponent<NodeScript>().Select();
-            //        }
-            //    }
-            //}
-
-
-
-
-            //foreach (var param in m_IntInputFields.ToList())
-            //{
-
-            //    //if (wrapper.Data.depth >= m_IntInputFields["Depth"])
-
-
-            //}
         }
         return true;
+    }
+
+
+    public void IncludeHiddenInSelection()
+    {
+        foreach (var item in m_Tree.ToList())
+        {
+            var cluster = item.Value;
+            //if (!cluster.activeSelf)
+            //{
+            //    continue;
+            //}
+
+            NodeWrapper wrapper = new NodeWrapper(cluster.GetComponent<NodeScript>().ToNodeData());
+            ClamFFI.GetClusterData(wrapper);
+            {
+                if (m_IntInputFields.TryGetValue("Depth", out var depthField))
+                {
+                    //var range = textField.MinMaxRange();
+                    if (!depthField.IsWithinRange(wrapper.Data.depth))
+                    {
+                        cluster.GetComponent<NodeScript>().Deselect();
+                        continue;
+                    }
+                }
+            }
+            {
+                if (m_IntInputFields.TryGetValue("Cardinality", out var cardField))
+                {
+                    //var range = textField.MinMaxRange();
+                    if (!cardField.IsWithinRange(wrapper.Data.cardinality))
+                    {
+                        cluster.GetComponent<NodeScript>().Deselect();
+
+                        //cluster.GetComponent<NodeScript>().Select();
+                        continue;
+                    }
+                }
+            }
+            cluster.SetActive(true);
+            cluster.GetComponent<NodeScript>().Select();
+        }
     }
 
     public void Lock()
     {
 
         m_IntInputFields.ToList().ForEach(item => item.Value.Lock());
-        m_DoubleInputFields.ToList().ForEach(item => item.Value.Lock());
+        m_MenuSelector.Lock();
+        var graphMenu = m_UIDocument.rootVisualElement.Q<VisualElement>("GraphMenuInstance");
+        if (graphMenu != null)
+        {
+            graphMenu.Children().ToList().ForEach(c => c.focusable = false);
+        }
+
+        //m_DoubleInputFields.ToList().ForEach(item => item.Value.Lock());
         //m_DepthField.Lock();
         //m_CardinalityField.Lock();
     }
+
+
 
     public void UnLock()
     {
 
         m_IntInputFields.ToList().ForEach(item => item.Value.UnLock());
-        m_DoubleInputFields.ToList().ForEach(item => item.Value.UnLock());
+        m_MenuSelector.Unlock();
+
+        var graphMenu = m_UIDocument.rootVisualElement.Q<VisualElement>("GraphMenuInstance");
+        if (graphMenu != null)
+        {
+            graphMenu.Children().ToList().ForEach(c => c.focusable = true);
+        }
+
+
+        //m_DoubleInputFields.ToList().ForEach(item => item.Value.UnLock());
 
         //m_DepthField.UnLock();
         //m_CardinalityField.UnLock();
     }
 
+    //void InitMenuSelector()
+    //{
+    //    m_MenuSelector.focusable = false;
+
+    //    m_MenuSelector.choices = new List<string>()
+    //    {
+    //        "Cluster Details", "Graph Builder"
+    //    };
+
+
+    //}
+
+
+
     public void DisplayClusterInfo(NodeDataFFI data)
     {
-        m_ClusterInfo.text = data.GetInfoForUI();
+        if (m_ClusterInfo != null)
+            m_ClusterInfo.text = data.GetInfoForUI();
     }
 
     public void ClearClusterInfo()
     {
-        m_ClusterInfo.text = "";
+        if (m_ClusterInfo != null)
+
+            m_ClusterInfo.text = "";
     }
 
     public void InitClusterInfoLabel()
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        if (m_ClusterInfo != null)
+        {
 
-        stringBuilder.AppendLine("id: ");
-        stringBuilder.AppendLine("depth: ");
-        stringBuilder.AppendLine("card: ");
-        stringBuilder.AppendLine("radius: ");
-        stringBuilder.AppendLine("lfd: ");
-        stringBuilder.AppendLine("argC: ");
-        stringBuilder.AppendLine("argR: ");
+            StringBuilder stringBuilder = new StringBuilder();
 
-        m_ClusterInfoLabel.text = stringBuilder.ToString();
+            stringBuilder.AppendLine("id: ");
+            stringBuilder.AppendLine("depth: ");
+            stringBuilder.AppendLine("card: ");
+            stringBuilder.AppendLine("radius: ");
+            stringBuilder.AppendLine("lfd: ");
+            stringBuilder.AppendLine("argC: ");
+            stringBuilder.AppendLine("argR: ");
+
+            m_ClusterInfoLabel.text = stringBuilder.ToString();
+        }
     }
 
     public void SetSelectedClusterInfo(string value)
     {
-        m_ClusterInfo.text = value;
+        if (m_ClusterInfo != null)
+
+            m_ClusterInfo.text = value;
     }
 
     public void SetTree(Dictionary<string, GameObject> tree)

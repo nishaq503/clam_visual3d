@@ -15,7 +15,8 @@ public enum Menu
     Pause,
     Lock,
     Unlock,
-    ResumePlay
+    ResumePlay,
+    IncludeHidden,
 }
 
 public class MenuEventManager : MonoBehaviour
@@ -29,6 +30,7 @@ public class MenuEventManager : MonoBehaviour
     private GameObject m_CurrentMenu;
 
     private Dictionary<Menu, UnityEvent> eventDictionary;
+    private Dictionary<string, GameObject> m_Tree;
 
     private static MenuEventManager eventManager;
 
@@ -52,6 +54,8 @@ public class MenuEventManager : MonoBehaviour
             if (!eventManager)
             {
                 eventManager = FindObjectOfType(typeof(MenuEventManager)) as MenuEventManager;
+                //m_CurrentMenu = Instantiate(m_InitalMenu);
+
 
                 if (!eventManager)
                 {
@@ -64,6 +68,16 @@ public class MenuEventManager : MonoBehaviour
             }
             return eventManager;
         }
+    }
+
+    public Dictionary<string, GameObject> GetTree()
+    {
+        return m_Tree;
+    }
+
+    public void SetTree(Dictionary<string, GameObject> tree)
+    {
+        m_Tree = tree;
     }
 
     void Init()
@@ -79,10 +93,13 @@ public class MenuEventManager : MonoBehaviour
             StartListening(Menu.Lock, LockUserInput);
             StartListening(Menu.Unlock, UnLockUserInput);
             StartListening(Menu.Pause, Pause);
+            StartListening(Menu.IncludeHidden, IncludeHiddenInSelection);
+            //m_CurrentMenu = Instantiate(m_InitalMenu);
+
         }
         //if (m_CurrentMenu == null)
         {
-            m_CurrentMenu = Instantiate(m_InitalMenu);
+            //m_CurrentMenu = Instantiate(m_InitalMenu);
         }
 
     }
@@ -143,6 +160,11 @@ public class MenuEventManager : MonoBehaviour
         Debug.Log("swtiching scne?");
         SceneManager.LoadScene("Scenes/MainScene");
 
+    }
+
+    private void IncludeHiddenInSelection()
+    {
+        m_CurrentMenu.GetComponent<ClusterUI_View>().IncludeHiddenInSelection();
     }
 
     private void LockUserInput()

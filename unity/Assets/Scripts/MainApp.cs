@@ -36,16 +36,16 @@ public class MainApp : MonoBehaviour
     {
         //GameObject child1 = GameObject.FindChild("child1").gameObject;
         //var user = this.GetComponent<Transform>().Find("User");
-        var user = GameObject.FindWithTag("Player");
+        //var user = GameObject.FindWithTag("Player");
         m_Tree.GetComponent<ClamTree>().Init();
-
+        MenuEventManager.instance.SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
         MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
 
 
-        if (user != null)
-        {
-            //user.GetComponent<ClamUserInput>().SetTree(GetComponent<ClamTree>().GetTree());
-        }
+        //if (user != null)
+        //{
+        //    //user.GetComponent<ClamUserInput>().SetTree(GetComponent<ClamTree>().GetTree());
+        //}
 
         //user.GetComponent<ClamUserInput>().SetTree(clamTree.GetComponent<ClamTree>().GetTree());
 

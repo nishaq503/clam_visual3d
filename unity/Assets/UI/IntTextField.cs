@@ -15,6 +15,7 @@ class IntTextField
     Label m_Label;
     TextField m_MinField;
     TextField m_MaxField;
+    MinMaxSlider m_Slider;
     int m_MinValueThreshold;
     int m_MaxValueThreshold;
 
@@ -34,16 +35,21 @@ class IntTextField
         m_Label = document.rootVisualElement.Q<Label>(name + "Label");
         m_MinField = document.rootVisualElement.Q<TextField>(name + "Min");
         m_MaxField = document.rootVisualElement.Q<TextField>(name + "Max");
+        m_Slider = document.rootVisualElement.Q<MinMaxSlider>(name + "Slider");
 
         m_MinField.value = minValue.ToString();
         m_MaxField.value = maxValue.ToString();
+        m_Slider.highLimit = m_Slider.maxValue = maxValue;
+        m_Slider.lowLimit = m_Slider.minValue = minValue;
+           
+
         m_Label.focusable = false;
         m_MinField.focusable = false;
         m_MaxField.focusable = false;
 
 
         m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
-        m_MinField.RegisterValueChangedCallback(MaxFieldCallback);
+        m_MinField.RegisterValueChangedCallback(MinFieldCallback);
 
         m_MinField.tripleClickSelectsLine = true;
         m_MinField.doubleClickSelectsWord = true;
@@ -145,6 +151,8 @@ class IntTextField
         else
         {
             // do stuff
+            m_Slider.minValue = int.Parse(textField.value);
+
             m_Callback();
             
 
@@ -164,6 +172,7 @@ class IntTextField
         else
         {
             // do stuff
+            m_Slider.maxValue = int.Parse(textField.value);
             m_Callback();
         }
     }

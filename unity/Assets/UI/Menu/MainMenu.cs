@@ -70,6 +70,7 @@ public class MainMenu : MonoBehaviour
 
         yesButton.clickable.clicked += () =>
         {
+
             Application.Quit();
         };
 
