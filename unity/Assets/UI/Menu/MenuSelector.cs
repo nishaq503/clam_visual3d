@@ -10,6 +10,7 @@ public class MenuSelector
 {
     DropdownField m_DropdownField;
     UIDocument m_Document;
+    GraphBuildMenu m_GraphBuildMenu;
 
     public MenuSelector(UIDocument document, string name)
     {
@@ -24,6 +25,8 @@ public class MenuSelector
         };
 
         m_DropdownField.RegisterValueChangedCallback(Callback);
+
+        m_GraphBuildMenu = null;
     }
 
     void Callback(ChangeEvent<string> evt)
@@ -33,6 +36,8 @@ public class MenuSelector
         if (evt.newValue == m_DropdownField.choices[0])
         {
             //var rightField = m_Document.rootVisualElement.Q<VisualElement>("Right").Children().ToList().Find(x => x.name = "GraphBuilder");
+            //m_GraphBuildMenu = null;
+
             var rightField = m_Document.rootVisualElement.Q<VisualElement>("Right");
 
             var children = rightField.Children();
@@ -85,7 +90,10 @@ public class MenuSelector
                     instance.name = "GraphBuildMenuInstance";
 
                     rightField.Add(instance);
-                    var graphBuildMenu = new GraphBuildMenu(m_Document, "GraphBuildMenuInstance");
+                    if (m_GraphBuildMenu == null)
+                    {
+                        m_GraphBuildMenu = new GraphBuildMenu(m_Document, "GraphBuildMenuInstance");
+                    }
 
                     //rightField.Insert(clusterDetailersIndex, new Button());
 

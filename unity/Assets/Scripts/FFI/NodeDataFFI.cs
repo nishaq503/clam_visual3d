@@ -199,7 +199,19 @@ namespace Clam
             //mustFree = true;
         }
 
-        public string AsString { get { return Marshal.PtrToStringAnsi(data); } }
+        public string AsString
+        {
+            get
+            {
+                //Debug.Log("attempting to access marshaleld string");
+                if (data == null)
+                {
+                    Debug.Log("Error id data is null");
+                    return "";
+                }
+                return Marshal.PtrToStringAnsi(data);
+            }
+        }
         public IntPtr AsPtr { get { return data; } }
 
         public bool IsEmpty { get { return len == 0; } }

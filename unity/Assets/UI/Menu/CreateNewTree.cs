@@ -57,6 +57,8 @@ public class CreateNewTree : MonoBehaviour
     void CreateButtonCallback(ClickEvent evt)
     {
         var validNames = GetFilesInDirectory(m_DataDirectory);
+        validNames.Add("rand");
+        validNames.Add("test");
 
         string dataName = m_DatasetField.text;
 
@@ -103,6 +105,9 @@ public class CreateNewTree : MonoBehaviour
 
                 fileNames.Add(name);
             }
+            fileNames.Add("rand");
+            fileNames.Add("test");
+
 
             return fileNames;
         }

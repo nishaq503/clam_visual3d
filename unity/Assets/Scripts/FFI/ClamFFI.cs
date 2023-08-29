@@ -16,7 +16,7 @@ namespace Clam
     {
 
 
-	public const string __DllName = "clam_ffi_20230809131511";
+	public const string __DllName = "clam_ffi_20230829161435";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -285,10 +285,10 @@ namespace Clam
 
         [System.Security.SecurityCritical]
         [DllImport(__DllName, EntryPoint = "physics_update_async", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern FFIError physics_update_async(IntPtr handle);
-        public static unsafe FFIError PhysicsUpdateAsync()
+        private static unsafe extern FFIError physics_update_async(IntPtr handle, NodeVisitor cb_fn);
+        public static unsafe FFIError PhysicsUpdateAsync(NodeVisitor cb_fn)
         {
-            return physics_update_async(_handle);
+            return physics_update_async(_handle, cb_fn);
         }
 
         [System.Security.SecurityCritical]

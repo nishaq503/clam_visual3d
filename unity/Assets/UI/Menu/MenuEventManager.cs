@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Clam;
 
 public enum Menu
 {
@@ -17,6 +18,7 @@ public enum Menu
     Unlock,
     ResumePlay,
     IncludeHidden,
+    DestroyGraph,
 }
 
 public class MenuEventManager : MonoBehaviour
@@ -27,6 +29,7 @@ public class MenuEventManager : MonoBehaviour
     public GameObject m_InitalMenu;
 
     public ClamTreeData m_TreeData;
+    //public GameObject m_TreeObject;
     private GameObject m_CurrentMenu;
 
     private Dictionary<Menu, UnityEvent> eventDictionary;
@@ -34,12 +37,19 @@ public class MenuEventManager : MonoBehaviour
 
     private static MenuEventManager eventManager;
 
+    public bool isPhysicsRunning = false;
+
     public void Start()
     {
         //SwitchToMainMenu();
         //m_CurrentMenu = Instantiate(m_InitalMenu);
         m_CurrentMenu = Instantiate(m_InitalMenu);
 
+    }
+
+    public GameObject MyInstantiate(GameObject obj)
+    {
+        return Instantiate(obj);
     }
 
     public GameObject GetCurrentMenu()
@@ -94,6 +104,7 @@ public class MenuEventManager : MonoBehaviour
             StartListening(Menu.Unlock, UnLockUserInput);
             StartListening(Menu.Pause, Pause);
             StartListening(Menu.IncludeHidden, IncludeHiddenInSelection);
+            StartListening(Menu.DestroyGraph, DestroyGraph);
             //m_CurrentMenu = Instantiate(m_InitalMenu);
 
         }
@@ -104,13 +115,32 @@ public class MenuEventManager : MonoBehaviour
 
     }
 
+    void DestroyGraph()
+    {
+        if (isPhysicsRunning)
+        {
+            Debug.Log("Error cannot destroy graph while physics is running");
+            return;
+        }
+        //foreach (var (name, node) in GetTree())
+        //{
+        //    node.SetActive(false);
+        //}
+
+        foreach (var spring in GameObject.FindGameObjectsWithTag("Spring"))
+        {
+            Destroy(spring);
+        }
+
+    }
+
     void Pause()
     {
         //var template = Resources.Load<VisualTreeAsset>("ui/PauseMenu");
         //var instance = template.Instantiate();
 
         var existingPauseMenu = FindObjectOfType(typeof(PauseMenu)) as PauseMenu;
-        if(existingPauseMenu != null)
+        if (existingPauseMenu != null)
         {
             Debug.Log("already paused");
             return;
@@ -215,6 +245,37 @@ public class MenuEventManager : MonoBehaviour
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.Invoke();
+        }
+    }
+
+    public void Update()
+    {
+        if (isPhysicsRunning)
+        {
+            if (ClamFFI.PhysicsUpdateAsync(UpdatePhysicsSim) == FFIError.PhysicsFinished)
+            {
+                isPhysicsRunning = false;
+                print("physics finished");
+            }
+        }
+    }
+
+    public void UpdatePhysicsSim(ref NodeDataFFI nodeData)
+    {
+        string id = nodeData.id.AsString;
+        if (id == null) Debug.Log("id is null");
+        //Debug.Log("id of updated node is " + id);
+        if (m_Tree == null)
+        {
+            Debug.Log("tree is null");
+        }
+        if (GetTree().TryGetValue(id, out var node))
+        {
+            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+        }
+        else
+        {
+            Debug.Log("physics upodate key not found - " + id);
         }
     }
 

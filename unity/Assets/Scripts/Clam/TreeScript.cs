@@ -460,25 +460,25 @@ namespace Clam
 
         void Update()
         {
-            if (m_IsPhysicsRunning)
-            {
-                if (ClamFFI.PhysicsUpdateAsync() == FFIError.PhysicsFinished)
-                {
-                    m_IsPhysicsRunning = false;
-                    print("physics finished");
-                }
-                //if (m_PhysicsIter < m_MaxPhysicsIters)
-                //{
-                //    ApplyForces();
-                //    m_PhysicsIter++;
-                //}
-                //else
-                //{
-                //    ClamFFI.ShutdownPhysics();
-                //    print("finished sim");
-                //    m_IsPhysicsRunning = false;
-                //}
-            }
+            //if (m_IsPhysicsRunning)
+            //{
+            //    if (ClamFFI.PhysicsUpdateAsync() == FFIError.PhysicsFinished)
+            //    {
+            //        m_IsPhysicsRunning = false;
+            //        print("physics finished");
+            //    }
+            //    //if (m_PhysicsIter < m_MaxPhysicsIters)
+            //    //{
+            //    //    ApplyForces();
+            //    //    m_PhysicsIter++;
+            //    //}
+            //    //else
+            //    //{
+            //    //    ClamFFI.ShutdownPhysics();
+            //    //    print("finished sim");
+            //    //    m_IsPhysicsRunning = false;
+            //    //}
+            //}
             //HandleLMC();
             HandleRMC();
             MyQuit();

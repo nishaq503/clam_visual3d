@@ -18,6 +18,7 @@ public class ClamTree : MonoBehaviour
 
     private float m_EdgeScalar = 25.0f;
     private float m_SearchRadius = 0.05f;
+    public bool m_IsPhysicsRunning = false;
 
     //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
     public void Init()
@@ -59,6 +60,29 @@ public class ClamTree : MonoBehaviour
         return m_Tree;
     }
 
+
+    public void Update()
+    {
+        //if (m_IsPhysicsRunning)
+        //{
+        //    //if (ClamFFI.PhysicsUpdateAsync() == FFIError.PhysicsFinished)
+        //    //{
+        //    //    m_IsPhysicsRunning = false;
+        //    //    print("physics finished");
+        //    //}
+        //    //if (m_PhysicsIter < m_MaxPhysicsIters)
+        //    //{
+        //    //    ApplyForces();
+        //    //    m_PhysicsIter++;
+        //    //}
+        //    //else
+        //    //{
+        //    //    ClamFFI.ShutdownPhysics();
+        //    //    print("finished sim");
+        //    //    m_IsPhysicsRunning = false;
+        //    //}
+        //}
+    }
     unsafe void SetNodeNames(ref Clam.NodeDataFFI nodeData)
     {
         GameObject node = Instantiate(m_NodePrefab);
