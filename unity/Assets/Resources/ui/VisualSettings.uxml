@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="GraphBuildMenu">
+        <ui:RadioButtonGroup label="Edge Type" value="-1" choices="Hierarchal, Distance" name="EdgeType" style="border-bottom-width: 2px; border-left-color: rgba(185, 175, 175, 255); border-right-color: rgba(185, 175, 175, 255); border-top-color: rgba(185, 175, 175, 255); border-bottom-color: rgba(185, 175, 175, 255);" />
+        <ui:RadioButtonGroup label="RadiusScale" value="-1" name="RadiusScale" choices="Default,Clam" />
+    </ui:VisualElement>
+</ui:UXML>

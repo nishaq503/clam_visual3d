@@ -16,7 +16,7 @@ namespace Clam
     {
 
 
-	public const string __DllName = "clam_ffi_20230829161435";
+	public const string __DllName = "clam_ffi_20230916190733";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -76,12 +76,12 @@ namespace Clam
             return distance_to_other(_handle, node1, node2); ;
         }
 
-        [DllImport(__DllName, EntryPoint = "create_reingold_layout", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static extern FFIError create_reingold_layout(IntPtr ptr, NodeVisitor callback);
+        [DllImport(__DllName, EntryPoint = "draw_heirarchy", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern FFIError draw_heirarchy(IntPtr ptr, NodeVisitor callback);
 
-        public static FFIError CreateReingoldLayout(NodeVisitor callback)
+        public static FFIError DrawHeirarchy(NodeVisitor callback)
         {
-            return create_reingold_layout(_handle, callback);
+            return draw_heirarchy(_handle, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "get_num_nodes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -252,21 +252,21 @@ namespace Clam
             detect_edges(_handle, items, items.Length, cbFn);
         }
 
-        [System.Security.SecurityCritical]
-        [DllImport(__DllName, EntryPoint = "init_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern void init_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-        public static unsafe void InitForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-        {
-            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var id = nodes[i].id;
-                items[i] = new NodeDataFFI(nodes[i]);
-            }
+        //[System.Security.SecurityCritical]
+        //[DllImport(__DllName, EntryPoint = "init_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        //private static unsafe extern void init_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        //public static unsafe void InitForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn)
+        //{
+        //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+        //    for (int i = 0; i < nodes.Count; i++)
+        //    {
+        //        //var id = nodes[i].id;
+        //        items[i] = new NodeDataFFI(nodes[i]);
+        //    }
 
-            init_force_directed_sim(_handle, items, items.Length, cbFn);
+        //    init_force_directed_sim(_handle, items, items.Length, cbFn);
 
-        }
+        //}
 
         [System.Security.SecurityCritical]
         [DllImport(__DllName, EntryPoint = "launch_physics_thread", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -281,6 +281,22 @@ namespace Clam
             }
 
             launch_physics_thread(_handle, items, items.Length, scalar, maxIters, edgeCB, updateCB);
+        }
+
+
+        [System.Security.SecurityCritical]
+        [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static unsafe extern void run_force_directed_graph_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb);
+        public static unsafe void RunForceDirectedSim(List<NodeDataUnity> nodes, float scalar, int maxIters, NodeVisitor edgeCB)
+        {
+            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                //var id = nodes[i].id;
+                items[i] = new NodeDataFFI(nodes[i]);
+            }
+
+            run_force_directed_graph_sim(_handle, items, items.Length, scalar, maxIters, edgeCB);
         }
 
         [System.Security.SecurityCritical]

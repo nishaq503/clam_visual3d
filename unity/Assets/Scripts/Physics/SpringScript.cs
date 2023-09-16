@@ -24,6 +24,10 @@ public class SpringScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!m_Node1.activeSelf || !m_Node2.activeSelf)
+        {
+            this.gameObject.SetActive(false);
+        }
         List<Vector3> positions = new List<Vector3>() { m_Node1.transform.position, m_Node2.transform.position };
         m_LineRenderer.SetPositions(positions.ToArray());
     }

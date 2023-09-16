@@ -1,3 +1,4 @@
+using Clam;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -18,7 +19,7 @@ public class MainApp : MonoBehaviour
 
     //public ClamTree clamTree;
     //private GameObject m_ClusterUI;
-
+    FFIError m_InitResult;
     public GameObject m_Tree;
 
 
@@ -32,12 +33,30 @@ public class MainApp : MonoBehaviour
 
     }
 
+    public void Quit()
+    {
+        // save any game data here
+#if UNITY_EDITOR
+        // Application.Quit() does not work in the editor so
+        // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     private void Start()
     {
         //GameObject child1 = GameObject.FindChild("child1").gameObject;
         //var user = this.GetComponent<Transform>().Find("User");
         //var user = GameObject.FindWithTag("Player");
-        m_Tree.GetComponent<ClamTree>().Init();
+        m_InitResult = m_Tree.GetComponent<ClamTree>().Init();
+
+        if (m_InitResult != FFIError.Ok)
+        {
+            //Application.Quit();
+            Quit();
+        }
         MenuEventManager.instance.SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
         MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
 
@@ -55,7 +74,7 @@ public class MainApp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnApplicationQuit()
@@ -63,6 +82,9 @@ public class MainApp : MonoBehaviour
         Debug.Log("Application ending after " + Time.time + " seconds");
         //m_Tree = new Dictionary<string, GameObject>();
         //m_SelectedNode = null;
-        Clam.ClamFFI.ShutdownClam();
+        if (m_InitResult == FFIError.Ok)
+        {
+            Clam.ClamFFI.ShutdownClam();
+        }
     }
 }

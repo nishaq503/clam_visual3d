@@ -92,7 +92,9 @@ public class GraphBuildMenu
         }
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
         MenuEventManager.instance.isPhysicsRunning = true;
-        Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
+        //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
+        Clam.ClamFFI.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
+
 
     }
     public void UpdatePhysicsSim(ref NodeDataFFI nodeData)

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
 using System.Linq;
-using static Unity.VisualScripting.Metadata;
 
 public class MenuSelector
 {

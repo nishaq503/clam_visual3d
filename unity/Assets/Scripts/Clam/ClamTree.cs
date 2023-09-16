@@ -21,7 +21,7 @@ public class ClamTree : MonoBehaviour
     public bool m_IsPhysicsRunning = false;
 
     //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
-    public void Init()
+    public FFIError Init()
     {
         //m_NodePrefab = nodePrefab;
         //m_SpringPrefab = springPrefab;
@@ -31,11 +31,19 @@ public class ClamTree : MonoBehaviour
         if (m_TreeData.dataName == null || m_TreeData.dataName.Length == 0)
         {
             Debug.Log("error with tree data");
-            Application.Quit();
-            
+            //Application.Quit();
+            return FFIError.HandleInitFailed;
+
         }
 
         FFIError clam_result = Clam.ClamFFI.InitClam(m_TreeData.dataName, m_TreeData.cardinality);
+
+        if (clam_result != FFIError.Ok)
+        {
+            Debug.Log("error with tree data");
+            //Application.Quit();
+            return clam_result;
+        }
 
         m_Tree = new Dictionary<string, GameObject>();
 
@@ -52,9 +60,36 @@ public class ClamTree : MonoBehaviour
         {
             Debug.Log("ERROR " + e);
         }
-        Clam.ClamFFI.CreateReingoldLayout(Reingoldify);
+        Clam.ClamFFI.DrawHeirarchy(PositionUpdater);
+
+        Clam.ClamFFI.ForEachDFT(EdgeDrawer);
+
+        return FFIError.Ok;
     }
 
+
+    public void EdgeDrawer(ref NodeDataFFI nodeData)
+    {
+        if (m_Tree.TryGetValue(nodeData.id.AsString, out var node))
+        {
+            if (node.activeSelf && !node.GetComponent<NodeScript>().IsLeaf())
+            {
+                if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetLeftChildID(), out var lc))
+                {
+                    var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
+
+                    spring.GetComponent<SpringScript>().SetNodes(node, lc);
+                }
+
+                if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetRightChildID(), out var rc))
+                {
+                    var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
+
+                    spring.GetComponent<SpringScript>().SetNodes(node, rc);
+                }
+            }
+        }
+    }
     public Dictionary<string, GameObject> GetTree()
     {
         return m_Tree;
@@ -96,14 +131,14 @@ public class ClamTree : MonoBehaviour
 
 
 
-    unsafe void Reingoldify(ref Clam.NodeDataFFI nodeData)
+    unsafe void PositionUpdater(ref Clam.NodeDataFFI nodeData)
     {
         GameObject node;
 
         bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
         if (hasValue)
         {
-            node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+            //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
             node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
         }
         else
