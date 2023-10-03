@@ -16,7 +16,7 @@ namespace Clam
     {
 
 
-	public const string __DllName = "clam_ffi_20230916190733";
+	public const string __DllName = "clam_ffi_20231003155445";
         private static IntPtr _handle;
 
         [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -82,6 +82,21 @@ namespace Clam
         public static FFIError DrawHeirarchy(NodeVisitor callback)
         {
             return draw_heirarchy(_handle, callback);
+        }
+
+        [DllImport(__DllName, EntryPoint = "draw_heirarchy_offset_from", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref NodeDataFFI offsetPos, NodeVisitor callback);
+        public static FFIError DrawHeirarchyOffsetFrom(NodeWrapper wrapper, NodeVisitor callback)
+        {
+
+            //FFIError found = get_cluster_data(_handle, ref nodeData, out var outNode);
+            //if (found == FFIError.Ok)
+            //{
+            //    nodeWrapper.Data = outNode;
+            //}
+            NodeDataFFI nodeData = wrapper.Data;
+
+            return draw_heirarchy_offset_from(_handle, ref nodeData, callback);
         }
 
         [DllImport(__DllName, EntryPoint = "get_num_nodes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -176,7 +191,7 @@ namespace Clam
 
         public static FFIError ShutdownClam()
         {
-            if (_handle != null)
+            if (_handle !=  IntPtr.Zero)
             {
                 return shutdown_clam(out _handle);
             }

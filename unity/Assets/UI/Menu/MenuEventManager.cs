@@ -256,6 +256,7 @@ public class MenuEventManager : MonoBehaviour
         UnityEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
+            //if (eventName != Menu.Main) 
             thisEvent.Invoke();
         }
     }

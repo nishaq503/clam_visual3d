@@ -304,5 +304,14 @@ namespace Clam
         public Color AsColor { get { return new Color(x, y, z); } }
         public Vector3 AsVector3 { get { return new Vector3(x, y, z); } }
 
+        public Vec3 Add(Vec3 other)
+        {
+            return new Vec3(this.x + other.x, this.y + other.y, this.z + other.z);
+        }
+        public Vector3 Add(Vector3 other)
+        {
+            return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
+        }
+
     }
 }

@@ -119,9 +119,10 @@ public class GraphBuildMenu
             {
                 //m_TempUI.AddEdge(node, other, 0);
                 //Object springPrefab = Resources.Load("Spring");
+                //var spring = SpringScript.CreateInstance(node, other, SpringScript.SpringType.Similarity);
                 var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                spring.GetComponent<SpringScript>().SetNodes(node, other);
+                spring.GetComponent<SpringScript>().InitLineRenderer(node, other, SpringScript.SpringType.Similarity);
 
             }
         }

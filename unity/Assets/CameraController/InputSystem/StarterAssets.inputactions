@@ -364,6 +364,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RMC",
+                    "type": "Button",
+                    "id": "24f3c322-0c66-49d2-8008-d33674e79856",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -414,11 +423,22 @@
                 {
                     "name": "",
                     "id": "2d3074d9-a1d8-49cd-8f82-a74099ae6bc4",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "LMC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ec78afc5-e358-4770-ad35-33d2ac490595",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "RMC",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

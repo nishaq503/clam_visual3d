@@ -77,15 +77,26 @@ public class ClamTree : MonoBehaviour
                 if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetLeftChildID(), out var lc))
                 {
                     var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
+                    //var sprint = SpringScript.CreateInstance(node, lc, SpringScript.SpringType.heirarchal);
+                    //var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                    spring.GetComponent<SpringScript>().SetNodes(node, lc);
+                    spring.GetComponent<SpringScript>().InitLineRenderer(node, lc, SpringScript.SpringType.heirarchal);
+
+                    //spring.GetComponent<SpringScript>().SetNodes(node, lc);
+                    //spring.GetComponent<SpringScript>().SetColor(Color.white);
+
                 }
 
                 if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetRightChildID(), out var rc))
                 {
                     var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                    spring.GetComponent<SpringScript>().SetNodes(node, rc);
+                    spring.GetComponent<SpringScript>().InitLineRenderer(node, rc, SpringScript.SpringType.heirarchal);
+
+                    //spring.GetComponent<SpringScript>().SetNodes(node, rc);
+                    //var sprint = SpringScript.CreateInstance(node, lc, SpringScript.SpringType.Similarity);
+
+                    //spring.GetComponent<SpringScript>().SetColor(Color.white);
                 }
             }
         }
@@ -138,7 +149,7 @@ public class ClamTree : MonoBehaviour
         bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
         if (hasValue)
         {
-            //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
+            node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
             node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
         }
         else

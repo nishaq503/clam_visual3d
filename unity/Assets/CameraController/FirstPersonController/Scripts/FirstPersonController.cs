@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 #endif
 
 namespace StarterAssets
@@ -13,9 +14,10 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 4.0f;
+        public float MoveSpeed = 100.0f;
+        public float scalar = 10.5f;
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 6.0f;
+        public float SprintSpeed = 302.0f;
         [Tooltip("Rotation speed of the character")]
         public float RotationSpeed = 1.0f;
         [Tooltip("Acceleration and deceleration")]
@@ -183,6 +185,8 @@ namespace StarterAssets
             {
                 _speed = targetSpeed;
             }
+            _speed = targetSpeed;
+
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, _input.verticalMove.y, _input.move.y).normalized;
@@ -196,37 +200,42 @@ namespace StarterAssets
             }
 
             // move the player
-            _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            Vector3 movement = inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            
+            movement.x *= scalar;
+            movement.y *= scalar;
+            movement.z *= scalar;
+            _controller.Move(movement);
         }
 
-        //void OnExit()
-        //{
-        //    Application.Quit();
-        //}
+        void OnExit()
+        {
+            Application.Quit();
+        }
 
-        //public void OnChangeMap(InputValue value)
-        //{
-        //    Debug.Log("change map!");
-        //    bool uiActive = UnityEngine.Cursor.visible;
+        public void OnChangeMap(InputValue value)
+        {
+            Debug.Log("change map!");
+            bool uiActive = UnityEngine.Cursor.visible;
 
-        //    if (uiActive)
-        //    {
-        //        Debug.Log("locking");
+            if (uiActive)
+            {
+                Debug.Log("locking");
 
-        //        _playerInput.SwitchCurrentActionMap("Player");
-        //        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        //        GetComponent<ClusterUI_View>().Lock();
+                _playerInput.SwitchCurrentActionMap("Player");
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                GetComponent<ClusterUI_View>().Lock();
 
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("unlocking");
-        //        _playerInput.SwitchCurrentActionMap("WorldUI");
-        //        UnityEngine.Cursor.lockState = CursorLockMode.None;
-        //        GetComponent<ClusterUI_View>().UnLock();
-        //    }
-        //    UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
-        //}
+            }
+            else
+            {
+                Debug.Log("unlocking");
+                _playerInput.SwitchCurrentActionMap("WorldUI");
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+                GetComponent<ClusterUI_View>().UnLock();
+            }
+            UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+        }
 
         private void VerticalMove()
         {
@@ -261,10 +270,10 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-           //if (targetSpeed > -0.5f && targetSpeed < 0.5f)
-           // {
-           //     _speed = 0.0f;
-           // }
+            //if (targetSpeed > -0.5f && targetSpeed < 0.5f)
+            // {
+            //     _speed = 0.0f;
+            // }
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(0.0f, _input.verticalMove.y, 0.0f).normalized;
@@ -435,19 +444,19 @@ namespace StarterAssets
 //		{
 //			get
 //			{
-//				#if ENABLE_INPUT_SYSTEM
+//#if ENABLE_INPUT_SYSTEM
 //				return _playerInput.currentControlScheme == "KeyboardMouse";
-//				#else
+//#else
 //				return false;
-//				#endif
+//#endif
 //			}
 //		}
 
 //		private void Awake()
 //		{
 //			Cursor.visible = false;
-//            // get a reference to our main camera
-//            if (_mainCamera == null)
+//			// get a reference to our main camera
+//			if (_mainCamera == null)
 //			{
 //				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 //			}
@@ -470,7 +479,7 @@ namespace StarterAssets
 
 //		private void Update()
 //		{
-//            VerticalMove();
+//			VerticalMove();
 //			//GroundedCheck()/*;*/
 //			Move();
 //		}
@@ -489,7 +498,7 @@ namespace StarterAssets
 
 
 
-//        private void CameraRotation()
+//		private void CameraRotation()
 //		{
 //			// if there is an input
 //			if (_input.look.sqrMagnitude >= _threshold)
@@ -555,59 +564,64 @@ namespace StarterAssets
 //			}
 
 //			// move the player
+//			Vector3 movement = inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+//			float scalar = 1.5f;
+//			movement.x *= scalar;
+//			movement.y *= scalar;
+//			movement.z *= scalar;
+//            _controller.Move(movement);
+//		}
+
+//		private void VerticalMove()
+//		{
+//			Debug.Log("new jump");
+
+//			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+
+//			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+
+//			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+//			// if there is no input, set the target speed to 0
+//			if (_input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
+
+//			// a reference to the players current horizontal velocity
+//			float currentHorizontalSpeed = new Vector3(0.0f, _controller.velocity.y, 0.0f).magnitude;
+
+//			float speedOffset = 0.1f;
+//			float inputMagnitude = _input.analogMovement ? _input.verticalMove.magnitude : 1f;
+
+//			// accelerate or decelerate to target speed
+//			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+//			{
+//				// creates curved result rather than a linear one giving a more organic speed change
+//				// note T in Lerp is clamped, so we don't need to clamp our speed
+//				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+
+//				// round speed to 3 decimal places
+//				_speed = Mathf.Round(_speed * 1000f) / 1000f;
+//			}
+//			else
+//			{
+//				_speed = targetSpeed;
+//			}
+
+//			// normalise input direction
+//			Vector3 inputDirection = new Vector3(0.0f, _input.verticalMove.y, 0.0f).normalized;
+
+//			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+//			// if there is a move input rotate player when the player is moving
+//			if (_input.verticalMove != Vector2.zero)
+//			{
+//				// move
+//				inputDirection = transform.up * -_input.verticalMove.y;
+//				//inputDirection += transform.up * _input.verticalMove.y;
+//			}
+
+//			// move the player
 //			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 //		}
 
-//private void VerticalMove()
-//{
-//    Debug.Log("new jump");
-
-//    float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
-//    // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-//    // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-//    // if there is no input, set the target speed to 0
-//    if (_input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
-
-//    // a reference to the players current horizontal velocity
-//    float currentHorizontalSpeed = new Vector3(0.0f, _controller.velocity.y, 0.0f).magnitude;
-
-//    float speedOffset = 0.1f;
-//    float inputMagnitude = _input.analogMovement ? _input.verticalMove.magnitude : 1f;
-
-//    // accelerate or decelerate to target speed
-//    if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-//    {
-//        // creates curved result rather than a linear one giving a more organic speed change
-//        // note T in Lerp is clamped, so we don't need to clamp our speed
-//        _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-
-//        // round speed to 3 decimal places
-//        _speed = Mathf.Round(_speed * 1000f) / 1000f;
-//    }
-//    else
-//    {
-//        _speed = targetSpeed;
-//    }
-
-//    // normalise input direction
-//    Vector3 inputDirection = new Vector3(0.0f, _input.verticalMove.y, 0.0f).normalized;
-
-//    // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-//    // if there is a move input rotate player when the player is moving
-//    if (_input.verticalMove != Vector2.zero)
-//    {
-//        // move
-//        inputDirection = transform.up * -_input.verticalMove.y;
-//        //inputDirection += transform.up * _input.verticalMove.y;
-//    }
-
-//    // move the player
-//    _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-//}
-
-//        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+//		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 //		{
 //			if (lfAngle < -360f) lfAngle += 360f;
 //			if (lfAngle > 360f) lfAngle -= 360f;
