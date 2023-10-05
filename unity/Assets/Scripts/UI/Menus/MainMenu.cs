@@ -1,3 +1,4 @@
+using Clam;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ public class MainMenu : MonoBehaviour
     {
         Button button = evt.currentTarget as Button;
 
-        MenuEventManager.SwitchState(Menu.CreateNewTree);
+        Clam.MenuEventManager.SwitchState(Menu.CreateNewTree);
 
     }
 

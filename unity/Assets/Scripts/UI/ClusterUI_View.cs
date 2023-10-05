@@ -49,8 +49,8 @@ public class ClusterUI_View : MonoBehaviour
         //TryDo.Do(myDelegate, null)
         m_IntInputFields = new Dictionary<string, IntTextField>
         {
-            { "Depth", new IntTextField("Depth", m_UIDocument, 0, FFI.TreeHeight(), new Func<bool>(InputFieldChangeCallback)) },
-            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, FFI.Cardinality(), new Func<bool>(InputFieldChangeCallback)) },
+            { "Depth", new IntTextField("Depth", m_UIDocument, 0, Clam.FFI.NativeMethods.TreeHeight(), new Func<bool>(InputFieldChangeCallback)) },
+            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, Clam.FFI.NativeMethods.Cardinality(), new Func<bool>(InputFieldChangeCallback)) },
 
             //{ "ArgRadius", new IntTextField("ArgRadius", rightField, 0, ClamFFI.ArgRadius(), new Func < bool >(InputFieldChangeCallback)) },
             //{ "ArgCenter", new IntTextField("ArgCenter", rightField, 0, ClamFFI.ArgCenter(), new Func < bool >(InputFieldChangeCallback)) }
@@ -98,8 +98,8 @@ public class ClusterUI_View : MonoBehaviour
                 continue;
             }
 
-            ClusterWrapper wrapper = new ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
-            FFI.GetClusterData(wrapper);
+            Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            Clam.FFI.NativeMethods.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
@@ -141,8 +141,8 @@ public class ClusterUI_View : MonoBehaviour
             //    continue;
             //}
 
-            ClusterWrapper wrapper = new ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
-            FFI.GetClusterData(wrapper);
+            Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            Clam.FFI.NativeMethods.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
@@ -223,7 +223,7 @@ public class ClusterUI_View : MonoBehaviour
 
 
 
-    public void DisplayClusterInfo(ClusterData data)
+    public void DisplayClusterInfo(Clam.FFI.ClusterData data)
     {
         if (m_ClusterInfo != null)
             m_ClusterInfo.text = data.GetInfoForUI();

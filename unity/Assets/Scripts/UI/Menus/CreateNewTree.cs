@@ -1,3 +1,4 @@
+using Clam;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ public class CreateNewTree : MonoBehaviour
 
         if (uint.TryParse(m_CardinalityField.text ,out uint cardinality) && validNames.Contains(dataName))
         {
-            MenuEventManager.SwitchState(Menu.StartClam);
+            Clam.MenuEventManager.SwitchState(Menu.StartClam);
         }
         else
         {

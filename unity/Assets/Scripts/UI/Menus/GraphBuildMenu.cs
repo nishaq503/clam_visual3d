@@ -92,7 +92,7 @@ public class GraphBuildMenu
                 //nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
             }
         }
-        ClusterData[] nodes = new ClusterData[numSelected];
+        Clam.FFI.ClusterData[] nodes = new Clam.FFI.ClusterData[numSelected];
         int i = 0;
 
         foreach (var (name, node) in MenuEventManager.instance.GetTree())
@@ -116,11 +116,11 @@ public class GraphBuildMenu
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
         MenuEventManager.instance.m_IsPhysicsRunning = true;
         //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
-        Clam.FFI.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
+        Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
 
 
     }
-    public void UpdatePhysicsSim(ref ClusterData nodeData)
+    public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
     {
         string id = nodeData.id.AsString;
         Debug.Log("id of updated node is " + id);
@@ -134,7 +134,7 @@ public class GraphBuildMenu
         }
     }
 
-    public void EdgeDrawer(ref ClusterData nodeData)
+    public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
     {
         if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {

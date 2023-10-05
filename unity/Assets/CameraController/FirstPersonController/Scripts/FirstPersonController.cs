@@ -216,7 +216,7 @@ namespace StarterAssets
         public void OnChangeMapToWorldUI(InputValue value)
         {
             m_PlayerInput.SwitchCurrentActionMap("WorldUI");
-            MenuEventManager.SwitchState(Menu.Unlock);
+            Clam.MenuEventManager.SwitchState(Menu.Unlock);
             //MenuEventManager.SwitchInputActionMap("WorldUI", _playerInput);
 
             //Debug.Log("change map!");
