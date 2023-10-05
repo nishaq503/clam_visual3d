@@ -81,24 +81,24 @@ namespace Clam
             distToQuery = -1;
 
         }
-        public NodeDataFFI(NodeDataUnity data)
-        {
-            this.pos = new Vec3(data.pos);
-            this.color = new Vec3(data.color);
+        //public NodeDataFFI(NodeDataUnity data)
+        //{
+        //    this.pos = new Vec3(data.pos);
+        //    this.color = new Vec3(data.color);
 
-            this.id = new StringFFI(data.id);
-            this.leftID = new StringFFI(data.leftID);
-            this.rightID = new StringFFI(data.rightID);
+        //    this.id = new StringFFI(data.id);
+        //    this.leftID = new StringFFI(data.leftID);
+        //    this.rightID = new StringFFI(data.rightID);
 
-            cardinality = data.cardinality;
-            depth = data.depth;
-            radius = data.radius;
-            lfd = data.lfd;
-            argCenter = data.argCenter;
-            argRadius = data.argRadius;
-            distToQuery = -1;
+        //    cardinality = data.cardinality;
+        //    depth = data.depth;
+        //    radius = data.radius;
+        //    lfd = data.lfd;
+        //    argCenter = data.argCenter;
+        //    argRadius = data.argRadius;
+        //    distToQuery = -1;
 
-        }
+        //}
         public NodeDataFFI(int n)
         {
             this.pos = new global::Clam.Vec3(n, n, n);

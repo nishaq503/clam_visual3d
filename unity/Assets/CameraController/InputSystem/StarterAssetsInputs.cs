@@ -47,7 +47,7 @@ namespace StarterAssets
         //}
         public void OnMove(InputValue value)
 		{
-			Debug.Log("enable on move");
+			//Debug.Log("enable on move");
 			MoveInput(value.Get<Vector2>());
 		}
 
@@ -61,7 +61,7 @@ namespace StarterAssets
 
 		public void OnUpDown(InputValue value)
 		{
-			Debug.Log("jump");
+			//Debug.Log("jump");
 
 			VerticalInput(value.Get<Vector2>());
 		}
@@ -77,14 +77,12 @@ namespace StarterAssets
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-            Debug.Log("after endif on move");
 
             move = newMoveDirection;
 		}
 
         public void VerticalInput(Vector2 newMoveDirection)
         {
-            Debug.Log("after endif on move");
 
             verticalMove = newMoveDirection;
         }

@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeMap",
+                    "name": "ChangeMapToWorldUI",
                     "type": "Button",
                     "id": "cdca603a-6644-47b0-9e1c-bbda09436b1a",
                     "expectedControlType": "Button",
@@ -253,7 +253,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "ChangeMap",
+                    "action": "ChangeMapToWorldUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -339,7 +339,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeMap",
+                    "name": "ChangeMapToPlayer",
                     "type": "Button",
                     "id": "08f00de7-a315-4cea-a4b6-3e8bce9b2115",
                     "expectedControlType": "Button",
@@ -405,7 +405,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "ChangeMap",
+                    "action": "ChangeMapToPlayer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

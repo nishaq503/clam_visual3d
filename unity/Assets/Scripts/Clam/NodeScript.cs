@@ -169,10 +169,10 @@ public class NodeScript : MonoBehaviour
         return node;
     }
 
-    public NodeDataUnity ToUnityData()
-    {
-        NodeDataUnity node = new NodeDataUnity(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
+    //public NodeDataUnity ToUnityData()
+    //{
+    //    NodeDataUnity node = new NodeDataUnity(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
 
-        return node;
-    }
+    //    return node;
+    //}
 }

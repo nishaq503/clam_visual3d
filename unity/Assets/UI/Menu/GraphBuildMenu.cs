@@ -76,18 +76,41 @@ public class GraphBuildMenu
 
         MenuEventManager.SwitchState(Menu.DestroyGraph);
 
-        List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+        //List<NodeDataUnity> nodes = new List<NodeDataUnity>();
+        int numSelected = 0;
         foreach (var (name, node) in MenuEventManager.instance.GetTree())
         {
             if (node.activeSelf && node.GetComponent<NodeScript>().Selected)
             {
+                numSelected++;
+                //var x = Random.Range(0, 100);
+                //var y = Random.Range(0, 100);
+                //var z = Random.Range(0, 100);
+
+                //node.GetComponent<Transform>().position = new Vector3(x, y, z);
+
+                //nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+            }
+        }
+        NodeDataFFI[] nodes = new NodeDataFFI[numSelected];
+        int i = 0;
+
+        foreach (var (name, node) in MenuEventManager.instance.GetTree())
+        {
+            if (node.activeSelf && node.GetComponent<NodeScript>().Selected)
+            {
+                //numSelected++;
                 var x = Random.Range(0, 100);
                 var y = Random.Range(0, 100);
                 var z = Random.Range(0, 100);
 
                 node.GetComponent<Transform>().position = new Vector3(x, y, z);
 
-                nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+                nodes[i] = node.GetComponent<NodeScript>().ToNodeData();
+                i++;
+
+                if (i == numSelected)
+                    break;
             }
         }
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);

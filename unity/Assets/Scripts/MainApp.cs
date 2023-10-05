@@ -50,15 +50,15 @@ public class MainApp : MonoBehaviour
         //GameObject child1 = GameObject.FindChild("child1").gameObject;
         //var user = this.GetComponent<Transform>().Find("User");
         //var user = GameObject.FindWithTag("Player");
-        m_InitResult = m_Tree.GetComponent<ClamTree>().Init();
+        m_InitResult = m_Tree.GetComponent<Tree>().Init();
 
         if (m_InitResult != FFIError.Ok)
         {
             //Application.Quit();
             Quit();
         }
-        MenuEventManager.instance.SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
-        MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(m_Tree.GetComponent<ClamTree>().GetTree());
+        MenuEventManager.instance.SetTree(m_Tree.GetComponent<Tree>().GetTree());
+        MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(m_Tree.GetComponent<Tree>().GetTree());
 
 
         //if (user != null)

@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ClamTreeData", order = 1)]
-public class ClamTreeData : ScriptableObject
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/TreeStartupData", order = 1)]
+public class TreeStartupData : ScriptableObject
 {
 
     public string dataName;

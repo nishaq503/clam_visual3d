@@ -213,28 +213,40 @@ namespace StarterAssets
             Application.Quit();
         }
 
-        public void OnChangeMap(InputValue value)
+        public void OnChangeMapToWorldUI(InputValue value)
         {
-            Debug.Log("change map!");
-            bool uiActive = UnityEngine.Cursor.visible;
+            _playerInput.SwitchCurrentActionMap("WorldUI");
+            MenuEventManager.SwitchState(Menu.Unlock);
+            //MenuEventManager.SwitchInputActionMap("WorldUI", _playerInput);
 
-            if (uiActive)
-            {
-                Debug.Log("locking");
+            //Debug.Log("change map!");
+            //bool uiActive = UnityEngine.Cursor.visible;
 
-                _playerInput.SwitchCurrentActionMap("Player");
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                GetComponent<ClusterUI_View>().Lock();
+            //if (uiActive)
+            //{
+            //    //Debug.Log("locking");
 
-            }
-            else
-            {
-                Debug.Log("unlocking");
-                _playerInput.SwitchCurrentActionMap("WorldUI");
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
-                GetComponent<ClusterUI_View>().UnLock();
-            }
-            UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+            //    //_playerInput.SwitchCurrentActionMap("Player");
+            //    ////UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            //    ////GetComponent<ClusterUI_View>().Lock();
+            //    //MenuEventManager.SwitchState(Menu.Lock);
+            //    //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+
+
+            //}
+            //else
+            //{
+            //    //Debug.Log("cursor is NOT visible");
+
+            //    //Debug.Log("unlocking");
+            //    _playerInput.SwitchCurrentActionMap("WorldUI");
+            //    MenuEventManager.SwitchState(Menu.Unlock);
+            //    //UnityEngine.Cursor.lockState = CursorLockMode.None;
+
+            //    //GetComponent<ClusterUI_View>().UnLock();
+            //    //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+
+            //}
         }
 
         private void VerticalMove()

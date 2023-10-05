@@ -234,38 +234,38 @@ namespace Clam
             test_struct_array(_handle, items, items.Length);
         }
 
-        [System.Security.SecurityCritical]
-        [DllImport(__DllName, EntryPoint = "color_by_dist_to_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern void color_by_dist_to_query(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-        public static unsafe void ColorByDistToQuery(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-        {
-            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var id = nodes[i].id;
-                items[i] = new NodeDataFFI(nodes[i]);
-            }
+        //[System.Security.SecurityCritical]
+        //[DllImport(__DllName, EntryPoint = "color_by_dist_to_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        //private static unsafe extern void color_by_dist_to_query(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        //public static unsafe void ColorByDistToQuery(List<NodeDataUnity> nodes, NodeVisitor cbFn)
+        //{
+        //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+        //    for (int i = 0; i < nodes.Count; i++)
+        //    {
+        //        //var id = nodes[i].id;
+        //        items[i] = new NodeDataFFI(nodes[i]);
+        //    }
 
-            color_by_dist_to_query(_handle, items, items.Length, cbFn);
+        //    color_by_dist_to_query(_handle, items, items.Length, cbFn);
 
 
 
-        }
+        //}
 
-        [System.Security.SecurityCritical]
-        [DllImport(__DllName, EntryPoint = "detect_edges", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        private static unsafe extern void detect_edges(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-        public static unsafe void DetectEdges(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-        {
-            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var id = nodes[i].id;
-                items[i] = new NodeDataFFI(nodes[i]);
-            }
+        //[System.Security.SecurityCritical]
+        //[DllImport(__DllName, EntryPoint = "detect_edges", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        //private static unsafe extern void detect_edges(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
+        //public static unsafe void DetectEdges(List<NodeDataUnity> nodes, NodeVisitor cbFn)
+        //{
+        //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+        //    for (int i = 0; i < nodes.Count; i++)
+        //    {
+        //        //var id = nodes[i].id;
+        //        items[i] = new NodeDataFFI(nodes[i]);
+        //    }
 
-            detect_edges(_handle, items, items.Length, cbFn);
-        }
+        //    detect_edges(_handle, items, items.Length, cbFn);
+        //}
 
         //[System.Security.SecurityCritical]
         //[DllImport(__DllName, EntryPoint = "init_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -286,32 +286,32 @@ namespace Clam
         [System.Security.SecurityCritical]
         [DllImport(__DllName, EntryPoint = "launch_physics_thread", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static unsafe extern void launch_physics_thread(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb, NodeVisitor update_cb);
-        public static unsafe void LaunchPhysicsThread(List<NodeDataUnity> nodes, float scalar, int maxIters, NodeVisitor edgeCB, NodeVisitor updateCB)
+        public static unsafe void LaunchPhysicsThread(NodeDataFFI[] nodes, float scalar, int maxIters, NodeVisitor edgeCB, NodeVisitor updateCB)
         {
-            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var id = nodes[i].id;
-                items[i] = new NodeDataFFI(nodes[i]);
-            }
+            //NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    //var id = nodes[i].id;
+            //    items[i] = new NodeDataFFI(nodes[i]);
+            //}
 
-            launch_physics_thread(_handle, items, items.Length, scalar, maxIters, edgeCB, updateCB);
+            launch_physics_thread(_handle, nodes, nodes.Length, scalar, maxIters, edgeCB, updateCB);
         }
 
 
         [System.Security.SecurityCritical]
         [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         private static unsafe extern void run_force_directed_graph_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb);
-        public static unsafe void RunForceDirectedSim(List<NodeDataUnity> nodes, float scalar, int maxIters, NodeVisitor edgeCB)
+        public static unsafe void RunForceDirectedSim(NodeDataFFI[] nodes, float scalar, int maxIters, NodeVisitor edgeCB)
         {
-            NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                //var id = nodes[i].id;
-                items[i] = new NodeDataFFI(nodes[i]);
-            }
+            //NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    //var id = nodes[i].id;
+            //    items[i] = new NodeDataFFI(nodes[i]);
+            //}
 
-            run_force_directed_graph_sim(_handle, items, items.Length, scalar, maxIters, edgeCB);
+            run_force_directed_graph_sim(_handle, nodes, nodes.Length, scalar, maxIters, edgeCB);
         }
 
         [System.Security.SecurityCritical]

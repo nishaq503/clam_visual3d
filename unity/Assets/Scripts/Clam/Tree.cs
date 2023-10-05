@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClamTree : MonoBehaviour
+public class Tree : MonoBehaviour
 {
 
     public GameObject m_NodePrefab;
@@ -12,7 +12,7 @@ public class ClamTree : MonoBehaviour
     private string m_DataName;
     private uint m_Cardinality;
 
-    public ClamTreeData m_TreeData;
+    public TreeStartupData m_TreeData;
 
     private Dictionary<string, GameObject> m_Tree;
 

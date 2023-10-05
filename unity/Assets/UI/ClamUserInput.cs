@@ -26,50 +26,57 @@ public class ClamUserInput : MonoBehaviour
         UnityEngine.Cursor.visible = false;
     }
 
-    public void OnChangeMap(InputValue value)
+    public void OnChangeMapToPlayer(InputValue value)
     {
-        Debug.Log("change map!");
-        bool uiActive = UnityEngine.Cursor.visible;
 
-        if (uiActive)
+        var focusedElement = GetFocusedElement();
+        if (focusedElement != null)
         {
-            Debug.Log("locking");
-            var focusedElement = GetFocusedElement();
-            if (focusedElement != null)
-            {
 
-                //focusedElement.focusable = false;
-                focusedElement.Blur();
-            }
-            playerInput.SwitchCurrentActionMap("Player");
-            //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            //m_ClusterUI.GetComponent<ClusterUI_View>().Lock();
-
-            MenuEventManager.SwitchState(Menu.Lock);
-
+            //focusedElement.focusable = false;
+            focusedElement.Blur();
         }
-        else
-        {
-            Debug.Log("unlocking");
-            playerInput.SwitchCurrentActionMap("WorldUI");
-            //UnityEngine.Cursor.lockState = CursorLockMode.None;
-            //m_ClusterUI.GetComponent<ClusterUI_View>().UnLock();
-            MenuEventManager.SwitchState(Menu.Unlock);
+        playerInput.SwitchCurrentActionMap("Player");
+        MenuEventManager.SwitchState(Menu.Lock);
 
-            var focusedElement = GetFocusedElement();
-            if (focusedElement != null)
-            {
+        //MenuEventManager.SwitchInputActionMap("Player", playerInput);
 
-                //focusedElement.focusable = false;
-                focusedElement.Blur();
-            }
-        }
+        //Debug.Log("change map!");
+        //bool uiActive = UnityEngine.Cursor.visible;
+
+        //if (uiActive)
+        //{
+        //    //Debug.Log("locking567");
+        //    //Debug.Log("cursor is visible");
+            
+
+        //    //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        //    //m_ClusterUI.GetComponent<ClusterUI_View>().Lock();
+
+
+        //}
+        //else
+        //{
+        //    //Debug.Log("unlocking567");
+        //    //playerInput.SwitchCurrentActionMap("WorldUI");
+        //    ////UnityEngine.Cursor.lockState = CursorLockMode.None;
+        //    ////m_ClusterUI.GetComponent<ClusterUI_View>().UnLock();
+        //    //MenuEventManager.SwitchState(Menu.Unlock);
+
+        //    //var focusedElement = GetFocusedElement();
+        //    //if (focusedElement != null)
+        //    //{
+
+        //    //    //focusedElement.focusable = false;
+        //    //    focusedElement.Blur();
+        //    //}
+        //}
         //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
     }
 
     public void OnLMC()
     {
-        Debug.Log("selecting onlmc");
+        //Debug.Log("selecting onlmc");
         Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue());
         Vector3 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -84,7 +91,7 @@ public class ClamUserInput : MonoBehaviour
         {
             var selectedNode = hitInfo.collider.gameObject;
 
-            Debug.Log("selexting");
+            //Debug.Log("selexting");
 
             //if (!selectedNode.GetComponent<NodeScript>().Selected)
             {
@@ -113,7 +120,7 @@ public class ClamUserInput : MonoBehaviour
 
     public void OnRMC()
     {
-        Debug.Log("selecting onlmc");
+        //Debug.Log("selecting onlmc");
         Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue());
         Vector3 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);

@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using Clam;
+using UnityEngine.InputSystem;
 
 public enum Menu
 {
@@ -19,6 +20,8 @@ public enum Menu
     ResumePlay,
     IncludeHidden,
     DestroyGraph,
+    WorldInput,
+    MenuInput
 }
 
 public class MenuEventManager : MonoBehaviour
@@ -28,7 +31,7 @@ public class MenuEventManager : MonoBehaviour
     public GameObject m_PauseMenu;
     public GameObject m_InitalMenu;
 
-    public ClamTreeData m_TreeData;
+    public TreeStartupData m_TreeData;
     //public GameObject m_TreeObject;
     private GameObject m_CurrentMenu;
 
@@ -211,17 +214,24 @@ public class MenuEventManager : MonoBehaviour
 
     private void LockUserInput()
     {
+        //Debug.Log("locking user input234");
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         m_CurrentMenu.GetComponent<ClusterUI_View>().Lock();
-        UnityEngine.Cursor.visible = false;
+        //UnityEngine.Cursor.visible = false;
+        UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+
 
     }
 
     private void UnLockUserInput()
     {
+        //Debug.Log("unlocking user input234");
+
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         m_CurrentMenu.GetComponent<ClusterUI_View>().UnLock();
-        UnityEngine.Cursor.visible = true;
+        //UnityEngine.Cursor.visible = true;
+        UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+
 
     }
 
@@ -289,6 +299,36 @@ public class MenuEventManager : MonoBehaviour
         else
         {
             Debug.Log("physics upodate key not found - " + id);
+        }
+    }
+
+    public static void SwitchInputActionMap(string newMapName, PlayerInput input)
+    {
+        if (newMapName == input.currentActionMap.name)
+        {
+            return;
+        }
+        else
+        {
+            input.currentActionMap.Disable();
+            input.SwitchCurrentActionMap(newMapName);
+
+            if (newMapName == "WorldUI")
+            {
+                //UnityEngine.Cursor.lockState = CursorLockMode.None;
+                //UnityEngine.Cursor.visible = true;
+
+                SwitchState(Menu.Unlock);
+            }
+            else if (newMapName == "Player")
+            {
+                //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                //UnityEngine.Cursor.visible = false;
+                SwitchState(Menu.Lock);
+
+            }
+            //input.currentActionMap.Enable();
+
         }
     }
 
