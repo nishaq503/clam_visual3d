@@ -54,34 +54,34 @@ namespace StarterAssets
         public float BottomClamp = -90.0f;
 
         // cinemachine
-        private float _cinemachineTargetPitch;
+        private float m_CinemachineTargetPitch;
 
         // player
-        private float _speed;
-        private float _rotationVelocity;
-        private float _verticalVelocity;
-        private float _terminalVelocity = 53.0f;
+        private float m_Speed;
+        private float m_RotationVelocity;
+        private float m_VerticalVelocity;
+        private float m_TerminalVelocity = 53.0f;
 
         // timeout deltatime
-        private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
+        private float m_JumpTimeoutDelta;
+        private float m_FallTimeoutDelta;
 
 
 #if ENABLE_INPUT_SYSTEM
-        private PlayerInput _playerInput;
+        private PlayerInput m_PlayerInput;
 #endif
-        private CharacterController _controller;
-        private StarterAssetsInputs _input;
-        private GameObject _mainCamera;
+        private CharacterController m_Controller;
+        private StarterAssetsInputs m_Input;
+        private GameObject m_MainCamera;
 
-        private const float _threshold = 0.01f;
+        private const float m_Threshold = 0.01f;
 
         private bool IsCurrentDeviceMouse
         {
             get
             {
 #if ENABLE_INPUT_SYSTEM
-                return _playerInput.currentControlScheme == "KeyboardMouse";
+                return m_PlayerInput.currentControlScheme == "KeyboardMouse";
 #else
 				return false;
 #endif
@@ -91,25 +91,25 @@ namespace StarterAssets
         private void Awake()
         {
             // get a reference to our main camera
-            if (_mainCamera == null)
+            if (m_MainCamera == null)
             {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+                m_MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
 
         private void Start()
         {
-            _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
+            m_Controller = GetComponent<CharacterController>();
+            m_Input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
-            _playerInput = GetComponent<PlayerInput>();
+            m_PlayerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
 
             // reset our timeouts on start
-            _jumpTimeoutDelta = JumpTimeout;
-            _fallTimeoutDelta = FallTimeout;
+            m_JumpTimeoutDelta = JumpTimeout;
+            m_FallTimeoutDelta = FallTimeout;
         }
 
         private void Update()
@@ -135,77 +135,77 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // if there is an input
-            if (_input.look.sqrMagnitude >= _threshold)
+            if (m_Input.look.sqrMagnitude >= m_Threshold)
             {
                 //Don't multiply mouse input by Time.deltaTime
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-                _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+                m_CinemachineTargetPitch += m_Input.look.y * RotationSpeed * deltaTimeMultiplier;
+                m_RotationVelocity = m_Input.look.x * RotationSpeed * deltaTimeMultiplier;
 
                 // clamp our pitch rotation
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+                m_CinemachineTargetPitch = ClampAngle(m_CinemachineTargetPitch, BottomClamp, TopClamp);
 
                 // Update Cinemachine camera target pitch
-                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(m_CinemachineTargetPitch, 0.0f, 0.0f);
 
                 // rotate the player left and right
-                transform.Rotate(Vector3.up * _rotationVelocity);
+                transform.Rotate(Vector3.up * m_RotationVelocity);
             }
         }
 
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = m_Input.sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero && _input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
+            if (m_Input.move == Vector2.zero && m_Input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
-            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, _controller.velocity.y, _controller.velocity.z).magnitude;
+            float currentHorizontalSpeed = new Vector3(m_Controller.velocity.x, m_Controller.velocity.y, m_Controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            float inputMagnitude = m_Input.analogMovement ? m_Input.move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+                m_Speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
 
                 // round speed to 3 decimal places
-                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+                m_Speed = Mathf.Round(m_Speed * 1000f) / 1000f;
             }
             else
             {
-                _speed = targetSpeed;
+                m_Speed = targetSpeed;
             }
-            _speed = targetSpeed;
+            m_Speed = targetSpeed;
 
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, _input.verticalMove.y, _input.move.y).normalized;
+            Vector3 inputDirection = new Vector3(m_Input.move.x, m_Input.verticalMove.y, m_Input.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero || _input.verticalMove != Vector2.zero)
+            if (m_Input.move != Vector2.zero || m_Input.verticalMove != Vector2.zero)
             {
                 // move
-                inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y + transform.up * -_input.verticalMove.y;
+                inputDirection = transform.right * m_Input.move.x + transform.forward * m_Input.move.y + transform.up * -m_Input.verticalMove.y;
             }
 
             // move the player
-            Vector3 movement = inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            Vector3 movement = inputDirection.normalized * (m_Speed * Time.deltaTime) + new Vector3(0.0f, m_VerticalVelocity, 0.0f) * Time.deltaTime;
             
             movement.x *= scalar;
             movement.y *= scalar;
             movement.z *= scalar;
-            _controller.Move(movement);
+            m_Controller.Move(movement);
         }
 
         void OnExit()
@@ -215,7 +215,7 @@ namespace StarterAssets
 
         public void OnChangeMapToWorldUI(InputValue value)
         {
-            _playerInput.SwitchCurrentActionMap("WorldUI");
+            m_PlayerInput.SwitchCurrentActionMap("WorldUI");
             MenuEventManager.SwitchState(Menu.Unlock);
             //MenuEventManager.SwitchInputActionMap("WorldUI", _playerInput);
 
@@ -253,33 +253,33 @@ namespace StarterAssets
         {
             Debug.Log("new jump");
 
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = m_Input.sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
+            if (m_Input.verticalMove == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
-            float currentHorizontalSpeed = new Vector3(0.0f, _controller.velocity.y, 0.0f).magnitude;
+            float currentHorizontalSpeed = new Vector3(0.0f, m_Controller.velocity.y, 0.0f).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.verticalMove.magnitude : 1f;
+            float inputMagnitude = m_Input.analogMovement ? m_Input.verticalMove.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+                m_Speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
 
                 // round speed to 3 decimal places
-                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+                m_Speed = Mathf.Round(m_Speed * 1000f) / 1000f;
             }
             else
             {
-                _speed = targetSpeed;
+                m_Speed = targetSpeed;
             }
 
             //if (targetSpeed > -0.5f && targetSpeed < 0.5f)
@@ -288,19 +288,19 @@ namespace StarterAssets
             // }
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(0.0f, _input.verticalMove.y, 0.0f).normalized;
+            Vector3 inputDirection = new Vector3(0.0f, m_Input.verticalMove.y, 0.0f).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.verticalMove != Vector2.zero)
+            if (m_Input.verticalMove != Vector2.zero)
             {
                 // move
-                inputDirection = transform.up * -_input.verticalMove.y;
+                inputDirection = transform.up * -m_Input.verticalMove.y;
                 //inputDirection += transform.up * _input.verticalMove.y;
             }
 
             // move the player
-            _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            m_Controller.Move(inputDirection.normalized * (m_Speed * Time.deltaTime) + new Vector3(0.0f, m_VerticalVelocity, 0.0f) * Time.deltaTime);
         }
 
         private void JumpAndGravity()
@@ -308,46 +308,46 @@ namespace StarterAssets
             if (Grounded)
             {
                 // reset the fall timeout timer
-                _fallTimeoutDelta = FallTimeout;
+                m_FallTimeoutDelta = FallTimeout;
 
                 // stop our velocity dropping infinitely when grounded
-                if (_verticalVelocity < 0.0f)
+                if (m_VerticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = -2f;
+                    m_VerticalVelocity = -2f;
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (m_Input.jump && m_JumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    m_VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                 }
 
                 // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
+                if (m_JumpTimeoutDelta >= 0.0f)
                 {
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    m_JumpTimeoutDelta -= Time.deltaTime;
                 }
             }
             else
             {
                 // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
+                m_JumpTimeoutDelta = JumpTimeout;
 
                 // fall timeout
-                if (_fallTimeoutDelta >= 0.0f)
+                if (m_FallTimeoutDelta >= 0.0f)
                 {
-                    _fallTimeoutDelta -= Time.deltaTime;
+                    m_FallTimeoutDelta -= Time.deltaTime;
                 }
 
                 // if we are not grounded, do not jump
-                _input.jump = false;
+                m_Input.jump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (_verticalVelocity < _terminalVelocity)
+            if (m_VerticalVelocity < m_TerminalVelocity)
             {
-                _verticalVelocity += Gravity * Time.deltaTime;
+                m_VerticalVelocity += Gravity * Time.deltaTime;
             }
         }
 

@@ -38,7 +38,7 @@ public class GraphBuildMenu
     {
         Debug.Log("clicked hide others");
 
-        if (MenuEventManager.instance.isPhysicsRunning)
+        if (MenuEventManager.instance.m_IsPhysicsRunning)
         {
             {
                 Debug.Log("Error cannot destroy graph while physics is running");
@@ -47,7 +47,7 @@ public class GraphBuildMenu
         }
         foreach (var (key, value) in MenuEventManager.instance.GetTree())
         {
-            if (!value.GetComponent<NodeScript>().Selected)
+            if (!value.GetComponent<Node>().Selected)
             {
                 value.SetActive(false);
             }
@@ -59,7 +59,7 @@ public class GraphBuildMenu
         Debug.Log("clicked hide others");
         foreach (var (key, value) in MenuEventManager.instance.GetTree())
         {
-            if (value.GetComponent<NodeScript>().Selected)
+            if (value.GetComponent<Node>().Selected)
             {
                 value.SetActive(false);
             }
@@ -68,7 +68,7 @@ public class GraphBuildMenu
 
     void CreateGraphCallback(ClickEvent evt)
     {
-        if (MenuEventManager.instance.isPhysicsRunning)
+        if (MenuEventManager.instance.m_IsPhysicsRunning)
         {
             Debug.Log("Error physics already running");
             return;
@@ -80,7 +80,7 @@ public class GraphBuildMenu
         int numSelected = 0;
         foreach (var (name, node) in MenuEventManager.instance.GetTree())
         {
-            if (node.activeSelf && node.GetComponent<NodeScript>().Selected)
+            if (node.activeSelf && node.GetComponent<Node>().Selected)
             {
                 numSelected++;
                 //var x = Random.Range(0, 100);
@@ -92,12 +92,12 @@ public class GraphBuildMenu
                 //nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
             }
         }
-        NodeDataFFI[] nodes = new NodeDataFFI[numSelected];
+        ClusterData[] nodes = new ClusterData[numSelected];
         int i = 0;
 
         foreach (var (name, node) in MenuEventManager.instance.GetTree())
         {
-            if (node.activeSelf && node.GetComponent<NodeScript>().Selected)
+            if (node.activeSelf && node.GetComponent<Node>().Selected)
             {
                 //numSelected++;
                 var x = Random.Range(0, 100);
@@ -106,7 +106,7 @@ public class GraphBuildMenu
 
                 node.GetComponent<Transform>().position = new Vector3(x, y, z);
 
-                nodes[i] = node.GetComponent<NodeScript>().ToNodeData();
+                nodes[i] = node.GetComponent<Node>().ToNodeData();
                 i++;
 
                 if (i == numSelected)
@@ -114,19 +114,19 @@ public class GraphBuildMenu
             }
         }
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
-        MenuEventManager.instance.isPhysicsRunning = true;
+        MenuEventManager.instance.m_IsPhysicsRunning = true;
         //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
-        Clam.ClamFFI.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
+        Clam.FFI.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
 
 
     }
-    public void UpdatePhysicsSim(ref NodeDataFFI nodeData)
+    public void UpdatePhysicsSim(ref ClusterData nodeData)
     {
         string id = nodeData.id.AsString;
         Debug.Log("id of updated node is " + id);
         if (MenuEventManager.instance.GetTree().TryGetValue(id, out var node))
         {
-            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
         }
         else
         {
@@ -134,7 +134,7 @@ public class GraphBuildMenu
         }
     }
 
-    public void EdgeDrawer(ref NodeDataFFI nodeData)
+    public void EdgeDrawer(ref ClusterData nodeData)
     {
         if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {
@@ -145,7 +145,7 @@ public class GraphBuildMenu
                 //var spring = SpringScript.CreateInstance(node, other, SpringScript.SpringType.Similarity);
                 var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                spring.GetComponent<SpringScript>().InitLineRenderer(node, other, SpringScript.SpringType.Similarity);
+                spring.GetComponent<Edge>().InitLineRenderer(node, other, Edge.SpringType.Similarity);
 
             }
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class PauseMenu : MonoBehaviour
@@ -24,6 +25,9 @@ public class PauseMenu : MonoBehaviour
         background.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.71f));
 
         m_MainMenu.RegisterCallback<ClickEvent>(MainMenuCallback);
+
+        BlurFocus();
+        //UnityEngine.Cursor.visible = true;
     }
 
     void MainMenuCallback(ClickEvent evt)
@@ -68,5 +72,39 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void BlurFocus()
+    {
+        var focusedElement = GetFocusedElement();
+        if (focusedElement != null)
+        {
+
+            //focusedElement.focusable = false;
+            focusedElement.Blur();
+        }
+    }
+
+    public static Focusable GetFocusedElement()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            return null;
+        }
+
+        GameObject selectedGameObject = eventSystem.currentSelectedGameObject;
+        if (selectedGameObject == null)
+        {
+            return null;
+        }
+
+        PanelEventHandler panelEventHandler = selectedGameObject.GetComponent<PanelEventHandler>();
+        if (panelEventHandler != null)
+        {
+            return panelEventHandler.panel.focusController.focusedElement;
+        }
+
+        return null;
     }
 }

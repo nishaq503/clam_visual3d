@@ -8,22 +8,22 @@ using UnityEngine;
 namespace Clam
 {
 
-    public class NodeWrapper
+    public class ClusterWrapper
     {
-        private NodeDataFFI m_NodeData;
+        private ClusterData m_NodeData;
 
-        public NodeWrapper(NodeDataFFI nodeData)
+        public ClusterWrapper(ClusterData nodeData)
         {
             m_NodeData = nodeData;
         }
 
-        public NodeDataFFI Data
+        public ClusterData Data
         {
             get { return m_NodeData; }
             set { m_NodeData = value; }
         }
 
-        ~NodeWrapper()
+        ~ClusterWrapper()
         {
             m_NodeData.FreeStrings();
         }
@@ -31,7 +31,7 @@ namespace Clam
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public partial struct NodeDataFFI
+    public partial struct ClusterData
     {
         public Vec3 pos;
         public Vec3 color;
@@ -63,7 +63,7 @@ namespace Clam
         //    argRadius = -1;
         //}
 
-        public NodeDataFFI(string id, string leftID, string rightID, Vector3 pos, Color color)
+        public ClusterData(string id, string leftID, string rightID, Vector3 pos, Color color)
         {
             this.pos = new global::Clam.Vec3(pos);
             this.color = new Vec3(color);
@@ -99,7 +99,7 @@ namespace Clam
         //    distToQuery = -1;
 
         //}
-        public NodeDataFFI(int n)
+        public ClusterData(int n)
         {
             this.pos = new global::Clam.Vec3(n, n, n);
             this.color = new Vec3(n, n, n);
@@ -240,7 +240,7 @@ namespace Clam
             {
                 var text = Marshal.PtrToStringUTF8(data);
                 len = text.Length;
-                global::Clam.ClamFFI.FreeStringFFI(ref this);
+                global::Clam.FFI.FreeStringFFI(ref this);
                 data = Marshal.StringToCoTaskMemUTF8(text);
                 isOwnedByUnity = true;
             }

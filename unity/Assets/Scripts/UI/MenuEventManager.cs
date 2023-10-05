@@ -35,12 +35,12 @@ public class MenuEventManager : MonoBehaviour
     //public GameObject m_TreeObject;
     private GameObject m_CurrentMenu;
 
-    private Dictionary<Menu, UnityEvent> eventDictionary;
+    private Dictionary<Menu, UnityEvent> m_EventDictionary;
     private Dictionary<string, GameObject> m_Tree;
 
-    private static MenuEventManager eventManager;
+    private static MenuEventManager m_EventManager;
 
-    public bool isPhysicsRunning = false;
+    public bool m_IsPhysicsRunning = false;
 
     public void Start()
     {
@@ -64,22 +64,22 @@ public class MenuEventManager : MonoBehaviour
     {
         get
         {
-            if (!eventManager)
+            if (!m_EventManager)
             {
-                eventManager = FindObjectOfType(typeof(MenuEventManager)) as MenuEventManager;
+                m_EventManager = FindObjectOfType(typeof(MenuEventManager)) as MenuEventManager;
                 //m_CurrentMenu = Instantiate(m_InitalMenu);
 
 
-                if (!eventManager)
+                if (!m_EventManager)
                 {
                     Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
                 }
                 else
                 {
-                    eventManager.Init();
+                    m_EventManager.Init();
                 }
             }
-            return eventManager;
+            return m_EventManager;
         }
     }
 
@@ -95,9 +95,9 @@ public class MenuEventManager : MonoBehaviour
 
     void Init()
     {
-        if (eventDictionary == null)
+        if (m_EventDictionary == null)
         {
-            eventDictionary = new Dictionary<Menu, UnityEvent>();
+            m_EventDictionary = new Dictionary<Menu, UnityEvent>();
 
             StartListening(Menu.Main, SwitchToMainMenu);
             StartListening(Menu.CreateNewTree, SwitchToCreateTree);
@@ -132,7 +132,7 @@ public class MenuEventManager : MonoBehaviour
 
     void DestroyGraph()
     {
-        if (isPhysicsRunning)
+        if (m_IsPhysicsRunning)
         {
             Debug.Log("Error cannot destroy graph while physics is running");
             return;
@@ -180,7 +180,7 @@ public class MenuEventManager : MonoBehaviour
 
     void SwitchToMainMenu()
     {
-        Clam.ClamFFI.ShutdownClam();
+        Clam.FFI.ShutdownClam();
         SceneManager.LoadScene("Scenes/MainMenu");
 
 
@@ -217,8 +217,8 @@ public class MenuEventManager : MonoBehaviour
         //Debug.Log("locking user input234");
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         m_CurrentMenu.GetComponent<ClusterUI_View>().Lock();
-        //UnityEngine.Cursor.visible = false;
-        UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+        UnityEngine.Cursor.visible = false;
+        //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
 
 
     }
@@ -230,7 +230,7 @@ public class MenuEventManager : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         m_CurrentMenu.GetComponent<ClusterUI_View>().UnLock();
         //UnityEngine.Cursor.visible = true;
-        UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
+        UnityEngine.Cursor.visible = true;
 
 
     }
@@ -238,7 +238,7 @@ public class MenuEventManager : MonoBehaviour
     public static void StartListening(Menu eventName, UnityAction listener)
     {
         UnityEvent thisEvent = null;
-        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        if (instance.m_EventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.AddListener(listener);
         }
@@ -246,15 +246,15 @@ public class MenuEventManager : MonoBehaviour
         {
             thisEvent = new UnityEvent();
             thisEvent.AddListener(listener);
-            instance.eventDictionary.Add(eventName, thisEvent);
+            instance.m_EventDictionary.Add(eventName, thisEvent);
         }
     }
 
     public static void StopListening(Menu eventName, UnityAction listener)
     {
-        if (eventManager == null) return;
+        if (m_EventManager == null) return;
         UnityEvent thisEvent = null;
-        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        if (instance.m_EventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.RemoveListener(listener);
         }
@@ -264,7 +264,7 @@ public class MenuEventManager : MonoBehaviour
     {
         Debug.Log("switching state to " + eventName.ToString());
         UnityEvent thisEvent = null;
-        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        if (instance.m_EventDictionary.TryGetValue(eventName, out thisEvent))
         {
             //if (eventName != Menu.Main) 
             thisEvent.Invoke();
@@ -273,17 +273,17 @@ public class MenuEventManager : MonoBehaviour
 
     public void Update()
     {
-        if (isPhysicsRunning)
+        if (m_IsPhysicsRunning)
         {
-            if (ClamFFI.PhysicsUpdateAsync(UpdatePhysicsSim) == FFIError.PhysicsFinished)
+            if (FFI.PhysicsUpdateAsync(UpdatePhysicsSim) == FFIError.PhysicsFinished)
             {
-                isPhysicsRunning = false;
+                m_IsPhysicsRunning = false;
                 print("physics finished");
             }
         }
     }
 
-    public void UpdatePhysicsSim(ref NodeDataFFI nodeData)
+    public void UpdatePhysicsSim(ref ClusterData nodeData)
     {
         string id = nodeData.id.AsString;
         if (id == null) Debug.Log("id is null");
@@ -294,7 +294,7 @@ public class MenuEventManager : MonoBehaviour
         }
         if (GetTree().TryGetValue(id, out var node))
         {
-            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
         }
         else
         {

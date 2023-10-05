@@ -84,7 +84,7 @@ public class MainApp : MonoBehaviour
         //m_SelectedNode = null;
         if (m_InitResult == FFIError.Ok)
         {
-            Clam.ClamFFI.ShutdownClam();
+            Clam.FFI.ShutdownClam();
         }
     }
 }

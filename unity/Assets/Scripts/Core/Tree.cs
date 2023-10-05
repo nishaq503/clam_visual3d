@@ -36,7 +36,7 @@ public class Tree : MonoBehaviour
 
         }
 
-        FFIError clam_result = Clam.ClamFFI.InitClam(m_TreeData.dataName, m_TreeData.cardinality);
+        FFIError clam_result = Clam.FFI.InitClam(m_TreeData.dataName, m_TreeData.cardinality);
 
         if (clam_result != FFIError.Ok)
         {
@@ -47,10 +47,10 @@ public class Tree : MonoBehaviour
 
         m_Tree = new Dictionary<string, GameObject>();
 
-        int numNodes = Clam.ClamFFI.GetNumNodes();
+        int numNodes = Clam.FFI.GetNumNodes();
         Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
 
-        FFIError e = Clam.ClamFFI.ForEachDFT(SetNodeNames);
+        FFIError e = Clam.FFI.ForEachDFT(SetNodeNames);
 
         if (e == FFIError.Ok)
         {
@@ -60,38 +60,38 @@ public class Tree : MonoBehaviour
         {
             Debug.Log("ERROR " + e);
         }
-        Clam.ClamFFI.DrawHeirarchy(PositionUpdater);
+        Clam.FFI.DrawHeirarchy(PositionUpdater);
 
-        Clam.ClamFFI.ForEachDFT(EdgeDrawer);
+        Clam.FFI.ForEachDFT(EdgeDrawer);
 
         return FFIError.Ok;
     }
 
 
-    public void EdgeDrawer(ref NodeDataFFI nodeData)
+    public void EdgeDrawer(ref ClusterData nodeData)
     {
         if (m_Tree.TryGetValue(nodeData.id.AsString, out var node))
         {
-            if (node.activeSelf && !node.GetComponent<NodeScript>().IsLeaf())
+            if (node.activeSelf && !node.GetComponent<Node>().IsLeaf())
             {
-                if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetLeftChildID(), out var lc))
+                if (m_Tree.TryGetValue(node.GetComponent<Node>().GetLeftChildID(), out var lc))
                 {
                     var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
                     //var sprint = SpringScript.CreateInstance(node, lc, SpringScript.SpringType.heirarchal);
                     //var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                    spring.GetComponent<SpringScript>().InitLineRenderer(node, lc, SpringScript.SpringType.heirarchal);
+                    spring.GetComponent<Edge>().InitLineRenderer(node, lc, Edge.SpringType.heirarchal);
 
                     //spring.GetComponent<SpringScript>().SetNodes(node, lc);
                     //spring.GetComponent<SpringScript>().SetColor(Color.white);
 
                 }
 
-                if (m_Tree.TryGetValue(node.GetComponent<NodeScript>().GetRightChildID(), out var rc))
+                if (m_Tree.TryGetValue(node.GetComponent<Node>().GetRightChildID(), out var rc))
                 {
                     var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                    spring.GetComponent<SpringScript>().InitLineRenderer(node, rc, SpringScript.SpringType.heirarchal);
+                    spring.GetComponent<Edge>().InitLineRenderer(node, rc, Edge.SpringType.heirarchal);
 
                     //spring.GetComponent<SpringScript>().SetNodes(node, rc);
                     //var sprint = SpringScript.CreateInstance(node, lc, SpringScript.SpringType.Similarity);
@@ -129,28 +129,28 @@ public class Tree : MonoBehaviour
         //    //}
         //}
     }
-    unsafe void SetNodeNames(ref Clam.NodeDataFFI nodeData)
+    unsafe void SetNodeNames(ref Clam.ClusterData nodeData)
     {
         GameObject node = Instantiate(m_NodePrefab);
-        print("setting name " + node.GetComponent<NodeScript>().GetId());
+        print("setting name " + node.GetComponent<Node>().GetId());
         nodeData.LogInfo();
-        node.GetComponent<NodeScript>().SetID(nodeData.id.AsString);
-        node.GetComponent<NodeScript>().SetLeft(nodeData.leftID.AsString);
-        node.GetComponent<NodeScript>().SetRight(nodeData.rightID.AsString);
+        node.GetComponent<Node>().SetID(nodeData.id.AsString);
+        node.GetComponent<Node>().SetLeft(nodeData.leftID.AsString);
+        node.GetComponent<Node>().SetRight(nodeData.rightID.AsString);
         m_Tree.Add(nodeData.id.AsString, node);
     }
 
 
 
-    unsafe void PositionUpdater(ref Clam.NodeDataFFI nodeData)
+    unsafe void PositionUpdater(ref Clam.ClusterData nodeData)
     {
         GameObject node;
 
         bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
         if (hasValue)
         {
-            node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
-            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            node.GetComponent<Node>().SetColor(nodeData.color.AsColor);
+            node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
         }
         else
         {

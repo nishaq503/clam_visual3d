@@ -49,8 +49,8 @@ public class ClusterUI_View : MonoBehaviour
         //TryDo.Do(myDelegate, null)
         m_IntInputFields = new Dictionary<string, IntTextField>
         {
-            { "Depth", new IntTextField("Depth", m_UIDocument, 0, ClamFFI.TreeHeight(), new Func<bool>(InputFieldChangeCallback)) },
-            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality(), new Func<bool>(InputFieldChangeCallback)) },
+            { "Depth", new IntTextField("Depth", m_UIDocument, 0, FFI.TreeHeight(), new Func<bool>(InputFieldChangeCallback)) },
+            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, FFI.Cardinality(), new Func<bool>(InputFieldChangeCallback)) },
 
             //{ "ArgRadius", new IntTextField("ArgRadius", rightField, 0, ClamFFI.ArgRadius(), new Func < bool >(InputFieldChangeCallback)) },
             //{ "ArgCenter", new IntTextField("ArgCenter", rightField, 0, ClamFFI.ArgCenter(), new Func < bool >(InputFieldChangeCallback)) }
@@ -98,15 +98,15 @@ public class ClusterUI_View : MonoBehaviour
                 continue;
             }
 
-            NodeWrapper wrapper = new NodeWrapper(cluster.GetComponent<NodeScript>().ToNodeData());
-            ClamFFI.GetClusterData(wrapper);
+            ClusterWrapper wrapper = new ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            FFI.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
                     //var range = textField.MinMaxRange();
                     if (!depthField.IsWithinRange(wrapper.Data.depth))
                     {
-                        cluster.GetComponent<NodeScript>().Deselect();
+                        cluster.GetComponent<Node>().Deselect();
                         continue;
                     }
                 }
@@ -117,7 +117,7 @@ public class ClusterUI_View : MonoBehaviour
                     //var range = textField.MinMaxRange();
                     if (!cardField.IsWithinRange(wrapper.Data.cardinality))
                     {
-                        cluster.GetComponent<NodeScript>().Deselect();
+                        cluster.GetComponent<Node>().Deselect();
 
                         //cluster.GetComponent<NodeScript>().Select();
                         continue;
@@ -125,7 +125,7 @@ public class ClusterUI_View : MonoBehaviour
                 }
             }
 
-            cluster.GetComponent<NodeScript>().Select();
+            cluster.GetComponent<Node>().Select();
         }
         return true;
     }
@@ -141,15 +141,15 @@ public class ClusterUI_View : MonoBehaviour
             //    continue;
             //}
 
-            NodeWrapper wrapper = new NodeWrapper(cluster.GetComponent<NodeScript>().ToNodeData());
-            ClamFFI.GetClusterData(wrapper);
+            ClusterWrapper wrapper = new ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            FFI.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
                     //var range = textField.MinMaxRange();
                     if (!depthField.IsWithinRange(wrapper.Data.depth))
                     {
-                        cluster.GetComponent<NodeScript>().Deselect();
+                        cluster.GetComponent<Node>().Deselect();
                         continue;
                     }
                 }
@@ -160,7 +160,7 @@ public class ClusterUI_View : MonoBehaviour
                     //var range = textField.MinMaxRange();
                     if (!cardField.IsWithinRange(wrapper.Data.cardinality))
                     {
-                        cluster.GetComponent<NodeScript>().Deselect();
+                        cluster.GetComponent<Node>().Deselect();
 
                         //cluster.GetComponent<NodeScript>().Select();
                         continue;
@@ -168,7 +168,7 @@ public class ClusterUI_View : MonoBehaviour
                 }
             }
             cluster.SetActive(true);
-            cluster.GetComponent<NodeScript>().Select();
+            cluster.GetComponent<Node>().Select();
         }
     }
 
@@ -223,7 +223,7 @@ public class ClusterUI_View : MonoBehaviour
 
 
 
-    public void DisplayClusterInfo(NodeDataFFI data)
+    public void DisplayClusterInfo(ClusterData data)
     {
         if (m_ClusterInfo != null)
             m_ClusterInfo.text = data.GetInfoForUI();

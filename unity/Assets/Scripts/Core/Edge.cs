@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public class SpringScript : MonoBehaviour
+public class Edge : MonoBehaviour
 {
     public enum SpringType
     {
@@ -13,7 +13,7 @@ public class SpringScript : MonoBehaviour
         Similarity,
         
     }
-    public GameObject nodePrefab;
+    public GameObject m_NodePrefab;
     private GameObject m_Node1;
     private GameObject m_Node2;
 

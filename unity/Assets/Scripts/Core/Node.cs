@@ -3,23 +3,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public interface IClickable
+//public interface IClickable
+//{
+//    void OnClick();
+//}
+
+public class Node : MonoBehaviour
 {
-    void OnClick();
-}
 
-public class NodeScript : MonoBehaviour
-{
+    private string m_ID;
+    private string m_LeftChildID;
+    private string m_RightChildID;
 
-    private string _id;
-    private string _leftChildID;
-    private string _rightChildID;
-
-    public int test = 5;
+    //public int test = 5;
     private bool m_IsSelected = false;
     private Color m_ActualColor;
-    private InputAction click;
-    public float distanceToQuery = -1.0f;
+    //private InputAction click;
+    public float m_DistanceToQuery = -1.0f;
 
     public bool Selected{ get { return m_IsSelected; } }
 
@@ -110,16 +110,16 @@ public class NodeScript : MonoBehaviour
 
     public string GetId()
     {
-        return _id;
+        return m_ID;
     }
 
     public string GetLeftChildID()
     {
-        return _leftChildID;
+        return m_LeftChildID;
     }
     public string GetRightChildID()
     {
-        return _rightChildID;
+        return m_RightChildID;
     }
     public Vector3 GetPosition()
     {
@@ -142,29 +142,29 @@ public class NodeScript : MonoBehaviour
 
     public void SetID(string id)
     {
-        _id = id;
+        m_ID = id;
     }
 
     public void SetLeft(string id)
     {
-        _leftChildID = id;
+        m_LeftChildID = id;
     }
 
     public void SetRight(string id)
     {
-        _rightChildID = id;
+        m_RightChildID = id;
     }
 
     public bool IsLeaf()
     {
-        print("-------------------------------------------------lid " + _leftChildID + ", rid " + _rightChildID);
-        return _leftChildID == "None" && _rightChildID == "None";
+        print("-------------------------------------------------lid " + m_LeftChildID + ", rid " + m_RightChildID);
+        return m_LeftChildID == "None" && m_RightChildID == "None";
     }
 
 
-    public Clam.NodeDataFFI ToNodeData()
+    public Clam.ClusterData ToNodeData()
     {
-        Clam.NodeDataFFI node = new Clam.NodeDataFFI(_id, _leftChildID, _rightChildID, GetPosition(), GetColor());
+        Clam.ClusterData node = new Clam.ClusterData(m_ID, m_LeftChildID, m_RightChildID, GetPosition(), GetColor());
 
         return node;
     }

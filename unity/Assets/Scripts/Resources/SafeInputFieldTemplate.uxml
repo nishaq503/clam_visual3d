@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="InputTemplate" style="flex-direction: row;">
-        <ui:Label display-tooltip-when-elided="true" name="DataLabel" style="justify-content: center; align-items: center; width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: middle-center;" />
-        <ui:TextField name="MinField" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
-        <ui:TextField name="MaxField" is-delayed="true" style="width: 30%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
-    </ui:VisualElement>
-</ui:UXML>

@@ -242,7 +242,7 @@ class IntTextField
         return new Tuple<int, int>(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
     }
 
-    public bool IsWithinRange(NodeWrapper wrapper)
+    public bool IsWithinRange(ClusterWrapper wrapper)
     {
 
         List<Tuple<string, int>> comparisons = new List<Tuple<string, int>>();

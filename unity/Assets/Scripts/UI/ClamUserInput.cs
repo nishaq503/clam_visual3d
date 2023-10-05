@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class ClamUserInput : MonoBehaviour
 {
 
-    public PlayerInput playerInput;
+    public PlayerInput m_PlayerInput;
 
     //temporary
     //private GameObject m_NodeForHeirarchyOffset;
@@ -28,15 +28,9 @@ public class ClamUserInput : MonoBehaviour
 
     public void OnChangeMapToPlayer(InputValue value)
     {
-
-        var focusedElement = GetFocusedElement();
-        if (focusedElement != null)
-        {
-
-            //focusedElement.focusable = false;
-            focusedElement.Blur();
-        }
-        playerInput.SwitchCurrentActionMap("Player");
+        BlurFocus();
+        
+        m_PlayerInput.SwitchCurrentActionMap("Player");
         MenuEventManager.SwitchState(Menu.Lock);
 
         //MenuEventManager.SwitchInputActionMap("Player", playerInput);
@@ -74,6 +68,17 @@ public class ClamUserInput : MonoBehaviour
         //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
     }
 
+    public void BlurFocus()
+    {
+        var focusedElement = GetFocusedElement();
+        if (focusedElement != null)
+        {
+
+            //focusedElement.focusable = false;
+            focusedElement.Blur();
+        }
+    }
+
     public void OnLMC()
     {
         //Debug.Log("selecting onlmc");
@@ -95,11 +100,11 @@ public class ClamUserInput : MonoBehaviour
 
             //if (!selectedNode.GetComponent<NodeScript>().Selected)
             {
-                Clam.NodeWrapper wrapper = new Clam.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
-                FFIError found = Clam.ClamFFI.GetClusterData(wrapper);
+                Clam.ClusterWrapper wrapper = new Clam.ClusterWrapper(selectedNode.GetComponent<Node>().ToNodeData());
+                FFIError found = Clam.FFI.GetClusterData(wrapper);
                 if (found == FFIError.Ok)
                 {
-                    if (!selectedNode.GetComponent<NodeScript>().Selected)
+                    if (!selectedNode.GetComponent<Node>().Selected)
                     {
                         //m_ClusterUI.GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
                         MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
@@ -111,7 +116,7 @@ public class ClamUserInput : MonoBehaviour
                         MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().ClearClusterInfo();
 
                     }
-                    selectedNode.GetComponent<NodeScript>().ToggleSelect();
+                    selectedNode.GetComponent<Node>().ToggleSelect();
 
                 }
             }
@@ -135,10 +140,10 @@ public class ClamUserInput : MonoBehaviour
         {
             var selectedNode = hitInfo.collider.gameObject;
 
-            if (!selectedNode.GetComponent<NodeScript>().IsLeaf()) //redundant?...
+            if (!selectedNode.GetComponent<Node>().IsLeaf()) //redundant?...
             {
-                var lid = selectedNode.GetComponent<NodeScript>().GetLeftChildID();
-                var rid = selectedNode.GetComponent<NodeScript>().GetRightChildID();
+                var lid = selectedNode.GetComponent<Node>().GetLeftChildID();
+                var rid = selectedNode.GetComponent<Node>().GetRightChildID();
 
                 bool hasLeft = MenuEventManager.instance.GetTree().TryGetValue(lid, out var leftChild);
 
@@ -150,8 +155,8 @@ public class ClamUserInput : MonoBehaviour
                     {
                         //leftChild.SetActive(!leftChild.activeSelf);
                         //rightChild.SetActive(!rightChild.activeSelf);
-                        ClamFFI.ForEachDFT(SetInactiveCallBack, leftChild.GetComponent<NodeScript>().GetId());
-                        ClamFFI.ForEachDFT(SetInactiveCallBack, rightChild.GetComponent<NodeScript>().GetId());
+                        FFI.ForEachDFT(SetInactiveCallBack, leftChild.GetComponent<Node>().GetId());
+                        FFI.ForEachDFT(SetInactiveCallBack, rightChild.GetComponent<Node>().GetId());
 
                         // if active that means setting inactive - set all subsequent children inactive as well
 
@@ -164,13 +169,13 @@ public class ClamUserInput : MonoBehaviour
 
                         // need to redraw parent child lines
                         string rootName = "1";
-                        Clam.NodeWrapper wrapper = new Clam.NodeWrapper(selectedNode.GetComponent<NodeScript>().ToNodeData());
+                        Clam.ClusterWrapper wrapper = new Clam.ClusterWrapper(selectedNode.GetComponent<Node>().ToNodeData());
                         if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
                         {
                             // tempoarary fix to prevent moving nodes around when already in reingold format
                             if (!root.activeSelf)
                             {
-                                ClamFFI.DrawHeirarchyOffsetFrom(wrapper, PositionUpdater);
+                                FFI.DrawHeirarchyOffsetFrom(wrapper, PositionUpdater);
 
                             }
                         }
@@ -180,8 +185,8 @@ public class ClamUserInput : MonoBehaviour
                         var leftSpring = MenuEventManager.instance.MyInstantiate(springPrefab);
                         var rightSpring = MenuEventManager.instance.MyInstantiate(springPrefab);
 
-                        leftSpring.GetComponent<SpringScript>().SetNodes(selectedNode, leftChild);
-                        rightSpring.GetComponent<SpringScript>().SetNodes(selectedNode, rightChild);
+                        leftSpring.GetComponent<Edge>().SetNodes(selectedNode, leftChild);
+                        rightSpring.GetComponent<Edge>().SetNodes(selectedNode, rightChild);
 
                         //leftSpring.GetComponent<SpringScript>().SetColor(Color.white);
                         //rightSpring.GetComponent<SpringScript>().SetColor(Color.white);
@@ -195,7 +200,7 @@ public class ClamUserInput : MonoBehaviour
         }
     }
 
-    unsafe void SetInactiveCallBack(ref Clam.NodeDataFFI nodeData)
+    unsafe void SetInactiveCallBack(ref Clam.ClusterData nodeData)
     {
         bool hasValue = MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
         if (hasValue)
@@ -208,14 +213,14 @@ public class ClamUserInput : MonoBehaviour
             Debug.Log("set inactive key not found - " + nodeData.id);
         }
     }
-    unsafe void PositionUpdater(ref Clam.NodeDataFFI nodeData)
+    unsafe void PositionUpdater(ref Clam.ClusterData nodeData)
     {
 
         bool hasValue = MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
         if (hasValue)
         {
             //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
-            node.GetComponent<NodeScript>().SetPosition(nodeData.pos.AsVector3);
+            node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
         }
         else
         {
@@ -225,7 +230,7 @@ public class ClamUserInput : MonoBehaviour
     void OnExit()
     {
         //Application.Quit();
-        playerInput.SwitchCurrentActionMap("WorldUI");
+        m_PlayerInput.SwitchCurrentActionMap("WorldUI");
 
         MenuEventManager.SwitchState(Menu.Pause);
     }

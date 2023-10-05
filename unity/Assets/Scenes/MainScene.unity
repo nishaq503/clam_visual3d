@@ -330,6 +330,7 @@ MonoBehaviour:
   m_NodePrefab: {fileID: 0}
   m_SpringPrefab: {fileID: 0}
   m_TreeData: {fileID: 0}
+  m_IsPhysicsRunning: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,7 +667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee382af1b205ec4490dfc7f52947309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 1686745306}
+  m_PlayerInput: {fileID: 1686745306}
 --- !u!1001 &1831576834
 PrefabInstance:
   m_ObjectHideFlags: 0
