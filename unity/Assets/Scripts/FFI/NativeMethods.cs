@@ -18,7 +18,7 @@ namespace Clam
         {
 
 
-	public const string __DllName = "clam_ffi_20231006143344";
+	public const string __DllName = "clam_ffi_20231006145418";
             private static IntPtr m_Handle;
 
             [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
