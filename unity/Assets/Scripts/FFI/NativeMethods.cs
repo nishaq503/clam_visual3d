@@ -18,7 +18,7 @@ namespace Clam
         {
 
 
-            public const string __DllName = "clam_ffi_20231003155445";
+	public const string __DllName = "clam_ffi_20231006143344";
             private static IntPtr m_Handle;
 
             [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
@@ -36,7 +36,7 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "get_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static unsafe extern FFIError get_cluster_data(IntPtr handle, ref global::Clam.FFI.ClusterData inNode, out global::Clam.FFI.ClusterData outNode);
 
-            public static unsafe FFIError GetClusterData(global::Clam.FFI.ClusterWrapper nodeWrapper)
+            public static unsafe FFIError GetClusterData(global::Clam.FFI.ClusterDataWrapper nodeWrapper)
             {
                 ClusterData nodeData = nodeWrapper.Data;
 
@@ -88,7 +88,7 @@ namespace Clam
 
             [DllImport(__DllName, EntryPoint = "draw_heirarchy_offset_from", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos, NodeVisitor callback);
-            public static FFIError DrawHeirarchyOffsetFrom(ClusterWrapper wrapper, NodeVisitor callback)
+            public static FFIError DrawHeirarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback)
             {
 
                 //FFIError found = get_cluster_data(_handle, ref nodeData, out var outNode);

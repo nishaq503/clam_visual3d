@@ -244,7 +244,7 @@ namespace Clam
             return new Tuple<int, int>(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
         }
 
-        public bool IsWithinRange(FFI.ClusterWrapper wrapper)
+        public bool IsWithinRange(FFI.ClusterDataWrapper wrapper)
         {
 
             List<Tuple<string, int>> comparisons = new List<Tuple<string, int>>();

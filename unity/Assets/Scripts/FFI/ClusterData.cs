@@ -10,11 +10,11 @@ namespace Clam
     namespace FFI
     {
 
-        public class ClusterWrapper
+        public class ClusterDataWrapper
         {
             private ClusterData m_NodeData;
 
-            public ClusterWrapper(ClusterData nodeData)
+            public ClusterDataWrapper(ClusterData nodeData)
             {
                 m_NodeData = nodeData;
             }
@@ -25,7 +25,7 @@ namespace Clam
                 set { m_NodeData = value; }
             }
 
-            ~ClusterWrapper()
+            ~ClusterDataWrapper()
             {
                 m_NodeData.FreeStrings();
             }

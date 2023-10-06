@@ -103,7 +103,7 @@ namespace Clam
 
                 //if (!selectedNode.GetComponent<NodeScript>().Selected)
                 {
-                    Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(selectedNode.GetComponent<Node>().ToNodeData());
+                    Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
                     FFIError found = Clam.FFI.NativeMethods.GetClusterData(wrapper);
                     if (found == FFIError.Ok)
                     {
@@ -172,7 +172,7 @@ namespace Clam
 
                             // need to redraw parent child lines
                             string rootName = "1";
-                            Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(selectedNode.GetComponent<Node>().ToNodeData());
+                            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
                             if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
                             {
                                 // tempoarary fix to prevent moving nodes around when already in reingold format

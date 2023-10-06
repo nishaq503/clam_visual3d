@@ -98,7 +98,7 @@ public class ClusterUI_View : MonoBehaviour
                 continue;
             }
 
-            Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
             Clam.FFI.NativeMethods.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
@@ -141,7 +141,7 @@ public class ClusterUI_View : MonoBehaviour
             //    continue;
             //}
 
-            Clam.FFI.ClusterWrapper wrapper = new Clam.FFI.ClusterWrapper(cluster.GetComponent<Node>().ToNodeData());
+            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
             Clam.FFI.NativeMethods.GetClusterData(wrapper);
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
