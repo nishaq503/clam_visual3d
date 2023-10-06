@@ -18,11 +18,10 @@ namespace Clam
         {
 
 
-	public const string __DllName = "clam_ffi_20231006145418";
+	public const string __DllName = "clam_ffi_20231006161839";
             private static IntPtr m_Handle;
 
-            [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string")]
-            private unsafe static extern void free_string(IntPtr context, IntPtr data);
+            
 
 
             [DllImport(__DllName, EntryPoint = "for_each_dft", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -48,33 +47,11 @@ namespace Clam
                 return found;
             }
 
-            //[DllImport(__DllName, EntryPoint = "get_root_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //private static unsafe extern FFIError get_root_data(IntPtr handle, ref global::Clam.NodeDataFFI inNode, out global::Clam.NodeDataFFI outNode);
-
-            //public static unsafe FFIError GetClamRootData(global::Clam.NodeWrapper nodeWrapper)
-            //{
-            //    NodeDataFFI nodeData = nodeWrapper.Data;
-
-            //    FFIError found = get_root_data(_handle, ref nodeData, out var outNode);
-            //    if (found == FFIError.Ok)
-            //    {
-            //        nodeWrapper.Data = outNode;
-            //    }
-            //    return found;
-            //}
-
             [DllImport(__DllName, EntryPoint = "distance_to_other", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static unsafe extern float distance_to_other(IntPtr handle, string node1, string node2);
 
             public static unsafe float DistanceToOther(string node1, string node2)
             {
-                //NodeDataFFI nodeData = nodeWrapper.Data;
-
-                //FFIError found = get_cluster_data(_handle, ref nodeData, out var outNode);
-                //if (found == FFIError.Ok)
-                //{
-                //    nodeWrapper.Data = outNode;
-                //}
                 return distance_to_other(m_Handle, node1, node2); ;
             }
 
@@ -157,8 +134,6 @@ namespace Clam
                 return arg_radius(m_Handle);
             }
 
-
-
             [DllImport(__DllName, EntryPoint = "shutdown_physics", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_physics(IntPtr handle);
 
@@ -186,8 +161,6 @@ namespace Clam
                 return init_clam(out m_Handle, byteName, len, cardinality);
             }
 
-
-
             [DllImport(__DllName, EntryPoint = "shutdown_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_clam(out IntPtr ptr);
 
@@ -199,107 +172,9 @@ namespace Clam
                 }
 
                 Debug.Log("error clam not initialized");
-                //Debug.Log("Application ending after " + Time.time + " seconds");
 
                 return FFIError.NullPointerPassed;
             }
-
-            public unsafe static void FreeString(IntPtr data)
-            {
-                free_string(m_Handle, data);
-            }
-
-            [DllImport(__DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_string_ffi")]
-            public unsafe static extern void free_string_ffi(ref global::Clam.FFI.StringFFI inNode, out global::Clam.FFI.StringFFI outNode);
-
-            public unsafe static void FreeStringFFI(ref global::Clam.FFI.StringFFI inNode)
-            {
-                free_string_ffi(ref inNode, out var outNode);
-            }
-
-            [System.Security.SecurityCritical]
-            [DllImport(__DllName, EntryPoint = "test_struct_array", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static unsafe extern void test_struct_array(IntPtr handle, [In, Out] ClusterData[] arr, int len);
-            struct float1
-            {
-                public float f;
-            }
-            public static unsafe void TestStructArray()
-            {
-                int numItems = 5;
-                ClusterData[] items = new ClusterData[numItems];
-                for (int i = 0; i < numItems; i++)
-                {
-                    items[i] = new ClusterData(i);
-                }
-
-                test_struct_array(m_Handle, items, items.Length);
-            }
-
-            //[System.Security.SecurityCritical]
-            //[DllImport(__DllName, EntryPoint = "color_by_dist_to_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //private static unsafe extern void color_by_dist_to_query(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-            //public static unsafe void ColorByDistToQuery(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-            //{
-            //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            //    for (int i = 0; i < nodes.Count; i++)
-            //    {
-            //        //var id = nodes[i].id;
-            //        items[i] = new NodeDataFFI(nodes[i]);
-            //    }
-
-            //    color_by_dist_to_query(_handle, items, items.Length, cbFn);
-
-
-
-            //}
-
-            //[System.Security.SecurityCritical]
-            //[DllImport(__DllName, EntryPoint = "detect_edges", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //private static unsafe extern void detect_edges(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-            //public static unsafe void DetectEdges(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-            //{
-            //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            //    for (int i = 0; i < nodes.Count; i++)
-            //    {
-            //        //var id = nodes[i].id;
-            //        items[i] = new NodeDataFFI(nodes[i]);
-            //    }
-
-            //    detect_edges(_handle, items, items.Length, cbFn);
-            //}
-
-            //[System.Security.SecurityCritical]
-            //[DllImport(__DllName, EntryPoint = "init_force_directed_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //private static unsafe extern void init_force_directed_sim(IntPtr handle, [In, Out] NodeDataFFI[] arr, int len, NodeVisitor cb_fn);
-            //public static unsafe void InitForceDirectedSim(List<NodeDataUnity> nodes, NodeVisitor cbFn)
-            //{
-            //    NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-            //    for (int i = 0; i < nodes.Count; i++)
-            //    {
-            //        //var id = nodes[i].id;
-            //        items[i] = new NodeDataFFI(nodes[i]);
-            //    }
-
-            //    init_force_directed_sim(_handle, items, items.Length, cbFn);
-
-            //}
-
-            [System.Security.SecurityCritical]
-            [DllImport(__DllName, EntryPoint = "launch_physics_thread", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static unsafe extern void launch_physics_thread(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb, NodeVisitor update_cb);
-            public static unsafe void LaunchPhysicsThread(ClusterData[] nodes, float scalar, int maxIters, NodeVisitor edgeCB, NodeVisitor updateCB)
-            {
-                //NodeDataFFI[] items = new NodeDataFFI[nodes.Count];
-                //for (int i = 0; i < nodes.Count; i++)
-                //{
-                //    //var id = nodes[i].id;
-                //    items[i] = new NodeDataFFI(nodes[i]);
-                //}
-
-                launch_physics_thread(m_Handle, nodes, nodes.Length, scalar, maxIters, edgeCB, updateCB);
-            }
-
 
             [System.Security.SecurityCritical]
             [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

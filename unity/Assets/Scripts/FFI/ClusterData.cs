@@ -176,66 +176,8 @@ namespace Clam
                 this.rightID.Free();
             }
         }
-
-        [Serializable]
-        [StructLayout(LayoutKind.Sequential)]
-        public partial struct StringFFI
-        {
-            private IntPtr m_Data;
-            private int m_Length;
-            //private bool isOwnedByUnity;
-            //private bool mustFree;
-
-            //public StringFFI(int n)
-            //{
-            //    data = IntPtr.Zero;
-            //    len = 0;
-            //    isOwned = false;
-            //}
-
-            public StringFFI(string data)
-            {
-                this.m_Data = Marshal.StringToCoTaskMemUTF8(data);
-                m_Length = data.Length;
-                //isOwnedByUnity = true;
-                //mustFree = true;
-            }
-
-            public string AsString
-            {
-                get
-                {
-                    //Debug.Log("attempting to access marshaleld string");
-                    if (m_Data == null)
-                    {
-                        Debug.Log("Error id data is null");
-                        return "";
-                    }
-                    return Marshal.PtrToStringAnsi(m_Data);
-                }
-            }
-            public IntPtr AsPtr { get { return m_Data; } }
-
-            public bool IsEmpty { get { return m_Length == 0; } }
-            //public bool IsOwned { get { return isOwnedByUnity; } }
-            public bool IsNull { get { return m_Data == IntPtr.Zero; } }
-
-
-            public void Free()
-            {
-                if (!IsNull)
-                {
-                    //Debug.Log("string ffi freeing memory");
-                    Marshal.FreeCoTaskMem(m_Data);
-                    m_Data = IntPtr.Zero;
-                    m_Length = 0;
-                }
-                else
-                {
-                    Debug.Log("Warning: string is already null");
-                }
-            }
-        }
     }
+
+       
 
 }
