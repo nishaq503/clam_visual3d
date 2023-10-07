@@ -33,7 +33,7 @@ public class ClusterUI_View : MonoBehaviour
     //public int argRadius;
 
 
-    void Start()
+    public void Start()
     {
         m_UIDocument = GetComponent<UIDocument>();
 
@@ -47,14 +47,27 @@ public class ClusterUI_View : MonoBehaviour
 
         //var myDelegate = new Func<string, DialogResult>(MessageBox.Show);
         //TryDo.Do(myDelegate, null)
-        m_IntInputFields = new Dictionary<string, IntTextField>
+
+        bool foundRoot = Clam.FFI.NativeMethods.GetRootData(out var dataWrapper);
+        if (foundRoot)
         {
+            m_IntInputFields = new Dictionary<string, IntTextField>
+        {
+            //{ "Depth", new IntTextField("Depth", m_UIDocument, 0, 10, new Func<bool>(InputFieldChangeCallback)) },
             { "Depth", new IntTextField("Depth", m_UIDocument, 0, Clam.FFI.NativeMethods.TreeHeight(), new Func<bool>(InputFieldChangeCallback)) },
-            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, Clam.FFI.NativeMethods.Cardinality(), new Func<bool>(InputFieldChangeCallback)) },
+            //{ "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, 10, new Func<bool>(InputFieldChangeCallback)) },
+            { "Cardinality", new IntTextField("Cardinality", m_UIDocument, 0, dataWrapper.Data.cardinality, new Func<bool>(InputFieldChangeCallback)) },
 
             //{ "ArgRadius", new IntTextField("ArgRadius", rightField, 0, ClamFFI.ArgRadius(), new Func < bool >(InputFieldChangeCallback)) },
             //{ "ArgCenter", new IntTextField("ArgCenter", rightField, 0, ClamFFI.ArgCenter(), new Func < bool >(InputFieldChangeCallback)) }
         };
+        }
+        else
+        {
+            Debug.LogError("root not found");
+        }
+
+
 
         //m_DoubleInputFields = new Dictionary<string, DoubleTextField>
         //{
@@ -62,7 +75,7 @@ public class ClusterUI_View : MonoBehaviour
         //    { "lfd", new DoubleTextField("lfd", rightField, 0, ClamFFI.LFD()) }
         //};
 
-        m_Tree = MenuEventManager.instance.GetTree();
+        //m_Tree = MenuEventManager.instance.GetTree();
 
         //InitMenuSelector();
 

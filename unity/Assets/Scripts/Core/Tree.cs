@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace Clam
 {
-
     public class Tree : MonoBehaviour
     {
-
         public GameObject m_NodePrefab;
         public GameObject m_SpringPrefab;
 
@@ -51,10 +49,15 @@ namespace Clam
 
             m_Tree = new Dictionary<string, GameObject>();
 
-            int numNodes = Clam.FFI.NativeMethods.GetNumNodes();
-            Debug.Log(System.String.Format("created tree with num nodes {0}.", numNodes));
+            //int numNodes = Clam.FFI.NativeMethods.GetNumNodes();
+
+
+
 
             FFIError e = Clam.FFI.NativeMethods.ForEachDFT(SetNodeNames);
+
+            MenuEventManager.instance.SetTree(m_Tree);
+
 
             if (e == FFIError.Ok)
             {
@@ -67,6 +70,16 @@ namespace Clam
             Clam.FFI.NativeMethods.DrawHeirarchy(PositionUpdater);
 
             Clam.FFI.NativeMethods.ForEachDFT(EdgeDrawer);
+
+            if (Clam.FFI.NativeMethods.GetRootData(out var rootData) == true)
+            {
+                Debug.Log(System.String.Format("created tree with num nodes {0}.", rootData.Data.cardinality));
+            }
+            else
+            {
+                Debug.LogError("root not found?");
+                return FFIError.HandleInitFailed;
+            }
 
             return FFIError.Ok;
         }

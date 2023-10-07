@@ -29,6 +29,8 @@ namespace Clam
         // Start is called before the first frame update
         void Awake()
         {
+
+            
             //Debug.Log("tree data" + treeData.dataName + " " + treeData.cardinality);
             //GetComponent<ClamTree>().Init(nodePrefab, springPrefab, treeData.dataName, treeData.cardinality);
             //userPrefab = Instantiate(userPrefab);
@@ -61,6 +63,7 @@ namespace Clam
                 Quit();
             }
             MenuEventManager.instance.SetTree(m_Tree.GetComponent<Tree>().GetTree());
+            //MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().Init();
             MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(m_Tree.GetComponent<Tree>().GetTree());
 
 

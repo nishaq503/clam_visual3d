@@ -12,22 +12,32 @@ namespace Clam
 
         public class ClusterDataWrapper
         {
-            private ClusterData m_NodeData;
+            private ClusterData m_Data;
+
+            public ClusterDataWrapper(GameObject node)
+            {
+                //m_NodeData = nodeData;
+                m_Data = new ClusterData(node);
+            }
 
             public ClusterDataWrapper(ClusterData nodeData)
             {
-                m_NodeData = nodeData;
+                m_Data = nodeData;
             }
 
             public ClusterData Data
             {
-                get { return m_NodeData; }
-                set { m_NodeData = value; }
+                get { return m_Data; }
+                set
+                {
+                    //m_Data.FreeStrings();
+                    m_Data = value;
+                }
             }
 
             ~ClusterDataWrapper()
             {
-                m_NodeData.FreeStrings();
+                m_Data.FreeStrings();
             }
         }
 
@@ -64,6 +74,25 @@ namespace Clam
             //    argCenter = -1;
             //    argRadius = -1;
             //}
+
+            public ClusterData(GameObject node)
+            {
+                var script = node.GetComponent<Node>();
+                this.pos = new Vec3(script.GetPosition());
+                this.color = new Vec3(script.GetColor());
+                this.id = new StringFFI(script.GetId());
+                this.leftID = new StringFFI(script.GetLeftChildID());
+                this.rightID = new StringFFI(script.GetRightChildID());
+                //m_NodeData = nodeData;
+
+                cardinality = -1;
+                depth = -1;
+                radius = -1.0f;
+                lfd = -1.0f;
+                argCenter = -1;
+                argRadius = -1;
+                distToQuery = -1;
+            }
 
             public ClusterData(string id, string leftID, string rightID, Vector3 pos, Color color)
             {
@@ -178,6 +207,6 @@ namespace Clam
         }
     }
 
-       
+
 
 }
