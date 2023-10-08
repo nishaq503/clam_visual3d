@@ -23,18 +23,23 @@ namespace Clam
         public bool m_IsPhysicsRunning = false;
 
         //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
-        public FFIError Init()
+        public FFIError Init(GameObject nodePrefab, GameObject springPrefab)
         {
+            m_NodePrefab = nodePrefab;
+            m_SpringPrefab = springPrefab;
             //m_NodePrefab = nodePrefab;
             //m_SpringPrefab = springPrefab;
             //m_DataName = dataName;
             //m_Cardinality = cardinality;
-
+            //m_TreeData = new TreeStartupData();
+            m_TreeData = MenuEventManager.instance.m_TreeData;
+            //m_TreeData.dataName = "arrhythmia";
+            //m_TreeData.cardinality = 15;
             if (m_TreeData.dataName == null || m_TreeData.dataName.Length == 0)
             {
                 Debug.Log("error with tree data");
                 //Application.Quit();
-                return FFIError.HandleInitFailed;
+                return FFIError.StartupDataInvalid;
 
             }
 
@@ -57,6 +62,8 @@ namespace Clam
             FFIError e = Clam.FFI.NativeMethods.ForEachDFT(SetNodeNames);
 
             MenuEventManager.instance.SetTree(m_Tree);
+
+
 
 
             if (e == FFIError.Ok)

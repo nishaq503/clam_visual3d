@@ -16,7 +16,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231007164536";
+	public const string __DllName = "clam_ffi_20231008155934";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -84,7 +84,7 @@ namespace Clam
 
             public static bool GetRootData(out ClusterDataWrapper clusterDataWrapper)
             {
-                if(MenuEventManager.instance.GetTree().TryGetValue("1", out var root))
+                if(Cakes.Tree.GetTree().TryGetValue("1", out var root))
                 {
                     clusterDataWrapper = new ClusterDataWrapper(root);
 
@@ -141,6 +141,10 @@ namespace Clam
             public static FFIError ShutdownPhysics()
             {
                 return shutdown_physics(m_Handle);
+            }
+            public static FFIError ForceShutdownPhysics()
+            {
+                return force_physics_shutdown(m_Handle);
             }
 
             // RNN 

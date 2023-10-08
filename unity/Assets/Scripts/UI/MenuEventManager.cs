@@ -182,8 +182,14 @@ namespace Clam
 
         void SwitchToMainMenu()
         {
-            Clam.FFI.NativeMethods.ShutdownClam();
+            //if (m_IsPhysicsRunning)
+            //{
+            //    Debug.Log("Error cannot change scenes while physics is running");
+            //    return;
+            //}
+            //Clam.FFI.NativeMethods.ShutdownClam();
             SceneManager.LoadScene("Scenes/MainMenu");
+
 
 
             //m_CurrentMenu = Instantiate(m_MainMenuPrefab);

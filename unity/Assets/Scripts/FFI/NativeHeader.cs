@@ -59,6 +59,9 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "shutdown_physics", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_physics(IntPtr handle);
 
+            [DllImport(__DllName, EntryPoint = "force_physics_shutdown", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError force_physics_shutdown(IntPtr handle);
+
             // ------------------------------------- RNN Search -------------------------------------
 
             [DllImport(__DllName, EntryPoint = "test_cakes_rnn_query", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

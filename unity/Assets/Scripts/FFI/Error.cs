@@ -20,5 +20,6 @@ namespace Clam
         PhysicsRunning,
         PhysicsFinished,
         PhysicsNotReady,
+        StartupDataInvalid,
     }
 }
