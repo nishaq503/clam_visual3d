@@ -14,11 +14,11 @@ namespace Clam
             private IntPtr m_Data;
             private int m_Length;
 
-            public StringFFI(string data)
-            {
-                m_Data = Marshal.StringToCoTaskMemUTF8(data);
-                m_Length = data.Length;
-            }
+            //public StringFFI(string data)
+            //{
+            //    m_Data = Marshal.StringToCoTaskMemUTF8(data);
+            //    m_Length = data.Length;
+            //}
 
             public string AsString
             {
@@ -39,19 +39,19 @@ namespace Clam
             public bool IsNull { get { return m_Data == IntPtr.Zero; } }
 
 
-            public void Free()
-            {
-                if (!IsNull)
-                {
-                    Marshal.FreeCoTaskMem(m_Data);
-                    m_Data = IntPtr.Zero;
-                    m_Length = 0;
-                }
-                else
-                {
-                    Debug.Log("Warning: string is already null");
-                }
-            }
+            //public void Free()
+            //{
+            //    if (!IsNull)
+            //    {
+            //        Marshal.FreeCoTaskMem(m_Data);
+            //        m_Data = IntPtr.Zero;
+            //        m_Length = 0;
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("Warning: string is already null");
+            //    }
+            //}
         }
     }
 }

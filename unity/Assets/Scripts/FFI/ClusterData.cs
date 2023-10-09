@@ -14,11 +14,11 @@ namespace Clam
         {
             private ClusterData m_Data;
 
-            public ClusterDataWrapper(GameObject node)
-            {
-                //m_NodeData = nodeData;
-                m_Data = new ClusterData(node);
-            }
+            //public ClusterDataWrapper(GameObject node)
+            //{
+            //    //m_NodeData = nodeData;
+            //    //m_Data = new ClusterData(node);
+            //}
 
             public ClusterDataWrapper(ClusterData nodeData)
             {
@@ -37,7 +37,9 @@ namespace Clam
 
             ~ClusterDataWrapper()
             {
-                m_Data.FreeStrings();
+                //m_Data.FreeStrings();
+                //var data = wrapper.Data;
+                Clam.FFI.NativeMethods.DeleteClusterData(ref m_Data);
             }
         }
 
@@ -50,6 +52,8 @@ namespace Clam
             public StringFFI id;
             public StringFFI leftID;
             public StringFFI rightID;
+            // a string storing 100 bytes for passing misc values between rust and unity - allocated by rust
+            public StringFFI message;
             public int cardinality;
             public int depth;
             public float radius;
@@ -58,6 +62,21 @@ namespace Clam
             public int argRadius;
 
             public float distToQuery;
+
+            public void SetPos(Vector3 pos)
+            {
+                this.pos.x = pos.x;
+                this.pos.y = pos.y;
+                this.pos.z = pos.z;
+            }
+            public void SetColor(Color color)
+            {
+                this.color.x = color.r;
+                this.color.y = color.g;
+                this.color.z = color.b;
+            }
+
+
 
 
             //public NodeData(int n)
@@ -75,43 +94,43 @@ namespace Clam
             //    argRadius = -1;
             //}
 
-            public ClusterData(GameObject node)
-            {
-                var script = node.GetComponent<Node>();
-                this.pos = new Vec3(script.GetPosition());
-                this.color = new Vec3(script.GetColor());
-                this.id = new StringFFI(script.GetId());
-                this.leftID = new StringFFI(script.GetLeftChildID());
-                this.rightID = new StringFFI(script.GetRightChildID());
-                //m_NodeData = nodeData;
+            //public ClusterData(GameObject node)
+            //{
+            //    var script = node.GetComponent<Node>();
+            //    this.pos = new Vec3(script.GetPosition());
+            //    this.color = new Vec3(script.GetColor());
+            //    this.id = new StringFFI(script.GetId());
+            //    this.leftID = new StringFFI(script.GetLeftChildID());
+            //    this.rightID = new StringFFI(script.GetRightChildID());
+            //    //m_NodeData = nodeData;
 
-                cardinality = -1;
-                depth = -1;
-                radius = -1.0f;
-                lfd = -1.0f;
-                argCenter = -1;
-                argRadius = -1;
-                distToQuery = -1;
-            }
+            //    cardinality = -1;
+            //    depth = -1;
+            //    radius = -1.0f;
+            //    lfd = -1.0f;
+            //    argCenter = -1;
+            //    argRadius = -1;
+            //    distToQuery = -1;
+            //}
 
-            public ClusterData(string id, string leftID, string rightID, Vector3 pos, Color color)
-            {
-                this.pos = new global::Clam.FFI.Vec3(pos);
-                this.color = new Vec3(color);
+            //public ClusterData(string id, string leftID, string rightID, Vector3 pos, Color color)
+            //{
+            //    this.pos = new global::Clam.FFI.Vec3(pos);
+            //    this.color = new Vec3(color);
 
-                this.id = new StringFFI(id);
-                this.leftID = new StringFFI(leftID);
-                this.rightID = new StringFFI(rightID);
+            //    this.id = new StringFFI(id);
+            //    this.leftID = new StringFFI(leftID);
+            //    this.rightID = new StringFFI(rightID);
 
-                cardinality = -1;
-                depth = -1;
-                radius = -1.0f;
-                lfd = -1.0f;
-                argCenter = -1;
-                argRadius = -1;
-                distToQuery = -1;
+            //    cardinality = -1;
+            //    depth = -1;
+            //    radius = -1.0f;
+            //    lfd = -1.0f;
+            //    argCenter = -1;
+            //    argRadius = -1;
+            //    distToQuery = -1;
 
-            }
+            //}
             //public NodeDataFFI(NodeDataUnity data)
             //{
             //    this.pos = new Vec3(data.pos);
@@ -130,24 +149,24 @@ namespace Clam
             //    distToQuery = -1;
 
             //}
-            public ClusterData(int n)
-            {
-                this.pos = new global::Clam.FFI.Vec3(n, n, n);
-                this.color = new Vec3(n, n, n);
+            //public ClusterData(int n)
+            //{
+            //    this.pos = new global::Clam.FFI.Vec3(n, n, n);
+            //    this.color = new Vec3(n, n, n);
 
-                this.id = new StringFFI("testing " + n.ToString());
-                this.leftID = new StringFFI(n.ToString());
-                this.rightID = new StringFFI(n.ToString());
+            //    this.id = new StringFFI("testing " + n.ToString());
+            //    this.leftID = new StringFFI(n.ToString());
+            //    this.rightID = new StringFFI(n.ToString());
 
-                cardinality = n;
-                depth = n;
-                radius = n;
-                lfd = n;
-                argCenter = n;
-                argRadius = n;
-                distToQuery = n;
+            //    cardinality = n;
+            //    depth = n;
+            //    radius = n;
+            //    lfd = n;
+            //    argCenter = n;
+            //    argRadius = n;
+            //    distToQuery = n;
 
-            }
+            //}
 
             public void LogInfo()
             {
@@ -200,9 +219,10 @@ namespace Clam
 
             public void FreeStrings()
             {
-                this.id.Free();
-                this.leftID.Free();
-                this.rightID.Free();
+                //this.id.Free();
+                //this.leftID.Free();
+                //this.rightID.Free();
+                Debug.Log("This should never be called");
             }
         }
     }

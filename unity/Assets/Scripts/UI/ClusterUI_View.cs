@@ -110,9 +110,11 @@ public class ClusterUI_View : MonoBehaviour
             {
                 continue;
             }
+            Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
 
-            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
-            Clam.FFI.NativeMethods.GetClusterData(wrapper);
+            //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
+            //Clam.FFI.NativeMethods.GetClusterData(wrapper);
+            if (wrapper != null)
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
@@ -123,8 +125,7 @@ public class ClusterUI_View : MonoBehaviour
                         continue;
                     }
                 }
-            }
-            {
+
                 if (m_IntInputFields.TryGetValue("Cardinality", out var cardField))
                 {
                     //var range = textField.MinMaxRange();
@@ -137,7 +138,6 @@ public class ClusterUI_View : MonoBehaviour
                     }
                 }
             }
-
             cluster.GetComponent<Node>().Select();
         }
         return true;
@@ -154,8 +154,10 @@ public class ClusterUI_View : MonoBehaviour
             //    continue;
             //}
 
-            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
-            Clam.FFI.NativeMethods.GetClusterData(wrapper);
+            //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
+            //Clam.FFI.NativeMethods.GetClusterData(wrapper);
+            Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
+            if (wrapper != null )
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {

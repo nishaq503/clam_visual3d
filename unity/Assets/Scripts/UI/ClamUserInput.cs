@@ -103,15 +103,16 @@ namespace Clam
 
                 //if (!selectedNode.GetComponent<NodeScript>().Selected)
                 {
-                    Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
-                    FFIError found = Clam.FFI.NativeMethods.GetClusterData(wrapper);
-                    if (found == FFIError.Ok)
+                    //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
+                    //FFIError found = Clam.FFI.NativeMethods.GetClusterData(wrapper);
+                    Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
+                    if (wrapper != null)
                     {
                         if (!selectedNode.GetComponent<Node>().Selected)
                         {
                             //m_ClusterUI.GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
                             MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
-
+                            //Debug.Log(wrapper.Data.id.AsString);
                         }
                         else
                         {
@@ -120,8 +121,14 @@ namespace Clam
 
                         }
                         selectedNode.GetComponent<Node>().ToggleSelect();
+                        
 
                     }
+                    else
+                    {
+                        Debug.LogError("wrapper was null in Create ClusterData");
+                    }
+                    
                 }
             }
         }
@@ -172,7 +179,8 @@ namespace Clam
 
                             // need to redraw parent child lines
                             string rootName = "1";
-                            Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
+                            var wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
+                            //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper();
                             if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
                             {
                                 // tempoarary fix to prevent moving nodes around when already in reingold format

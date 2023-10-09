@@ -106,7 +106,16 @@ public class GraphBuildMenu
 
                 node.GetComponent<Transform>().position = new Vector3(x, y, z);
 
-                nodes[i] = node.GetComponent<Node>().ToNodeData();
+                var result = Clam.FFI.NativeMethods.CreateClusterDataMustFree(node.GetComponent<Node>().GetId(), out var clusterData);
+                if (result == FFIError.Ok)
+                {
+                    nodes[i] = clusterData;
+                }
+                else
+                {
+                    Debug.LogError("Node could not be found");
+                    return;
+                }
                 i++;
 
                 if (i == numSelected)
@@ -116,7 +125,14 @@ public class GraphBuildMenu
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
         MenuEventManager.instance.m_IsPhysicsRunning = true;
         //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
-        Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 1000, EdgeDrawer);
+        Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 500, EdgeDrawer);
+
+        for (int K = 0; K < nodes.Length;K++)
+        {
+            //ref var node = ref node1;
+            Debug.Log("freeing all nodes from physics sim");
+            Clam.FFI.NativeMethods.DeleteClusterData(ref nodes[K]);
+        }
 
 
     }

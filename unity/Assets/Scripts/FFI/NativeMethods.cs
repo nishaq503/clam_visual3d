@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 namespace Clam
@@ -16,10 +17,76 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231008155934";
+	public const string __DllName = "clam_ffi_20231009180554";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
+
+            public static Clam.FFI.ClusterDataWrapper CreateClusterDataWrapper(string id)
+            {
+                var result = create_cluster_data(m_Handle, id, out var data);
+                if (result != FFIError.Ok)
+                {
+                    Debug.Log(result);
+                    return null;
+                }
+                var node = Cakes.Tree.GetTree().GetValueOrDefault(data.id.AsString).GetComponent<Node>();
+                data.SetPos(node.GetPosition());
+                data.SetColor(node.GetColor());
+
+                return new ClusterDataWrapper(data);
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+            public static FFIError CreateClusterDataMustFree(string id, out Clam.FFI.ClusterData clusterData)
+            {
+                var result = create_cluster_data(m_Handle, id, out var data);
+                if (result != FFIError.Ok)
+                {
+                    Debug.Log(result);
+                    clusterData = new ClusterData();
+                    return result;
+                }
+                var node = Cakes.Tree.GetTree().GetValueOrDefault(data.id.AsString).GetComponent<Node>();
+                data.SetPos(node.GetPosition());
+                data.SetColor(node.GetColor());
+                clusterData = data;
+                return FFIError.Ok;
+                //return new ClusterDataWrapper(data);
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+            //public static unsafe FFIError GetClusterData(global::Clam.FFI.ClusterDataWrapper nodeWrapper)
+            //{
+            //    ClusterData nodeData = nodeWrapper.Data;
+
+            //    FFIError found = get_cluster_data(m_Handle, ref nodeData, out var outNode);
+            //    if (found == FFIError.Ok)
+            //    {
+            //        // does reassigning data lead to memory leak?
+            //        // pretty sure it is resassigning to itself - in rust, outNode is set equal
+            //        // to nodeData meaning outNode copies it?
+            //        nodeWrapper.Data = outNode;
+            //    }
+            //    return found;
+            //}
+
+
+            public static FFIError DeleteClusterData(ref ClusterData data)
+            {
+                Debug.Log("freeing with delete cluster data");
+                return delete_cluster_data(ref data, out var outData);
+                //return data;
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+
+            [DllImport(__DllName, EntryPoint = "create_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError create_cluster_data(IntPtr ptr, string id, out ClusterData data);
+
+            [DllImport(__DllName, EntryPoint = "delete_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError delete_cluster_data(ref ClusterData inData, out ClusterData outData);
+
 
 
             // init/shutdown functions for clam
@@ -44,7 +111,7 @@ namespace Clam
                     m_Handle = IntPtr.Zero;
                     return e;
                 }
-                
+
                 return FFIError.NullPointerPassed;
             }
 
@@ -67,45 +134,35 @@ namespace Clam
 
             // ------------------------------------- Cluster Helpers ------------------------------------- 
 
-            public static unsafe FFIError GetClusterData(global::Clam.FFI.ClusterDataWrapper nodeWrapper)
-            {
-                ClusterData nodeData = nodeWrapper.Data;
+            //public static unsafe FFIError GetClusterData(global::Clam.FFI.ClusterDataWrapper nodeWrapper)
+            //{
+            //    ClusterData nodeData = nodeWrapper.Data;
 
-                FFIError found = get_cluster_data(m_Handle, ref nodeData, out var outNode);
-                if (found == FFIError.Ok)
-                {
-                    // does reassigning data lead to memory leak?
-                    // pretty sure it is resassigning to itself - in rust, outNode is set equal
-                    // to nodeData meaning outNode copies it?
-                    nodeWrapper.Data = outNode;
-                }
-                return found;
-            }
+            //    FFIError found = get_cluster_data(m_Handle, ref nodeData, out var outNode);
+            //    if (found == FFIError.Ok)
+            //    {
+            //        // does reassigning data lead to memory leak?
+            //        // pretty sure it is resassigning to itself - in rust, outNode is set equal
+            //        // to nodeData meaning outNode copies it?
+            //        nodeWrapper.Data = outNode;
+            //    }
+            //    return found;
+            //}
 
             public static bool GetRootData(out ClusterDataWrapper clusterDataWrapper)
             {
-                if(Cakes.Tree.GetTree().TryGetValue("1", out var root))
+                string rootName = "1";
+                if (Cakes.Tree.GetTree().TryGetValue(rootName, out var root))
                 {
-                    clusterDataWrapper = new ClusterDataWrapper(root);
+                    clusterDataWrapper = CreateClusterDataWrapper(root.GetComponent<Node>().GetId());
 
-                    ClusterData clusterData = clusterDataWrapper.Data;
-
-                    FFIError found = get_cluster_data(m_Handle, ref clusterData, out var outNode);
-                    if (found == FFIError.Ok)
+                    if (clusterDataWrapper != null)
                     {
-                        clusterDataWrapper.Data = outNode;
                         return true;
-                    }
-                    else
-                    {
-                        clusterDataWrapper = null;
-                        return false;
                     }
                 }
                 clusterDataWrapper = null;
                 return false;
-
-                
             }
 
             public static unsafe float DistanceToOther(string node1, string node2)
@@ -113,7 +170,7 @@ namespace Clam
                 return distance_to_other(m_Handle, node1, node2); ;
             }
 
-           
+
 
             // Reingold Tilford Tree Layout
             public static FFIError DrawHeirarchy(NodeVisitor callback)

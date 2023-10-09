@@ -165,12 +165,12 @@ namespace Clam
         }
 
 
-        public FFI.ClusterData ToNodeData()
-        {
-            FFI.ClusterData node = new FFI.ClusterData(m_ID, m_LeftChildID, m_RightChildID, GetPosition(), GetColor());
+        //public FFI.ClusterData ToNodeData()
+        //{
+        //    FFI.ClusterData node = new FFI.ClusterData(m_ID, m_LeftChildID, m_RightChildID, GetPosition(), GetColor());
 
-            return node;
-        }
+        //    return node;
+        //}
 
         //public NodeDataUnity ToUnityData()
         //{
