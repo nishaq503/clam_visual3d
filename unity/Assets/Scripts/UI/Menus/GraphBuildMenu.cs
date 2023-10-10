@@ -124,6 +124,7 @@ public class GraphBuildMenu
         }
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
         MenuEventManager.instance.m_IsPhysicsRunning = true;
+        Debug.LogWarning("finished setting up unity pgysics sim - passing to rust");
         //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
         Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 500, EdgeDrawer);
 
@@ -154,17 +155,20 @@ public class GraphBuildMenu
     {
         if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {
-            if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.leftID.AsString, out var other))
+            if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.message.AsString, out var other))
             {
+                //Debug.Log("message from rust " + nodeData.message.AsString);
+                //nodeData.SetMessage("hello world");
+                //Clam.FFI.NativeMethods.SetMessage("hello world", out nodeData);
                 //m_TempUI.AddEdge(node, other, 0);
                 //Object springPrefab = Resources.Load("Spring");
                 //var spring = SpringScript.CreateInstance(node, other, SpringScript.SpringType.Similarity);
                 var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
                 spring.GetComponent<Edge>().InitLineRenderer(node, other, Edge.SpringType.Similarity);
-
             }
         }
+
     }
 
     public void DestroyGraphCallback(ClickEvent evt)

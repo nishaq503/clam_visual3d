@@ -14,10 +14,12 @@ namespace Clam
     namespace FFI
     {
         public unsafe delegate void NodeVisitor(ref Clam.FFI.ClusterData baton);
+        public unsafe delegate void NameSetter(ref Clam.FFI.ClusterIDs baton);
+        public unsafe delegate void NodeVisitorMut(ref Clam.FFI.ClusterData inData);
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231009180554";
+	public const string __DllName = "clam_ffi_20231010142429";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -80,6 +82,16 @@ namespace Clam
                 //ClusterData* data = create_cluster_data("1");
             }
 
+            public static FFIError SetMessage(string msg, out ClusterData data)
+            {
+                Debug.Log("freeing with delete cluster data");
+                set_message(msg, out data);
+                //data = outData;
+                return FFIError.Ok;
+                //return data;
+                //ClusterData* data = create_cluster_data("1");
+            }
+
 
             [DllImport(__DllName, EntryPoint = "create_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError create_cluster_data(IntPtr ptr, string id, out ClusterData data);
@@ -87,7 +99,8 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "delete_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError delete_cluster_data(ref ClusterData inData, out ClusterData outData);
 
-
+            [DllImport(__DllName, EntryPoint = "set_message", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError set_message(string msg, out ClusterData outData);
 
             // init/shutdown functions for clam
             public static FFIError InitClam(string dataName, uint cardinality)
@@ -120,6 +133,11 @@ namespace Clam
             public static FFIError ForEachDFT(NodeVisitor callback, string startNode = "root")
             {
                 return for_each_dft(m_Handle, callback, startNode);
+            }
+
+            public static FFIError SetNames(NameSetter callback, string startNode = "root")
+            {
+                return set_names(m_Handle, callback, startNode);
             }
 
             //public static int GetNumNodes()
@@ -185,7 +203,7 @@ namespace Clam
             }
 
             // Graph Physics
-            public static unsafe void RunForceDirectedSim(ClusterData[] nodes, float scalar, int maxIters, NodeVisitor edgeCB)
+            public static unsafe void RunForceDirectedSim(ClusterData[] nodes, float scalar, int maxIters, NodeVisitorMut edgeCB)
             {
                 run_force_directed_graph_sim(m_Handle, nodes, nodes.Length, scalar, maxIters, edgeCB);
             }

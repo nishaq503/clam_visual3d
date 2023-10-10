@@ -59,7 +59,8 @@ namespace Clam
 
 
 
-            FFIError e = Clam.FFI.NativeMethods.ForEachDFT(SetNodeNames);
+            FFIError e = Clam.FFI.NativeMethods.SetNames(SetNodeNames);
+            //FFIError e = Clam.FFI.NativeMethods.ForEachDFT(SetNodeNames);
 
             MenuEventManager.instance.SetTree(m_Tree);
 
@@ -153,14 +154,14 @@ namespace Clam
             //    //}
             //}
         }
-        unsafe void SetNodeNames(ref Clam.FFI.ClusterData nodeData)
+        unsafe void SetNodeNames(ref Clam.FFI.ClusterIDs nodeData)
         {
             GameObject node = Instantiate(m_NodePrefab);
-            print("setting name " + node.GetComponent<Node>().GetId());
-            nodeData.LogInfo();
+            //nodeData.LogInfo();
             node.GetComponent<Node>().SetID(nodeData.id.AsString);
             node.GetComponent<Node>().SetLeft(nodeData.leftID.AsString);
             node.GetComponent<Node>().SetRight(nodeData.rightID.AsString);
+            print("setting name here " + node.GetComponent<Node>().GetId());
             m_Tree.Add(nodeData.id.AsString, node);
         }
 

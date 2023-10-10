@@ -56,6 +56,9 @@ public class Edge : MonoBehaviour
         {
             SetColor(Color.black);
         }
+
+        List<Vector3> positions = new List<Vector3>() { m_Node1.transform.position, m_Node2.transform.position };
+        GetComponent<LineRenderer>().SetPositions(positions.ToArray());
     }
     // Start is called before the first frame update
     void Start()

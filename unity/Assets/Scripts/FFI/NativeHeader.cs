@@ -24,6 +24,9 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "for_each_dft", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError for_each_dft(IntPtr ptr, NodeVisitor callback, string startNode);
 
+            [DllImport(__DllName, EntryPoint = "set_names", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError set_names(IntPtr ptr, NameSetter callback, string startNode);
+
             [DllImport(__DllName, EntryPoint = "tree_height", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern int tree_height(IntPtr handle);
 
@@ -50,7 +53,7 @@ namespace Clam
 
             [System.Security.SecurityCritical]
             [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static unsafe extern void run_force_directed_graph_sim(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitor edge_cb);
+            private static unsafe extern void run_force_directed_graph_sim(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitorMut edge_cb);
 
             [System.Security.SecurityCritical]
             [DllImport(__DllName, EntryPoint = "physics_update_async", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
