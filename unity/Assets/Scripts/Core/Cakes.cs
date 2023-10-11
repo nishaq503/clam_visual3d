@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -16,6 +17,8 @@ namespace Clam
         //public static TreeStartupData m_StartupData;
         //FFIError m_InitResult;
         private static bool m_Initialized = false;
+        //private static IntPtr m_Handle;
+
 
         private static Cakes Instance
         {
@@ -29,7 +32,7 @@ namespace Clam
                         GameObject obj = new GameObject();
                         obj.name = typeof(Cakes).Name;
                         instance = obj.AddComponent<Cakes>();
-                        
+                        //m_Handle = FFI.NativeMethods.GetHandle();
                         //m_Tree = obj.AddComponent<Tree>();
                     }
 

@@ -19,10 +19,11 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231010142429";
+	public const string __DllName = "clam_ffi_20231011130131";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
+
 
             public static Clam.FFI.ClusterDataWrapper CreateClusterDataWrapper(string id)
             {
@@ -124,7 +125,7 @@ namespace Clam
                     m_Handle = IntPtr.Zero;
                     return e;
                 }
-
+                Debug.Log("Failed to shutdown clam");
                 return FFIError.NullPointerPassed;
             }
 
