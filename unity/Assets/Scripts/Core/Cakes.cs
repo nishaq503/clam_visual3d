@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,11 +14,36 @@ namespace Clam
         private static GameObject m_SpringPrefab;
 
         private static Cakes instance;
-        private static Tree m_Tree;
+        //private static Tree m_Tree;
         //public static TreeStartupData m_StartupData;
         //FFIError m_InitResult;
         private static bool m_Initialized = false;
         //private static IntPtr m_Handle;
+
+        static public void BuildGraphWithSelected()
+        {
+            Dictionary<string, GameObject> graph = new Dictionary<string, GameObject>();
+
+            foreach(var (id, node) in Tree.GetTree())
+            {
+                if (node.activeSelf && node.GetComponent<Node>().IsSelected())
+                {
+                    graph[id] = node;
+                }
+                else
+                {
+                    Destroy(node);
+                    //node.SetActive(false);
+                }
+            }
+
+            Debug.Log("building graph with size" + graph.Count);
+            //var graph = Tree.GetTree().Where(
+            //    kvp => kvp.Value.activeSelf && kvp.Value.GetComponent<Node>().IsSelected())
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); 
+
+            Tree.Set(graph);
+        }
 
 
         private static Cakes Instance
@@ -36,7 +62,7 @@ namespace Clam
                         //m_Tree = obj.AddComponent<Tree>();
                     }
 
-                    
+
                 }
                 if (instance.GetComponent<Tree>() == null)
                 {
@@ -74,7 +100,7 @@ namespace Clam
             else
             {
                 Destroy(gameObject);
-                Debug.LogWarning("Why is destroy here?...");
+                //Debug.LogWarning("Why is destroy here?...");
             }
         }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -2050024466729378230}
   - component: {fileID: -3630937606449034739}
   m_Layer: 0
-  m_Name: Spring
+  m_Name: Spring 1
   m_TagString: Spring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d1c83a8166558e147825f94f498dbe8d, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

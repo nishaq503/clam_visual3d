@@ -41,11 +41,11 @@ public class GraphBuildMenu
         if (MenuEventManager.instance.m_IsPhysicsRunning)
         {
             {
-                Debug.Log("Error cannot destroy graph while physics is running");
+                //Debug.Log("Error cannot destroy graph while physics is running");
                 return;
             }
         }
-        foreach (var (key, value) in MenuEventManager.instance.GetTree())
+        foreach (var (key, value) in Cakes.Tree.GetTree())
         {
             if (!value.GetComponent<Node>().Selected)
             {
@@ -56,8 +56,8 @@ public class GraphBuildMenu
 
     void HideSelectedCallback(ClickEvent evt)
     {
-        Debug.Log("clicked hide others");
-        foreach (var (key, value) in MenuEventManager.instance.GetTree())
+        //Debug.Log("clicked hide others");
+        foreach (var (key, value) in Cakes.Tree.GetTree())
         {
             if (value.GetComponent<Node>().Selected)
             {
@@ -70,34 +70,36 @@ public class GraphBuildMenu
     {
         if (MenuEventManager.instance.m_IsPhysicsRunning)
         {
-            Debug.Log("Error physics already running");
+            //Debug.Log("Error physics already running");
             return;
         }
+
+        Cakes.BuildGraphWithSelected();
 
         MenuEventManager.SwitchState(Menu.DestroyGraph);
 
         //List<NodeDataUnity> nodes = new List<NodeDataUnity>();
-        int numSelected = 0;
-        foreach (var (name, node) in MenuEventManager.instance.GetTree())
-        {
-            if (node.activeSelf && node.GetComponent<Node>().Selected)
-            {
-                numSelected++;
-                //var x = Random.Range(0, 100);
-                //var y = Random.Range(0, 100);
-                //var z = Random.Range(0, 100);
+        //int numSelected = 0;
+        //foreach (var (name, node) in MenuEventManager.instance.GetTree())
+        //{
+        //    if (node.activeSelf && node.GetComponent<Node>().Selected)
+        //    {
+        //        numSelected++;
+        //        //var x = Random.Range(0, 100);
+        //        //var y = Random.Range(0, 100);
+        //        //var z = Random.Range(0, 100);
 
-                //node.GetComponent<Transform>().position = new Vector3(x, y, z);
+        //        //node.GetComponent<Transform>().position = new Vector3(x, y, z);
 
-                //nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
-            }
-        }
-        Clam.FFI.ClusterData[] nodes = new Clam.FFI.ClusterData[numSelected];
+        //        //nodes.Add(node.GetComponent<NodeScript>().ToUnityData());
+        //    }
+        //}
+        Clam.FFI.ClusterData[] nodes = new Clam.FFI.ClusterData[Cakes.Tree.GetTree().Count];
         int i = 0;
 
-        foreach (var (name, node) in MenuEventManager.instance.GetTree())
+        foreach (var (name, node) in Cakes.Tree.GetTree())
         {
-            if (node.activeSelf && node.GetComponent<Node>().Selected)
+            //if (node.activeSelf && node.GetComponent<Node>().Selected)
             {
                 //numSelected++;
                 var x = Random.Range(0, 100);
@@ -109,17 +111,17 @@ public class GraphBuildMenu
                 var result = Clam.FFI.NativeMethods.CreateClusterDataMustFree(node.GetComponent<Node>().GetId(), out var clusterData);
                 if (result == FFIError.Ok)
                 {
-                    nodes[i] = clusterData;
+                    nodes[i++] = clusterData;
                 }
                 else
                 {
                     Debug.LogError("Node could not be found");
                     return;
                 }
-                i++;
+                //i++;
 
-                if (i == numSelected)
-                    break;
+                //if (i == numSelected)
+                //    break;
             }
         }
         //Clam.ClamFFI.InitForceDirectedSim(nodes, EdgeDrawer);
@@ -131,7 +133,7 @@ public class GraphBuildMenu
         for (int K = 0; K < nodes.Length;K++)
         {
             //ref var node = ref node1;
-            Debug.Log("freeing all nodes from physics sim");
+            //Debug.Log("freeing all nodes from physics sim");
             Clam.FFI.NativeMethods.DeleteClusterData(ref nodes[K]);
         }
 
@@ -140,8 +142,8 @@ public class GraphBuildMenu
     public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
     {
         string id = nodeData.id.AsString;
-        Debug.Log("id of updated node is " + id);
-        if (MenuEventManager.instance.GetTree().TryGetValue(id, out var node))
+        //Debug.Log("id of updated node is " + id);
+        if (Cakes.Tree.GetTree().TryGetValue(id, out var node))
         {
             node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
         }
@@ -153,9 +155,9 @@ public class GraphBuildMenu
 
     public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
     {
-        if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out var node))
+        if (Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {
-            if (MenuEventManager.instance.GetTree().TryGetValue(nodeData.message.AsString, out var other))
+            if (Cakes.Tree.GetTree().TryGetValue(nodeData.message.AsString, out var other))
             {
                 //Debug.Log("message from rust " + nodeData.message.AsString);
                 //nodeData.SetMessage("hello world");

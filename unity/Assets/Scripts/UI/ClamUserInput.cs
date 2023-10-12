@@ -154,11 +154,29 @@ namespace Clam
                 {
                     var lid = selectedNode.GetComponent<Node>().GetLeftChildID();
                     var rid = selectedNode.GetComponent<Node>().GetRightChildID();
+                    GameObject leftChild = null;
+                    GameObject rightChild = null;
 
-                    bool hasLeft = MenuEventManager.instance.GetTree().TryGetValue(lid, out var leftChild);
+                    //refactor all of this nonsense later ffs
+                    if (!Cakes.Tree.Contains(lid))
+                    {
+                        leftChild = Cakes.Tree.Add(lid);
+                        leftChild.SetActive(false);
 
-                    bool hasRight = MenuEventManager.instance.GetTree().TryGetValue(rid, out var rightChild);
-                    if (hasLeft && hasRight)
+                    }
+                    if (!Cakes.Tree.Contains(rid))
+                    {
+                        rightChild = Cakes.Tree.Add(rid);
+                        rightChild.SetActive(false);
+                    }
+
+                    //var leftChild = Cakes.Tree.GetOrAdd(selectedNode.GetComponent<Node>().GetLeftChildID());
+                    //var rightChild = Cakes.Tree.GetOrAdd(selectedNode.GetComponent<Node>().GetRightChildID());
+
+                    //bool hasLeft = MenuEventManager.instance.GetTree().TryGetValue(lid, out var leftChild);
+
+                    //bool hasRight = MenuEventManager.instance.GetTree().TryGetValue(rid, out var rightChild);
+                    //if (hasLeft && hasRight)
                     {
                         // should i handle case of only one being active?
                         if (leftChild.activeSelf && rightChild.activeSelf)
@@ -173,18 +191,20 @@ namespace Clam
                         }
                         else
                         {
+                            Debug.Log("else make children visible");
                             //if inactive - only set immediate two children as active
+                            //if (Cakes.Tree.Contains)
                             leftChild.SetActive(true);
                             rightChild.SetActive(true);
 
                             // need to redraw parent child lines
-                            string rootName = "1";
+                            //string rootName = "1";
                             var wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
                             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper();
-                            if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
+                            //if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
                             {
                                 // tempoarary fix to prevent moving nodes around when already in reingold format
-                                if (!root.activeSelf)
+                                //if (!root.activeSelf)
                                 {
                                     Clam.FFI.NativeMethods.DrawHeirarchyOffsetFrom(wrapper, PositionUpdater);
 
@@ -213,7 +233,7 @@ namespace Clam
 
         unsafe void SetInactiveCallBack(ref FFI.ClusterData nodeData)
         {
-            bool hasValue = MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
+            bool hasValue = Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
             if (hasValue)
             {
                 //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);
@@ -227,7 +247,7 @@ namespace Clam
         unsafe void PositionUpdater(ref Clam.FFI.ClusterData nodeData)
         {
 
-            bool hasValue = MenuEventManager.instance.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
+            bool hasValue = Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out GameObject node);
             if (hasValue)
             {
                 //node.GetComponent<NodeScript>().SetColor(nodeData.color.AsColor);

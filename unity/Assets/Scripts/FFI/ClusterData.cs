@@ -231,6 +231,39 @@ namespace Clam
             }
         }
 
+        public class ClusterIDsWrapper
+        {
+            private ClusterIDs m_Data;
+
+            //public ClusterDataWrapper(GameObject node)
+            //{
+            //    //m_NodeData = nodeData;
+            //    //m_Data = new ClusterData(node);
+            //}
+
+            public ClusterIDsWrapper(ClusterIDs nodeData)
+            {
+                m_Data = nodeData;
+            }
+
+            public ClusterIDs Data
+            {
+                get { return m_Data; }
+                set
+                {
+                    //m_Data.FreeStrings();
+                    m_Data = value;
+                }
+            }
+
+            ~ClusterIDsWrapper()
+            {
+                //m_Data.FreeStrings();
+                //var data = wrapper.Data;
+                Clam.FFI.NativeMethods.DeleteClusterIDs(ref m_Data);
+            }
+        }
+
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public partial struct ClusterIDs

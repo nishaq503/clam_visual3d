@@ -19,7 +19,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231011130131";
+	public const string __DllName = "clam_ffi_20231013112256";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -38,6 +38,22 @@ namespace Clam
                 data.SetColor(node.GetColor());
 
                 return new ClusterDataWrapper(data);
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+            public static Clam.FFI.ClusterIDsWrapper CreateClusterIDsWrapper(string id)
+            {
+                var result = create_cluster_ids(m_Handle, id, out var data);
+                if (result != FFIError.Ok)
+                {
+                    Debug.Log(result);
+                    return null;
+                }
+                //var node = Cakes.Tree.GetTree().GetValueOrDefault(data.id.AsString).GetComponent<Node>();
+                //data.SetPos(node.GetPosition());
+                //data.SetColor(node.GetColor());
+
+                return new ClusterIDsWrapper(data);
                 //ClusterData* data = create_cluster_data("1");
             }
 
@@ -77,15 +93,23 @@ namespace Clam
 
             public static FFIError DeleteClusterData(ref ClusterData data)
             {
-                Debug.Log("freeing with delete cluster data");
+                //Debug.Log("freeing with delete cluster data");
                 return delete_cluster_data(ref data, out var outData);
+                //return data;
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+            public static FFIError DeleteClusterIDs(ref ClusterIDs data)
+            {
+                //Debug.Log("freeing with delete cluster data");
+                return delete_cluster_ids(ref data, out var outData);
                 //return data;
                 //ClusterData* data = create_cluster_data("1");
             }
 
             public static FFIError SetMessage(string msg, out ClusterData data)
             {
-                Debug.Log("freeing with delete cluster data");
+                //Debug.Log("freeing with delete cluster data");
                 set_message(msg, out data);
                 //data = outData;
                 return FFIError.Ok;
@@ -97,8 +121,13 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "create_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError create_cluster_data(IntPtr ptr, string id, out ClusterData data);
 
+            [DllImport(__DllName, EntryPoint = "create_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError create_cluster_ids(IntPtr ptr, string id, out ClusterIDs data);
+
             [DllImport(__DllName, EntryPoint = "delete_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError delete_cluster_data(ref ClusterData inData, out ClusterData outData);
+            [DllImport(__DllName, EntryPoint = "delete_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError delete_cluster_ids(ref ClusterIDs inData, out ClusterIDs outData);
 
             [DllImport(__DllName, EntryPoint = "set_message", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError set_message(string msg, out ClusterData outData);

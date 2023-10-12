@@ -110,17 +110,28 @@ public class Line : MonoBehaviour
         //int[] indicesForLineStrip = new int[] { 0, 1, 2, 3, 1 };
         //Mesh mesh = new Mesh();
         //mesh.SetIndices(indicesForLines, MeshTopology.Lines, 0);
-        int[] indicesForLineStrip = new int[] { 0, 1, 1, 2, 2, 3, 3, 1 };
-        mesh = new Mesh();
-        Vector3[] verts = new Vector3[] { Vector3.up, Vector3.right, Vector3.down, Vector3.left};
-        int[] indicesForLines = new int[] { 0, 1, 1, 2, 2, 3, 3, 0 };
-        mesh.vertices = verts;
-        mesh.SetIndices(indicesForLines, MeshTopology.Lines, 0);
-        //mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        //int[] indicesForLineStrip = new int[] { 0, 1, 1, 2, 2, 3, 3, 1 };
 
-        meshFilter = gameObject.GetComponent<MeshFilter>();
-        meshFilter.mesh = mesh;
+
+        //mesh = new Mesh();
+        //Vector3[] verts = new Vector3[] { Vector3.up, Vector3.right, Vector3.down, Vector3.left};
+        //int[] indicesForLines = new int[] { 0, 1, 1, 2, 2, 3, 3, 0 };
+        //mesh.vertices = verts;
+        //mesh.SetIndices(indicesForLines, MeshTopology.Lines, 0);
+        ////mesh.RecalculateNormals();
+        //mesh.RecalculateBounds();
+
+        //meshFilter = gameObject.GetComponent<MeshFilter>();
+        //meshFilter.mesh = mesh;
+
+        // Create a new material and set its color
+        Material material = GetComponent<Material>();
+        material.color = Color.red; // Change the color here
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        // Assign the material to the MeshRenderer
+        meshRenderer.material = material;
+
+        //GetComponent<Renderer>().material.color = Color.red;
 
 
         //We assign our vertices and triangles to the mesh.

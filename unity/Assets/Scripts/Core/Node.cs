@@ -26,6 +26,14 @@ namespace Clam
 
         public bool Selected { get { return m_IsSelected; } }
 
+        private int m_IndexBufferID;
+
+        int IndexBuffer
+        {
+            get { return m_IndexBufferID; }
+            set { m_IndexBufferID = value; }
+        }
+
 
         //void Awake()
         //{
@@ -44,6 +52,7 @@ namespace Clam
         void Start()
         {
             m_ActualColor = new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f);
+            m_IndexBufferID = -1;
         }
         //public void OnClick()
         //{

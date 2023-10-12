@@ -1,4 +1,5 @@
 using Clam;
+using Clam.FFI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -129,6 +130,53 @@ namespace Clam
         public Dictionary<string, GameObject> GetTree()
         {
             return m_Tree;
+        }
+
+        public void Set(Dictionary<string, GameObject> tree)
+        {
+            m_Tree = tree;
+        }
+
+        public bool Contains(string id)
+        {
+            return m_Tree.ContainsKey(id);
+        }
+
+        public GameObject Add(string id)
+        {
+            var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
+            if (wrapper != null)
+            {
+                GameObject node = Instantiate(m_NodePrefab);
+                //nodeData.LogInfo();
+                node.GetComponent<Node>().SetID(wrapper.Data.id.AsString);
+                node.GetComponent<Node>().SetLeft(wrapper.Data.leftID.AsString);
+                node.GetComponent<Node>().SetRight(wrapper.Data.rightID.AsString);
+                print("setting name here add" + node.GetComponent<Node>().GetId());
+                m_Tree.Add(id, node);
+                return node;
+            }
+            return null;
+
+        }
+
+        public GameObject GetOrAdd(string id)
+        {
+            var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
+            if (wrapper != null)
+            {
+                GameObject node = Instantiate(m_NodePrefab);
+                node.GetComponent<Node>().SetID(wrapper.Data.id.AsString);
+                node.GetComponent<Node>().SetLeft(wrapper.Data.leftID.AsString);
+                node.GetComponent<Node>().SetRight(wrapper.Data.rightID.AsString);
+                print("setting name here getoradd " + node.GetComponent<Node>().GetId());
+                m_Tree.Add(id, node);
+                return node;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
