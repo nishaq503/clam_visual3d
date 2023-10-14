@@ -15,8 +15,12 @@ public class GraphBuildMenu
     GameObject m_SpringPrefab;
     Slider m_EdgeScalar;
 
+    //public GameObject m_GraphBuilderPrefab;
+
     public GraphBuildMenu(UIDocument document, string name)
     {
+        //m_GraphBuilderPrefab = graphBuilderPrefab;
+
         m_CreateGraph = document.rootVisualElement.Q<Button>("CreateGraphButton");
         m_DestroyGraph = document.rootVisualElement.Q<Button>("DestroyGraph");
         m_HideSelected = document.rootVisualElement.Q<Button>("HideSelected");
@@ -128,14 +132,18 @@ public class GraphBuildMenu
         MenuEventManager.instance.m_IsPhysicsRunning = true;
         Debug.LogWarning("finished setting up unity pgysics sim - passing to rust");
         //Clam.ClamFFI.LaunchPhysicsThread(nodes, m_EdgeScalar.value, 1000, EdgeDrawer, UpdatePhysicsSim);
-        Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 500, EdgeDrawer);
+        GameObject graphBuilderPrefab = Resources.Load("Graph") as GameObject;
+        var graphBuilder = MenuEventManager.Instantiate(graphBuilderPrefab);
+        graphBuilder.GetComponent<GraphBuilder>().Init(nodes, m_EdgeScalar.value, 500);
+        //Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, m_EdgeScalar.value, 500, EdgeDrawer);
 
-        for (int K = 0; K < nodes.Length;K++)
-        {
-            //ref var node = ref node1;
-            //Debug.Log("freeing all nodes from physics sim");
-            Clam.FFI.NativeMethods.DeleteClusterData(ref nodes[K]);
-        }
+
+        //for (int K = 0; K < nodes.Length;K++)
+        //{
+        //    //ref var node = ref node1;
+        //    //Debug.Log("freeing all nodes from physics sim");
+        //    Clam.FFI.NativeMethods.DeleteClusterData(ref nodes[K]);
+        //}
 
 
     }

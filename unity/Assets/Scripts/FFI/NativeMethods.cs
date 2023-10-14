@@ -19,11 +19,18 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231013112256";
+	public const string __DllName = "clam_ffi_20231014115055";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
 
+            [DllImport(__DllName, EntryPoint = "get_num_edges_in_graph", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern int get_num_edges_in_graph(IntPtr ptr);
+            // -1 if no graph
+            public static int GetNumEdgesInGraph()
+            {
+                return get_num_edges_in_graph(m_Handle);
+            }
 
             public static Clam.FFI.ClusterDataWrapper CreateClusterDataWrapper(string id)
             {
@@ -233,6 +240,11 @@ namespace Clam
             }
 
             // Graph Physics
+
+            public static unsafe void InitForceDirectedSim(ClusterData[] nodes, float scalar, int maxIters, NodeVisitorMut edgeCB)
+            {
+                init_force_directed_graph_sim(m_Handle, nodes, nodes.Length, scalar, maxIters, edgeCB);
+            }
             public static unsafe void RunForceDirectedSim(ClusterData[] nodes, float scalar, int maxIters, NodeVisitorMut edgeCB)
             {
                 run_force_directed_graph_sim(m_Handle, nodes, nodes.Length, scalar, maxIters, edgeCB);

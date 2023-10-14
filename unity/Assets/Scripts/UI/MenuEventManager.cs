@@ -32,6 +32,7 @@ namespace Clam
         public GameObject m_CreateNewTreeMenuPrefab;
         public GameObject m_PauseMenu;
         public GameObject m_InitalMenu;
+        //public GameObject m_GraphBuilderPrefab;
 
         public TreeStartupData m_TreeData;
         //public GameObject m_TreeObject;
@@ -49,6 +50,7 @@ namespace Clam
             //SwitchToMainMenu();
             //m_CurrentMenu = Instantiate(m_InitalMenu);
             m_CurrentMenu = Instantiate(m_InitalMenu);
+            
 
         }
 
@@ -279,14 +281,14 @@ namespace Clam
 
         public void Update()
         {
-            if (m_IsPhysicsRunning)
-            {
-                if (Clam.FFI.NativeMethods.PhysicsUpdateAsync(UpdatePhysicsSim) == FFIError.PhysicsFinished)
-                {
-                    m_IsPhysicsRunning = false;
-                    print("physics finished");
-                }
-            }
+            //if (m_IsPhysicsRunning)
+            //{
+            //    if (Clam.FFI.NativeMethods.PhysicsUpdateAsync(UpdatePhysicsSim) == FFIError.PhysicsFinished)
+            //    {
+            //        m_IsPhysicsRunning = false;
+            //        print("physics finished");
+            //    }
+            //}
         }
 
         public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)

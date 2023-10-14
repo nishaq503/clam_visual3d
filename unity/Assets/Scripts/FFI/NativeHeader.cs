@@ -50,6 +50,9 @@ namespace Clam
             private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos, NodeVisitor callback);
 
             // ------------------------------------- Graph Physics -------------------------------------
+            [System.Security.SecurityCritical]
+            [DllImport(__DllName, EntryPoint = "init_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static unsafe extern void init_force_directed_graph_sim(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitorMut edge_cb);
 
             [System.Security.SecurityCritical]
             [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

@@ -28,7 +28,7 @@ namespace Clam
 
         private int m_IndexBufferID;
 
-        int IndexBuffer
+        public int IndexBufferID
         {
             get { return m_IndexBufferID; }
             set { m_IndexBufferID = value; }

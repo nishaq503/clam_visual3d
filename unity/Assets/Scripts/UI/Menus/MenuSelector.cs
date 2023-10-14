@@ -10,9 +10,12 @@ public class MenuSelector
     DropdownField m_DropdownField;
     UIDocument m_Document;
     GraphBuildMenu m_GraphBuildMenu;
+    //public GameObject m_GraphBuilderPrefab;
 
-    public MenuSelector(UIDocument document, string name)
+    public MenuSelector(UIDocument document, string name)//, GameObject graphBuilderPrefab)
     {
+        //m_GraphBuilderPrefab = graphBuilderPrefab;
+
         m_DropdownField = document.rootVisualElement.Q<DropdownField>(name);
         m_Document = document;
 
@@ -91,7 +94,7 @@ public class MenuSelector
                     rightField.Add(instance);
                     if (m_GraphBuildMenu == null)
                     {
-                        m_GraphBuildMenu = new GraphBuildMenu(m_Document, "GraphBuildMenuInstance");
+                        m_GraphBuildMenu = new GraphBuildMenu(m_Document, "GraphBuildMenuInstance");//, m_GraphBuilderPrefab);
                     }
 
                     //rightField.Insert(clusterDetailersIndex, new Button());
