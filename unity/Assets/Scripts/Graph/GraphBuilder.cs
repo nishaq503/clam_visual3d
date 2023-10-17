@@ -13,8 +13,10 @@ public class GraphBuilder : MonoBehaviour
     private int m_VertexCounter;
     private int m_IndexCounter;
     private bool m_IsPhysicsRunning;
+    private float m_EdgeScalar = 25.0f;
 
-    int m_ShouldUpdate = 0;
+
+    //int m_ShouldUpdate = 0;
     //private bool m_InitializedIndices;
     //private bool m_UpdatedAllVertices;
 
@@ -34,13 +36,13 @@ public class GraphBuilder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("graph builder update");
-        Debug.Log("physics is running updatet val " + m_IsPhysicsRunning);
+        //Debug.Log("graph builder update");
+        //Debug.Log("physics is running updatet val " + m_IsPhysicsRunning);
 
         //m_VertexCounter = 0;
         if (m_IsPhysicsRunning)
         {
-            Debug.Log("graph builder updatephysics is runningf");
+            //Debug.Log("graph builder updatephysics is runningf");
 
             if (Clam.FFI.NativeMethods.PhysicsUpdateAsync(PositionUpdater) == FFIError.PhysicsFinished)
             {
@@ -55,7 +57,7 @@ public class GraphBuilder : MonoBehaviour
     {
         GetComponent<MeshFilter>().mesh = new Mesh();
 
-        Clam.FFI.NativeMethods.InitForceDirectedSim(nodes, edgeScalar, numIters, EdgeDrawer);
+        Clam.FFI.NativeMethods.InitForceDirectedGraph(nodes, edgeScalar, numIters);
 
         m_VertexCounter = 0;
         m_IndexCounter = 0;
@@ -64,11 +66,11 @@ public class GraphBuilder : MonoBehaviour
 
         int numNodes = Cakes.Tree.GetTree().Count;
         int numEdges = Clam.FFI.NativeMethods.GetNumEdgesInGraph();
+        Debug.Log("num edges in graph : " + numEdges + ", num nodes " + numNodes);
         m_Vertices = new Vector3[numNodes];
         m_Indices = new int[numEdges * 2];
         InitNodeIndices();
-        Debug.Log("num edges in graph : " + numEdges + ", num nodes " + numNodes);
-        Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, edgeScalar, numIters, EdgeDrawer);
+        Clam.FFI.NativeMethods.InitGraphVertices(EdgeDrawer);
 
 
 
@@ -103,8 +105,8 @@ public class GraphBuilder : MonoBehaviour
 
     public void PositionUpdater(ref Clam.FFI.ClusterData nodeData)
     {
-        
-        Debug.Log("graph builder update");
+
+        //Debug.Log("graph builder update");
         string id = nodeData.id.AsString;
         //Debug.Log("id of updated node is " + id);
         if (Cakes.Tree.GetTree().TryGetValue(id, out var node))
@@ -112,7 +114,7 @@ public class GraphBuilder : MonoBehaviour
             node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
 
             int numNodes = Cakes.Tree.GetTree().Count;
-            
+
 
             m_Vertices[node.GetComponent<Node>().IndexBufferID] = node.GetComponent<Node>().GetPosition();
             m_VertexCounter++;
@@ -137,7 +139,7 @@ public class GraphBuilder : MonoBehaviour
     public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
     {
         
-        Debug.Log("graph builder edge drawer");
+        //Debug.Log("graph builder edge drawer");
 
         if (Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {

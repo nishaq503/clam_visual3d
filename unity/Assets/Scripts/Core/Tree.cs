@@ -2,6 +2,7 @@ using Clam;
 using Clam.FFI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -19,8 +20,8 @@ namespace Clam
 
         private Dictionary<string, GameObject> m_Tree;
 
-        private float m_EdgeScalar = 25.0f;
-        private float m_SearchRadius = 0.05f;
+        //private float m_EdgeScalar = 25.0f;
+        //private float m_SearchRadius = 0.05f;
         public bool m_IsPhysicsRunning = false;
 
         //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
@@ -55,18 +56,7 @@ namespace Clam
 
             m_Tree = new Dictionary<string, GameObject>();
 
-            //int numNodes = Clam.FFI.NativeMethods.GetNumNodes();
-
-
-
-
             FFIError e = Clam.FFI.NativeMethods.SetNames(SetNodeNames);
-            //FFIError e = Clam.FFI.NativeMethods.ForEachDFT(SetNodeNames);
-
-            MenuEventManager.instance.SetTree(m_Tree);
-
-
-
 
             if (e == FFIError.Ok)
             {
@@ -90,6 +80,7 @@ namespace Clam
                 return FFIError.HandleInitFailed;
             }
 
+            //SetVisibleTreeDepth(7);
             return FFIError.Ok;
         }
 
@@ -179,28 +170,42 @@ namespace Clam
             }
         }
 
+        bool SetVisibleTreeDepth(int maxDepth)
+        {
+            foreach (var kvp in m_Tree.ToList())
+            {
+                var cluster = kvp.Value;
+                //if (!cluster.activeSelf)
+                //{
+                //    continue;
+                //}
+                Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(kvp.Key);
+
+                //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
+                //Clam.FFI.NativeMethods.GetClusterData(wrapper);
+                if (wrapper != null)
+                {
+                    //if (m_IntInputFields.TryGetValue("Depth", out var depthField))
+                    {
+                        //var range = textField.MinMaxRange();
+                        if (wrapper.Data.depth > maxDepth)
+                        {
+                            cluster.GetComponent<Node>().Deselect();
+                            cluster.SetActive(false);
+                            //continue;
+                        }
+                    }
+
+
+                }
+                //cluster.GetComponent<Node>().Select();
+            }
+            return true;
+        }
+
 
         public void Update()
         {
-            //if (m_IsPhysicsRunning)
-            //{
-            //    //if (ClamFFI.PhysicsUpdateAsync() == FFIError.PhysicsFinished)
-            //    //{
-            //    //    m_IsPhysicsRunning = false;
-            //    //    print("physics finished");
-            //    //}
-            //    //if (m_PhysicsIter < m_MaxPhysicsIters)
-            //    //{
-            //    //    ApplyForces();
-            //    //    m_PhysicsIter++;
-            //    //}
-            //    //else
-            //    //{
-            //    //    ClamFFI.ShutdownPhysics();
-            //    //    print("finished sim");
-            //    //    m_IsPhysicsRunning = false;
-            //    //}
-            //}
         }
         unsafe void SetNodeNames(ref Clam.FFI.ClusterIDs nodeData)
         {

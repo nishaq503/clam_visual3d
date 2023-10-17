@@ -37,6 +37,19 @@ namespace Clam
 
             [DllImport(__DllName, EntryPoint = "get_root_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern int get_root_data(IntPtr handle);
+            [DllImport(__DllName, EntryPoint = "create_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError create_cluster_data(IntPtr ptr, string id, out ClusterData data);
+
+            [DllImport(__DllName, EntryPoint = "create_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError create_cluster_ids(IntPtr ptr, string id, out ClusterIDs data);
+
+            [DllImport(__DllName, EntryPoint = "delete_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError delete_cluster_data(ref ClusterData inData, out ClusterData outData);
+            [DllImport(__DllName, EntryPoint = "delete_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError delete_cluster_ids(ref ClusterIDs inData, out ClusterIDs outData);
+
+            [DllImport(__DllName, EntryPoint = "set_message", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError set_message(string msg, out ClusterData outData);
 
             [DllImport(__DllName, EntryPoint = "distance_to_other", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static unsafe extern float distance_to_other(IntPtr handle, string node1, string node2);
@@ -51,12 +64,12 @@ namespace Clam
 
             // ------------------------------------- Graph Physics -------------------------------------
             [System.Security.SecurityCritical]
-            [DllImport(__DllName, EntryPoint = "init_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static unsafe extern void init_force_directed_graph_sim(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitorMut edge_cb);
+            [DllImport(__DllName, EntryPoint = "init_force_directed_graph", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static unsafe extern void init_force_directed_graph(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters);
 
             [System.Security.SecurityCritical]
-            [DllImport(__DllName, EntryPoint = "run_force_directed_graph_sim", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static unsafe extern void run_force_directed_graph_sim(IntPtr handle, [In, Out] ClusterData[] arr, int len, float scalar, int maxIters, NodeVisitorMut edge_cb);
+            [DllImport(__DllName, EntryPoint = "init_graph_vertices", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static unsafe extern void init_graph_vertices(IntPtr handle, NodeVisitorMut edge_cb);
 
             [System.Security.SecurityCritical]
             [DllImport(__DllName, EntryPoint = "physics_update_async", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
@@ -67,6 +80,9 @@ namespace Clam
 
             [DllImport(__DllName, EntryPoint = "force_physics_shutdown", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError force_physics_shutdown(IntPtr handle);
+
+            [DllImport(__DllName, EntryPoint = "get_num_edges_in_graph", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern int get_num_edges_in_graph(IntPtr ptr);
 
             // ------------------------------------- RNN Search -------------------------------------
 

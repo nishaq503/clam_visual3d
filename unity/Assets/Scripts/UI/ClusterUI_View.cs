@@ -15,7 +15,7 @@ public class ClusterUI_View : MonoBehaviour
     VisualTreeAsset m_SafeInputFieldTemplate;
 
     private UIDocument m_UIDocument;
-    private Dictionary<string, GameObject> m_Tree;
+    //private Dictionary<string, GameObject> m_Tree;
     Label m_ClusterInfo;
     Label m_ClusterInfoLabel;
     MenuSelector m_MenuSelector;
@@ -103,13 +103,13 @@ public class ClusterUI_View : MonoBehaviour
 
     bool InputFieldChangeCallback()
     {
-        foreach (var item in m_Tree.ToList())
+        foreach (var item in Cakes.Tree.GetTree().ToList())
         {
             var cluster = item.Value;
-            if (!cluster.activeSelf)
-            {
-                continue;
-            }
+            //if (!cluster.activeSelf)
+            //{
+            //    continue;
+            //}
             Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
 
             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
@@ -146,7 +146,7 @@ public class ClusterUI_View : MonoBehaviour
 
     public void IncludeHiddenInSelection()
     {
-        foreach (var item in m_Tree.ToList())
+        foreach (var item in Cakes.Tree.GetTree().ToList())
         {
             var cluster = item.Value;
             //if (!cluster.activeSelf)
@@ -198,9 +198,6 @@ public class ClusterUI_View : MonoBehaviour
             graphMenu.Children().ToList().ForEach(c => c.focusable = false);
         }
 
-        //m_DoubleInputFields.ToList().ForEach(item => item.Value.Lock());
-        //m_DepthField.Lock();
-        //m_CardinalityField.Lock();
     }
 
 
@@ -216,26 +213,7 @@ public class ClusterUI_View : MonoBehaviour
         {
             graphMenu.Children().ToList().ForEach(c => c.focusable = true);
         }
-
-
-        //m_DoubleInputFields.ToList().ForEach(item => item.Value.UnLock());
-
-        //m_DepthField.UnLock();
-        //m_CardinalityField.UnLock();
     }
-
-    //void InitMenuSelector()
-    //{
-    //    m_MenuSelector.focusable = false;
-
-    //    m_MenuSelector.choices = new List<string>()
-    //    {
-    //        "Cluster Details", "Graph Builder"
-    //    };
-
-
-    //}
-
 
 
     public void DisplayClusterInfo(Clam.FFI.ClusterData data)
@@ -255,7 +233,6 @@ public class ClusterUI_View : MonoBehaviour
     {
         if (m_ClusterInfo != null)
         {
-
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine("id: ");
@@ -276,13 +253,4 @@ public class ClusterUI_View : MonoBehaviour
 
             m_ClusterInfo.text = value;
     }
-
-    public void SetTree(Dictionary<string, GameObject> tree)
-    {
-        Debug.Log("serting tree");
-        m_Tree = tree;
-
-        //m_Tree.ToList().ForEach(item => { item.Value.GetComponent<NodeScript>().Select(); });
-    }
 }
-

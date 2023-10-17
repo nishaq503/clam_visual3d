@@ -39,7 +39,7 @@ namespace Clam
         private GameObject m_CurrentMenu;
 
         private Dictionary<Menu, UnityEvent> m_EventDictionary;
-        private Dictionary<string, GameObject> m_Tree;
+        //private Dictionary<string, GameObject> m_Tree;
 
         private static MenuEventManager m_EventManager;
 
@@ -87,15 +87,15 @@ namespace Clam
             }
         }
 
-        public Dictionary<string, GameObject> GetTree()
-        {
-            return m_Tree;
-        }
+        //public Dictionary<string, GameObject> GetTree()
+        //{
+        //    return m_Tree;
+        //}
 
-        public void SetTree(Dictionary<string, GameObject> tree)
-        {
-            m_Tree = tree;
-        }
+        //public void SetTree(Dictionary<string, GameObject> tree)
+        //{
+        //    m_Tree = tree;
+        //}
 
         void Init()
         {
@@ -291,24 +291,24 @@ namespace Clam
             //}
         }
 
-        public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
-        {
-            string id = nodeData.id.AsString;
-            if (id == null) Debug.Log("id is null");
-            //Debug.Log("id of updated node is " + id);
-            if (m_Tree == null)
-            {
-                Debug.Log("tree is null");
-            }
-            if (GetTree().TryGetValue(id, out var node))
-            {
-                node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
-            }
-            else
-            {
-                Debug.Log("physics upodate key not found - " + id);
-            }
-        }
+        //public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
+        //{
+        //    string id = nodeData.id.AsString;
+        //    if (id == null) Debug.Log("id is null");
+        //    //Debug.Log("id of updated node is " + id);
+        //    if (m_Tree == null)
+        //    {
+        //        Debug.Log("tree is null");
+        //    }
+        //    if (GetTree().TryGetValue(id, out var node))
+        //    {
+        //        node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("physics upodate key not found - " + id);
+        //    }
+        //}
 
         public static void SwitchInputActionMap(string newMapName, PlayerInput input)
         {

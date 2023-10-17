@@ -45,6 +45,35 @@ namespace Clam
             Tree.Set(graph);
         }
 
+        static public void BuildGraphWithinParams()
+        {
+            Dictionary<string, GameObject> graph = new Dictionary<string, GameObject>();
+
+            foreach (var (id, node) in Tree.GetTree())
+            {
+                if (node.GetComponent<Node>().IsSelected())
+                {
+                    if (!node.activeSelf)
+                    {
+                        node.SetActive(true);
+                    }
+                    graph[id] = node;
+                }
+                else
+                {
+                    Destroy(node);
+                    //node.SetActive(false);
+                }
+            }
+
+            Debug.Log("building graph with size" + graph.Count);
+            //var graph = Tree.GetTree().Where(
+            //    kvp => kvp.Value.activeSelf && kvp.Value.GetComponent<Node>().IsSelected())
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); 
+
+            Tree.Set(graph);
+        }
+
 
         private static Cakes Instance
         {
@@ -132,10 +161,6 @@ namespace Clam
             if (initResult == FFIError.Ok)
             {
                 m_Initialized = true;
-
-                MenuEventManager.instance.SetTree(Cakes.Tree.GetTree());
-                //MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().Init();
-                MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().SetTree(Cakes.Tree.GetTree());
             }
             else
             {
@@ -147,33 +172,8 @@ namespace Clam
         void OnApplicationQuit()
         {
             Debug.Log("Application ending after " + Time.time + " seconds");
-            //m_Tree = new Dictionary<string, GameObject>();
-            //m_SelectedNode = null;
-            //if (m_InitResult == FFIError.Ok)
-            //{
-            //    Clam.FFI.NativeMethods.ShutdownClam();
-            //}
+            
         }
-
-
-        //// Explicit static constructor to tell C# compiler
-        //// not to mark type as beforefieldinit
-        //static Cakes()
-        //{
-        //}
-
-        //private Cakes()
-        //{
-        //    m_Tree = new Dictionary<string, GameObject>();
-        //}
-
-        //public static Cakes Instance
-        //{
-        //    get
-        //    {
-        //        return instance;
-        //    }
-        //}
     }
 }
 

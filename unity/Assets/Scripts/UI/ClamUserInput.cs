@@ -173,9 +173,9 @@ namespace Clam
                     //var leftChild = Cakes.Tree.GetOrAdd(selectedNode.GetComponent<Node>().GetLeftChildID());
                     //var rightChild = Cakes.Tree.GetOrAdd(selectedNode.GetComponent<Node>().GetRightChildID());
 
-                    //bool hasLeft = MenuEventManager.instance.GetTree().TryGetValue(lid, out var leftChild);
+                    bool hasLeft = Cakes.Tree.GetTree().TryGetValue(lid, out leftChild);
 
-                    //bool hasRight = MenuEventManager.instance.GetTree().TryGetValue(rid, out var rightChild);
+                    bool hasRight = Cakes.Tree.GetTree().TryGetValue(rid, out rightChild);
                     //if (hasLeft && hasRight)
                     {
                         // should i handle case of only one being active?

@@ -78,7 +78,7 @@ public class GraphBuildMenu
             return;
         }
 
-        Cakes.BuildGraphWithSelected();
+        Cakes.BuildGraphWithinParams();
 
         MenuEventManager.SwitchState(Menu.DestroyGraph);
 
