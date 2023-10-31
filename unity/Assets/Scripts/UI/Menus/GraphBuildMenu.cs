@@ -81,6 +81,7 @@ public class GraphBuildMenu
         Cakes.BuildGraphWithinParams();
 
         MenuEventManager.SwitchState(Menu.DestroyGraph);
+        MenuEventManager.SwitchState(Menu.DestroyTree);
 
         //List<NodeDataUnity> nodes = new List<NodeDataUnity>();
         //int numSelected = 0;
@@ -187,6 +188,8 @@ public class GraphBuildMenu
         //{
         //    value.SetActive(false);
         //}
+        Debug.Log("is this running hello?00");
+        MenuEventManager.SwitchState(Menu.DestroyTree);
         MenuEventManager.SwitchState(Menu.DestroyGraph);
     }
 

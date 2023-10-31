@@ -2,8 +2,10 @@ using Clam;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class GraphBuilder : MonoBehaviour
@@ -30,9 +32,21 @@ public class GraphBuilder : MonoBehaviour
         //GetComponent<MeshFilter>().mesh = lineMesh;
 
         Debug.Log("physics is running start val " + m_IsPhysicsRunning);
+        MenuEventManager.StartListening(Menu.DestroyGraph, DestroyGraph);
+    }
+    void DestroyGraph()
+    {
+        GetComponent<MeshFilter>().mesh = new Mesh();
+        //m_Vertices = null;
+        //m_Vertices = new Vector3[0];
+        //m_Indices = new int[0];
+
+        //mesh.vertices = m_Vertices;
+        ////mesh.triangles = m_Indices;
+        //GetComponent<MeshFilter>().mesh.SetIndices(m_Indices, MeshTopology.Lines, 0);
+        //mesh.RecalculateBounds();
 
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -47,6 +61,7 @@ public class GraphBuilder : MonoBehaviour
             if (Clam.FFI.NativeMethods.PhysicsUpdateAsync(PositionUpdater) == FFIError.PhysicsFinished)
             {
                 m_IsPhysicsRunning = false;
+                MenuEventManager.instance.m_IsPhysicsRunning = false;
                 print("physics finished");
             }
         }
@@ -83,6 +98,9 @@ public class GraphBuilder : MonoBehaviour
         //Clam.FFI.NativeMethods.RunForceDirectedSim(nodes, edgeScalar, numIters, EdgeDrawer);
 
         m_IsPhysicsRunning = true;
+        // terrible redesign later*********************************************************
+        MenuEventManager.instance.m_IsPhysicsRunning = true;
+
 
         Debug.Log("physics is runninginit val " + m_IsPhysicsRunning);
 
@@ -138,25 +156,37 @@ public class GraphBuilder : MonoBehaviour
 
     public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
     {
-        
+
         //Debug.Log("graph builder edge drawer");
+        string msg = nodeData.message.AsString;
+        var values = msg.Split(' ').ToList();
+        string otherID = values[1];
+        bool isDetected = values[0][0] == '1';
+        //Debug.Log("val 0 " + vals[0]);
+        //Debug.Log("val 1 " + vals[1]);
 
         if (Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out var node))
         {
-            if (Cakes.Tree.GetTree().TryGetValue(nodeData.message.AsString, out var other))
+            if (Cakes.Tree.GetTree().TryGetValue(otherID, out var other))
             {
-                var id1 = node.GetComponent<Node>().IndexBufferID;
-                var id2 = other.GetComponent<Node>().IndexBufferID;
-                m_Indices[m_IndexCounter++] = id1;
-                m_Indices[m_IndexCounter++] = id2;
-                //m_Vertices[id1] = node.ge;
-                //m_Vertices[id2] = nodeData.pos.AsVector3;
-                if (m_IndexCounter == m_Indices.Length)
+                Debug.Log("other id valis");
+                if (isDetected)
                 {
-                    //m_InitializedIndices = true;
-                    GetComponent<MeshFilter>().mesh.SetIndices(m_Indices, MeshTopology.Lines, 0);
-                    //m_Indices = null;
-                    Debug.Log("set indices in edge drawer");
+                    Debug.Log("is detected is true");
+
+                    var id1 = node.GetComponent<Node>().IndexBufferID;
+                    var id2 = other.GetComponent<Node>().IndexBufferID;
+                    m_Indices[m_IndexCounter++] = id1;
+                    m_Indices[m_IndexCounter++] = id2;
+                    //m_Vertices[id1] = node.ge;
+                    //m_Vertices[id2] = nodeData.pos.AsVector3;
+                    if (m_IndexCounter == m_Indices.Length)
+                    {
+                        //m_InitializedIndices = true;
+                        GetComponent<MeshFilter>().mesh.SetIndices(m_Indices, MeshTopology.Lines, 0);
+                        //m_Indices = null;
+                        Debug.Log("set indices in edge drawer");
+                    }
                 }
             }
         }

@@ -19,6 +19,7 @@ public enum Menu
     ResumePlay,
     IncludeHidden,
     DestroyGraph,
+    DestroyTree,
     WorldInput,
     MenuInput
 }
@@ -111,7 +112,7 @@ namespace Clam
                 StartListening(Menu.Unlock, UnLockUserInput);
                 StartListening(Menu.Pause, Pause);
                 StartListening(Menu.IncludeHidden, IncludeHiddenInSelection);
-                StartListening(Menu.DestroyGraph, DestroyGraph);
+                StartListening(Menu.DestroyTree, DestroyTree);
                 //m_CurrentMenu = Instantiate(m_InitalMenu);
 
             }
@@ -134,7 +135,7 @@ namespace Clam
 #endif
         }
 
-        void DestroyGraph()
+        void DestroyTree()
         {
             if (m_IsPhysicsRunning)
             {
@@ -145,7 +146,7 @@ namespace Clam
             //{
             //    node.SetActive(false);
             //}
-
+            
             foreach (var spring in GameObject.FindGameObjectsWithTag("Spring"))
             {
                 Destroy(spring);
