@@ -30,6 +30,9 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "tree_height", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern int tree_height(IntPtr handle);
 
+            [DllImport(__DllName, EntryPoint = "color_clusters_by_label", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError color_clusters_by_label(IntPtr ptr, NodeVisitor callback);
+
             // ------------------------------------- Cluster Helpers ------------------------------------- 
 
             //[DllImport(__DllName, EntryPoint = "get_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]

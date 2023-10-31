@@ -61,4 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f5d911d1de9df48bc49df0718d2f5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ListEntryTemplate: {fileID: 9197481963319205126, guid: 89b2229bea608ab4cb5557c4a0ebd7ba, type: 3}
+  m_SafeInputFieldTemplate: {fileID: 0}
+  m_GraphBuilder: {fileID: 9197481963319205126, guid: 39c760fa5a7a79642a49a9eb47c04a35, type: 3}
+  m_TreeSettings: {fileID: 9197481963319205126, guid: 276436576c226f44c86081facafe8b1b, type: 3}

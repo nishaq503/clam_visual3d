@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="GraphBuildMenu">
+        <ui:VisualElement name="HideButtons" style="flex-direction: row; align-items: center; justify-content: center;">
+            <ui:Button text="Hide Selected" display-tooltip-when-elided="true" name="HideSelected" focusable="false" style="width: 45%;" />
+            <ui:Button text="Hide Others" display-tooltip-when-elided="true" name="HideOthers" focusable="false" style="width: 45%;" />
+        </ui:VisualElement>
+        <ui:Toggle label="Include Hidden" focusable="false" name="ToggleHidden" />
+        <ui:VisualElement name="EdgeScalerContainer" style="flex-direction: row;">
+            <ui:Label text="Edge Scale" display-tooltip-when-elided="true" name="EdgeScalerLabel" style="width: 35%;" />
+            <ui:Slider picking-mode="Ignore" value="100" high-value="100" name="EdgeScalar" focusable="false" style="width: 55%;" />
+        </ui:VisualElement>
+        <ui:Button text="Create Graph" display-tooltip-when-elided="true" name="CreateGraphButton" focusable="false" />
+        <ui:Button text="Destroy Graph" display-tooltip-when-elided="true" name="DestroyGraph" />
+    </ui:VisualElement>
+</ui:UXML>

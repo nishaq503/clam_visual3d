@@ -117,6 +117,7 @@ namespace Clam
             {
                 //instance = this as Cakes;
                 instance = FindObjectOfType<Cakes>();
+                InitTree();
                 //if (instance.GetComponent<Tree>() == null)
                 //{
                 //    Debug.LogWarning("tree not added yet in instance");

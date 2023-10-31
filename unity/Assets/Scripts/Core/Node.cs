@@ -51,7 +51,7 @@ namespace Clam
         // Start is called before the first frame update
         void Start()
         {
-            m_ActualColor = new Color(153.0f / 255.0f, 50.0f / 255.0f, 204.0f / 255.0f);
+            //m_ActualColor = new Color(255.0f,255.0f,255.0f);
             m_IndexBufferID = -1;
         }
         //public void OnClick()
@@ -150,6 +150,7 @@ namespace Clam
         public void SetActualColor(Color color)
         {
             m_ActualColor = color;
+            SetColor(color);
         }
 
         public void SetID(string id)

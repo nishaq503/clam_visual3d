@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -28,6 +29,7 @@ namespace Clam
 
         public IntTextField(string name, UIDocument document, int minValue, int maxValue, Func<bool> callback)
         {
+            
             m_MinValueThreshold = minValue;
             m_MaxValueThreshold = maxValue;
 
@@ -61,38 +63,38 @@ namespace Clam
 
 
 
-        public IntTextField(string name, VisualElement parent, int minValue, int maxValue, Func<bool> callback)
-        {
-            m_MinValueThreshold = minValue;
-            m_MaxValueThreshold = maxValue;
+        //public IntTextField(string name, VisualElement parent, int minValue, int maxValue, Func<bool> callback)
+        //{
+        //    m_MinValueThreshold = minValue;
+        //    m_MaxValueThreshold = maxValue;
 
-            m_Callback = callback;
+        //    m_Callback = callback;
 
-            var template = Resources.Load<VisualTreeAsset>("ui/SafeInputFieldTemplate");
+        //    var template = Resources.Load<VisualTreeAsset>("ui/SafeInputFieldTemplate");
 
-            var instance = template.Instantiate();
-            parent.Add(instance);
-            m_Label = instance.Q<Label>("DataLabel");
-            m_MinField = instance.Q<TextField>("MinField");
-            m_MaxField = instance.Q<TextField>("MaxField");
+        //    var instance = template.Instantiate();
+        //    parent.Add(instance);
+        //    m_Label = instance.Q<Label>("DataLabel");
+        //    m_MinField = instance.Q<TextField>("MinField");
+        //    m_MaxField = instance.Q<TextField>("MaxField");
 
-            m_Label.text = name;
+        //    m_Label.text = name;
 
-            m_MinField.value = minValue.ToString();
-            m_MaxField.value = maxValue.ToString();
-            m_Label.focusable = false;
-            m_MinField.focusable = false;
-            m_MaxField.focusable = false;
+        //    m_MinField.value = minValue.ToString();
+        //    m_MaxField.value = maxValue.ToString();
+        //    m_Label.focusable = false;
+        //    m_MinField.focusable = false;
+        //    m_MaxField.focusable = false;
 
 
-            m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
-            m_MinField.RegisterValueChangedCallback(MinFieldCallback);
+        //    m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
+        //    m_MinField.RegisterValueChangedCallback(MinFieldCallback);
 
-            m_MinField.tripleClickSelectsLine = true;
-            m_MinField.doubleClickSelectsWord = true;
-            m_MaxField.doubleClickSelectsWord = true;
-            m_MaxField.doubleClickSelectsWord = true;
-        }
+        //    m_MinField.tripleClickSelectsLine = true;
+        //    m_MinField.doubleClickSelectsWord = true;
+        //    m_MaxField.doubleClickSelectsWord = true;
+        //    m_MaxField.doubleClickSelectsWord = true;
+        //}
 
         bool ValidateMinNumericInput(ChangeEvent<string> changeEvent)
         {

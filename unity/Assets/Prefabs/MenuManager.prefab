@@ -108,4 +108,6 @@ MonoBehaviour:
   m_CreateNewTreeMenuPrefab: {fileID: 282500079766783759, guid: 90e0c39662228a9419d5852a9b986d6e, type: 3}
   m_PauseMenu: {fileID: 1382387957798709202, guid: ee3333960529631498404ba86706e6c6, type: 3}
   m_InitalMenu: {fileID: 1033999518466829612, guid: c12b4900408295a458adac3e923d6ac2, type: 3}
+  m_ClusterSideMenu: {fileID: 5464502129025283835, guid: ead783c851f275043a91c635c430b0fc, type: 3}
   m_TreeData: {fileID: 11400000, guid: 7436c985af14f604f858fde450087cdb, type: 2}
+  m_IsPhysicsRunning: 0

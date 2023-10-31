@@ -23,7 +23,7 @@ public class MenuSelector
 
         m_DropdownField.choices = new List<string>()
         {
-            "Cluster Details", "Graph Builder"
+            "Cluster Details", "Graph Builder", "Tree Settings"
         };
 
         m_DropdownField.RegisterValueChangedCallback(Callback);
@@ -33,7 +33,7 @@ public class MenuSelector
 
     void Callback(ChangeEvent<string> evt)
     {
-        var dropdowntField = evt.target as DropdownField;
+        //var dropdowntField = evt.target as DropdownField;
 
         if (evt.newValue == m_DropdownField.choices[0])
         {

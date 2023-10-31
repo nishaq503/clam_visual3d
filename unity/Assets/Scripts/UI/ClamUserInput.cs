@@ -111,13 +111,13 @@ namespace Clam
                         if (!selectedNode.GetComponent<Node>().Selected)
                         {
                             //m_ClusterUI.GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
-                            MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().DisplayClusterInfo(wrapper.Data);
+                            MenuEventManager.instance.GetCurrentMenu().GetComponent<SideMenu>().DisplayClusterInfo(wrapper.Data);
                             //Debug.Log(wrapper.Data.id.AsString);
                         }
                         else
                         {
                             //m_ClusterUI.GetComponent<ClusterUI_View>().ClearClusterInfo();
-                            MenuEventManager.instance.GetCurrentMenu().GetComponent<ClusterUI_View>().ClearClusterInfo();
+                            MenuEventManager.instance.GetCurrentMenu().GetComponent<SideMenu>().ClearClusterInfo();
 
                         }
                         selectedNode.GetComponent<Node>().ToggleSelect();

@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="TreeMenu">
+        <ui:VisualElement name="Depth" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
+            <ui:VisualElement name="DepthSlider" style="flex-direction: row; border-bottom-width: 0; border-left-color: rgb(207, 196, 196); border-right-color: rgb(207, 196, 196); border-top-color: rgb(207, 196, 196); border-bottom-color: rgb(207, 196, 196); padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; border-left-width: 0; border-right-width: 0; border-top-width: 0;">
+                <ui:Label text="Depth" display-tooltip-when-elided="true" name="DepthLabel" style="justify-content: center; align-items: center; width: 20%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: middle-center;" />
+                <ui:MinMaxSlider picking-mode="Ignore" min-value="0" max-value="100" low-limit="0" high-limit="100" name="DepthSlider" style="flex-direction: row-reverse; width: 75%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="DepthText" style="flex-direction: row; align-items: center; justify-content: center;">
+                <ui:TextField name="DepthMin" is-delayed="true" style="width: 45%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+                <ui:TextField name="DepthMax" is-delayed="true" style="width: 45%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ColorElement">
+            <ui:Label text="Color" display-tooltip-when-elided="true" name="Color" />
+            <ui:RadioButtonGroup value="0" choices="Label, Component" name="ColorOptions" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

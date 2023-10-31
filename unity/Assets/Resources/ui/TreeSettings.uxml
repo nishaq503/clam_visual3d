@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="TreeSettings" style="flex-direction: row; justify-content: flex-start; align-items: stretch; -unity-text-align: middle-center;">
+        <ui:Label text="Depth" display-tooltip-when-elided="true" style="align-items: center; justify-content: center;" />
+        <ui:TextField picking-mode="Ignore" text="0&#x9;&#x9;" style="width: 15%; height: 100%; -unity-text-align: upper-left; white-space: nowrap; align-items: center; justify-content: center;" />
+        <ui:SliderInt picking-mode="Ignore" value="42" high-value="100" />
+    </ui:VisualElement>
+</ui:UXML>

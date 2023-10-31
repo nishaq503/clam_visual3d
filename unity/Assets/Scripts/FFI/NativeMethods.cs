@@ -19,7 +19,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231024144816";
+	public const string __DllName = "clam_ffi_20231031125246";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -70,6 +70,11 @@ namespace Clam
             public static int TreeHeight()
             {
                 return tree_height(m_Handle);
+            }
+
+            public static FFIError ColorClustersByLabel(NodeVisitor callback)
+            {
+                return color_clusters_by_label(m_Handle, callback);
             }
 
             // ------------------------------------- Cluster Helpers ------------------------------------- 

@@ -67,6 +67,7 @@ namespace Clam
                 Debug.Log("ERROR " + e);
             }
             Clam.FFI.NativeMethods.DrawHeirarchy(PositionUpdater);
+            Clam.FFI.NativeMethods.ColorClustersByLabel(ColorFiller);
 
             Clam.FFI.NativeMethods.ForEachDFT(EdgeDrawer);
 
@@ -227,12 +228,28 @@ namespace Clam
             bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
             if (hasValue)
             {
-                node.GetComponent<Node>().SetColor(nodeData.color.AsColor);
+                //node.GetComponent<Node>().SetColor(nodeData.color.AsColor);
                 node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
             }
             else
             {
                 Debug.Log("reingoldify key not found - " + nodeData.id);
+            }
+        }
+
+        unsafe void ColorFiller(ref Clam.FFI.ClusterData nodeData)
+        {
+            GameObject node;
+
+            bool hasValue = m_Tree.TryGetValue(nodeData.id.AsString, out node);
+            if (hasValue)
+            {
+                Debug.Log("setting color to" + nodeData.color.AsVector3.ToString());
+                node.GetComponent<Node>().SetActualColor(nodeData.color.AsColor);
+            }
+            else
+            {
+                Debug.Log("cluster key not found - color filler - " + nodeData.id);
             }
         }
     }

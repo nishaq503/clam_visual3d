@@ -1,4 +1,5 @@
 using Clam;
+using Clam.FFI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -18,6 +20,7 @@ public class ClusterUI_View : MonoBehaviour
     //private Dictionary<string, GameObject> m_Tree;
     Label m_ClusterInfo;
     Label m_ClusterInfoLabel;
+    RadioButtonGroup m_ColorOptions;
     MenuSelector m_MenuSelector;
 
     //SafeTextField m_DepthField;
@@ -25,6 +28,9 @@ public class ClusterUI_View : MonoBehaviour
 
     Dictionary<string, IntTextField> m_IntInputFields;
     //Dictionary<string, DoubleTextField> m_DoubleInputFields;
+
+    public VisualTreeAsset m_GraphBuilder;
+    public VisualTreeAsset m_TreeSettings;
 
 
     //public float radius;
@@ -39,6 +45,8 @@ public class ClusterUI_View : MonoBehaviour
 
         m_ClusterInfo = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfo");
         m_ClusterInfoLabel = m_UIDocument.rootVisualElement.Q<Label>("ClusterInfoLabel");
+        m_ColorOptions = m_UIDocument.rootVisualElement.Q<RadioButtonGroup>("ColorOptions");
+        m_ColorOptions.RegisterValueChangedCallback(ColorChangeCallback);
 
         InitClusterInfoLabel();
         var rightField = m_UIDocument.rootVisualElement.Q<VisualElement>("Right");
@@ -99,7 +107,33 @@ public class ClusterUI_View : MonoBehaviour
         //m_CardinalityField = new SafeTextField("Cardinality", m_UIDocument, 0, ClamFFI.Cardinality());
     }
 
+    void ColorChangeCallback(ChangeEvent<int> changeEvent)
+    {
+        if (changeEvent != null)
+        {
+            if (changeEvent.newValue == 0)
+            {
+                NativeMethods.ColorClustersByLabel(ColorFiller);
+            }
+        }
+    }
 
+    unsafe void ColorFiller(ref Clam.FFI.ClusterData nodeData)
+    {
+        GameObject node;
+
+        bool hasValue = Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out node);
+        if (hasValue)
+        {
+            Debug.Log("setting color to" + nodeData.color.AsVector3.ToString());
+            node.GetComponent<Node>().Deselect();
+            node.GetComponent<Node>().SetActualColor(nodeData.color.AsColor);
+        }
+        else
+        {
+            Debug.Log("cluster key not found - color filler - " + nodeData.id);
+        }
+    }
 
     bool InputFieldChangeCallback()
     {

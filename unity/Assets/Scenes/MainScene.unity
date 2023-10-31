@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cf49bd5d95fa240b5ecb95d4055ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Tree: {fileID: 1249286736}
 --- !u!4 &791094
 Transform:
   m_ObjectHideFlags: 0
@@ -263,7 +262,11 @@ PrefabInstance:
     - target: {fileID: 1773597683, guid: 9bef4f42a298bae478320457626b1a4f, type: 3}
       propertyPath: m_InitalMenu
       value: 
-      objectReference: {fileID: 6051935874089535639, guid: f045b42977113a84e90da9ecbe4f46ab, type: 3}
+      objectReference: {fileID: 5464502129025283835, guid: ead783c851f275043a91c635c430b0fc, type: 3}
+    - target: {fileID: 1773597683, guid: 9bef4f42a298bae478320457626b1a4f, type: 3}
+      propertyPath: m_ClusterSideMenu
+      value: 
+      objectReference: {fileID: 5464502129025283835, guid: ead783c851f275043a91c635c430b0fc, type: 3}
     - target: {fileID: 8812543147707653320, guid: 9bef4f42a298bae478320457626b1a4f, type: 3}
       propertyPath: m_Name
       value: MenuManager
@@ -678,11 +681,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22115f68b86505b4bb456400127a8509, type: 3}
---- !u!1 &1249286736 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 638518818164506301, guid: 22115f68b86505b4bb456400127a8509, type: 3}
-  m_PrefabInstance: {fileID: 1249286735}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1686745305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}

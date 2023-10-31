@@ -148,39 +148,39 @@ public class GraphBuildMenu
 
 
     }
-    public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
-    {
-        string id = nodeData.id.AsString;
-        //Debug.Log("id of updated node is " + id);
-        if (Cakes.Tree.GetTree().TryGetValue(id, out var node))
-        {
-            node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
-        }
-        else
-        {
-            Debug.Log("physics upodate key not found - " + id);
-        }
-    }
+    //public void UpdatePhysicsSim(ref Clam.FFI.ClusterData nodeData)
+    //{
+    //    string id = nodeData.id.AsString;
+    //    //Debug.Log("id of updated node is " + id);
+    //    if (Cakes.Tree.GetTree().TryGetValue(id, out var node))
+    //    {
+    //        node.GetComponent<Node>().SetPosition(nodeData.pos.AsVector3);
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("physics upodate key not found - " + id);
+    //    }
+    //}
 
-    public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
-    {
-        if (Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out var node))
-        {
-            if (Cakes.Tree.GetTree().TryGetValue(nodeData.message.AsString, out var other))
-            {
-                //Debug.Log("message from rust " + nodeData.message.AsString);
-                //nodeData.SetMessage("hello world");
-                //Clam.FFI.NativeMethods.SetMessage("hello world", out nodeData);
-                //m_TempUI.AddEdge(node, other, 0);
-                //Object springPrefab = Resources.Load("Spring");
-                //var spring = SpringScript.CreateInstance(node, other, SpringScript.SpringType.Similarity);
-                var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
+    //public void EdgeDrawer(ref Clam.FFI.ClusterData nodeData)
+    //{
+    //    if (Cakes.Tree.GetTree().TryGetValue(nodeData.id.AsString, out var node))
+    //    {
+    //        if (Cakes.Tree.GetTree().TryGetValue(nodeData.message.AsString, out var other))
+    //        {
+    //            //Debug.Log("message from rust " + nodeData.message.AsString);
+    //            //nodeData.SetMessage("hello world");
+    //            //Clam.FFI.NativeMethods.SetMessage("hello world", out nodeData);
+    //            //m_TempUI.AddEdge(node, other, 0);
+    //            //Object springPrefab = Resources.Load("Spring");
+    //            //var spring = SpringScript.CreateInstance(node, other, SpringScript.SpringType.Similarity);
+    //            var spring = MenuEventManager.instance.MyInstantiate(m_SpringPrefab);
 
-                spring.GetComponent<Edge>().InitLineRenderer(node, other, Edge.SpringType.Similarity);
-            }
-        }
+    //            spring.GetComponent<Edge>().InitLineRenderer(node, other, Edge.SpringType.Similarity);
+    //        }
+    //    }
 
-    }
+    //}
 
     public void DestroyGraphCallback(ClickEvent evt)
     {

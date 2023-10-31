@@ -33,6 +33,7 @@ namespace Clam
         public GameObject m_CreateNewTreeMenuPrefab;
         public GameObject m_PauseMenu;
         public GameObject m_InitalMenu;
+        public GameObject m_ClusterSideMenu;
         //public GameObject m_GraphBuilderPrefab;
 
         public TreeStartupData m_TreeData;
@@ -49,10 +50,7 @@ namespace Clam
         public void Start()
         {
             //SwitchToMainMenu();
-            //m_CurrentMenu = Instantiate(m_InitalMenu);
             m_CurrentMenu = Instantiate(m_InitalMenu);
-            
-
         }
 
         public GameObject MyInstantiate(GameObject obj)
@@ -220,14 +218,14 @@ namespace Clam
 
         private void IncludeHiddenInSelection()
         {
-            m_CurrentMenu.GetComponent<ClusterUI_View>().IncludeHiddenInSelection();
+            //m_CurrentMenu.GetComponent<ClusterMenu>().IncludeHiddenInSelection();
         }
 
         private void LockUserInput()
         {
             //Debug.Log("locking user input234");
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            m_CurrentMenu.GetComponent<ClusterUI_View>().Lock();
+            m_CurrentMenu.GetComponent<SideMenu>().Lock();
             UnityEngine.Cursor.visible = false;
             //UnityEngine.Cursor.visible = !UnityEngine.Cursor.visible;
         }
@@ -237,7 +235,7 @@ namespace Clam
             //Debug.Log("unlocking user input234");
 
             UnityEngine.Cursor.lockState = CursorLockMode.None;
-            m_CurrentMenu.GetComponent<ClusterUI_View>().UnLock();
+            m_CurrentMenu.GetComponent<SideMenu>().UnLock();
             //UnityEngine.Cursor.visible = true;
             UnityEngine.Cursor.visible = true;
 
@@ -279,6 +277,8 @@ namespace Clam
                 thisEvent.Invoke();
             }
         }
+
+        
 
         public void Update()
         {
