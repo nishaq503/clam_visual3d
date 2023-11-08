@@ -14,7 +14,7 @@ namespace Clam
             // ------------------------------------- Startup/Shutdown -------------------------------------
 
             [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality);
+            private static extern FFIError init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality, DistanceMetric distanceMetric);
 
             [DllImport(__DllName, EntryPoint = "shutdown_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_clam(out IntPtr ptr);
@@ -63,7 +63,7 @@ namespace Clam
             private static extern FFIError draw_heirarchy(IntPtr ptr, NodeVisitor callback);
 
             [DllImport(__DllName, EntryPoint = "draw_heirarchy_offset_from", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos, NodeVisitor callback);
+            private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos,int currentDepth, int maxDepth, NodeVisitor callback);
 
             // ------------------------------------- Graph Physics -------------------------------------
             [System.Security.SecurityCritical]

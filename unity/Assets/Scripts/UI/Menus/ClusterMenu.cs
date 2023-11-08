@@ -132,17 +132,13 @@ public class ClusterMenu
 
     public void Lock()
     {
-
         m_IntInputFields.ToList().ForEach(item => item.Value.Lock());
         var graphMenu = m_UIDocument.rootVisualElement.Q<VisualElement>("GraphMenuInstance");
         if (graphMenu != null)
         {
             graphMenu.Children().ToList().ForEach(c => c.focusable = false);
         }
-
     }
-
-
 
     public void UnLock()
     {

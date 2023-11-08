@@ -8,8 +8,12 @@ public class Graph : MonoBehaviour
 {
 
     //private Dictionary<string, GameObject> m_Graph;
-    private List<GameObject> m_Components;
-    private List<(string, string)> m_ComponentEdges;
+    //private List<GameObject> m_Components;
+    //private List<(string, string)> m_ComponentEdges;
+
+    //private List<string> m_Clusters;
+    private List<GraphComponent> m_Components;
+
 
 
     // Start is called before the first frame update
@@ -31,30 +35,30 @@ public class Graph : MonoBehaviour
 
     void ComponentLoop()
     {
-        m_ComponentEdges = new List<(string, string)>();
-        for (int i = 0; i < m_Components.Count; i++)
-        {
-            for (int j = i + 1; j < m_Components.Count; j++)
-            {
-                var rep1 = m_Components[i].GetComponent<GraphComponent>().GetRepresentatives();
-                var rep2 = m_Components[j].GetComponent<GraphComponent>().GetRepresentatives();
+        //m_ComponentEdges = new List<(string, string)>();
+        //for (int i = 0; i < m_Components.Count; i++)
+        //{
+        //    for (int j = i + 1; j < m_Components.Count; j++)
+        //    {
+        //        var rep1 = m_Components[i].GetComponent<GraphComponent>().GetRepresentatives();
+        //        var rep2 = m_Components[j].GetComponent<GraphComponent>().GetRepresentatives();
 
-                InitSprings(rep1, rep2);
-            }
-        }
+        //        InitSprings(rep1, rep2);
+        //    }
+        //}
     }
 
     private void InitSprings(List<string> rep1, List<string> rep2)
     {
-        var len = Math.Max(rep1.Count, rep2.Count);
+        //var len = Math.Max(rep1.Count, rep2.Count);
 
-        for (int i = 0; i < len; i++)
-        {
-            for (int j = i + 1; j < len; j++)
-            {
-                m_ComponentEdges.Add((rep1[i], rep2[j]));
-            }
-        }
+        //for (int i = 0; i < len; i++)
+        //{
+        //    for (int j = i + 1; j < len; j++)
+        //    {
+        //        m_ComponentEdges.Add((rep1[i], rep2[j]));
+        //    }
+        //}
     }
 
     private void FixedUpdate()
@@ -64,9 +68,9 @@ public class Graph : MonoBehaviour
         // foreach spring between 3 chosen clusters in each component
         // spring.applyforce()
 
-        foreach ((var node1, var node2) in m_ComponentEdges)
-        {
+        //foreach ((var node1, var node2) in m_ComponentEdges)
+        //{
 
-        }
+        //}
     }
 }

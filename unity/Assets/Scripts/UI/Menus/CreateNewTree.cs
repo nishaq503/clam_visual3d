@@ -13,7 +13,8 @@ public class CreateNewTree : MonoBehaviour
 
     TextField m_DatasetField;
     TextField m_CardinalityField;
-    DropdownField m_DropdownField;
+    DropdownField m_DatasetDropdownField;
+    DropdownField m_DistanceMetricDropdownField;
 
     Button m_CreateButton;
     Button m_BackButton;
@@ -33,18 +34,29 @@ public class CreateNewTree : MonoBehaviour
         m_BackButton.RegisterCallback<ClickEvent>(BackButtonCallback);
         m_CreateButton.RegisterCallback<ClickEvent>(CreateButtonCallback);
 
-        m_DropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("DatasetDropdown");
+        m_DatasetDropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("DatasetDropdown");
+        m_DistanceMetricDropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("DistanceMetricDropdown");
 
         var fileNames = GetFilesInDirectory(m_DataDirectory);
 
-        m_DropdownField.choices = fileNames.ToList();
+        m_DatasetDropdownField.choices = fileNames.ToList();
 
-        m_DropdownField.RegisterValueChangedCallback(evt =>
+        m_DatasetDropdownField.RegisterValueChangedCallback(evt =>
         {
             m_DatasetField.value = evt.newValue;
         });
 
-
+        m_DistanceMetricDropdownField.choices = new List<string> {
+        "Euclidean",
+        "EuclideanSQ",
+        "Manhattan",
+        "L3Norm",
+        "L4Norm",
+        "Chebyshev",
+        "Cosine",
+        "Canberra" };
+        //"NeedlemanWunsch",
+        //"Levenshtein" };
     }
 
     void DropdownCallback(EventCallback<ChangeEvent<string>> evt)
@@ -63,7 +75,7 @@ public class CreateNewTree : MonoBehaviour
 
         string dataName = m_DatasetField.text;
 
-        if (uint.TryParse(m_CardinalityField.text ,out uint cardinality) && validNames.Contains(dataName))
+        if (uint.TryParse(m_CardinalityField.text, out uint cardinality) && validNames.Contains(dataName))
         {
             Clam.MenuEventManager.SwitchState(Menu.StartClam);
         }
@@ -72,7 +84,7 @@ public class CreateNewTree : MonoBehaviour
             ErrorDialoguePopup();
         }
 
-      
+
     }
 
     void ErrorDialoguePopup()
@@ -135,7 +147,7 @@ public class CreateNewTree : MonoBehaviour
         return String.Empty;
     }
 
-    
+
     // Update is called once per frame
     void Update()
     {

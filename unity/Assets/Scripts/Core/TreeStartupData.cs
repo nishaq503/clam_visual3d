@@ -1,3 +1,4 @@
+using Clam;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class TreeStartupData : ScriptableObject
 {
 
     public string dataName;
+    public DistanceMetric distanceMetric;
     public uint cardinality;
     // Start is called before the first frame update
     void Start()

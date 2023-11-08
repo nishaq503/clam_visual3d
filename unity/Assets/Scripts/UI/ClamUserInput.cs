@@ -31,6 +31,7 @@ namespace Clam
 
         public void OnChangeMapToPlayer(InputValue value)
         {
+            //Debug.Log("cuserinput changemap to player");
             BlurFocus();
 
             m_PlayerInput.SwitchCurrentActionMap("Player");

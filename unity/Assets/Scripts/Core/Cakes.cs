@@ -93,7 +93,7 @@ namespace Clam
 
 
                 }
-                if (instance.GetComponent<Tree>() == null)
+                if (instance.GetComponent<TreeCache>() == null)
                 {
                     Debug.LogWarning("tree not added yet in instance");
                     InitTree();
@@ -103,11 +103,11 @@ namespace Clam
             }
         }
 
-        public static Tree Tree
+        public static TreeCache Tree
         {
             get
             {
-                return Instance.GetComponent<Tree>();
+                return Instance.GetComponent<TreeCache>();
             }
         }
 
@@ -152,7 +152,7 @@ namespace Clam
 
         private static void InitTree()
         {
-            Tree tree = instance.AddComponent<Tree>();
+            TreeCache tree = instance.AddComponent<TreeCache>();
             m_SpringPrefab = Resources.Load("Spring") as GameObject;
             m_NodePrefab = Resources.Load("Node") as GameObject;
 

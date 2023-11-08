@@ -1,3 +1,4 @@
+using Clam;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,7 @@ public class Edge : MonoBehaviour
         //m_LineRenderer.startWidth = 0.1f;
         //m_LineRenderer.endWidth = 0.1f;
         //m_LineRenderer.useWorldSpace = true;
+        gameObject.name = node1.GetComponent<Node>().GetId() + node2.GetComponent<Node>().GetId();
 
         m_Node1 = node1;
         m_Node2 = node2;
@@ -80,6 +82,7 @@ public class Edge : MonoBehaviour
         if (!m_Node1.activeSelf || !m_Node2.activeSelf)
         {
             this.gameObject.SetActive(false);
+            return;
         }
         List<Vector3> positions = new List<Vector3>() { m_Node1.transform.position, m_Node2.transform.position };
         GetComponent<LineRenderer>().SetPositions(positions.ToArray());

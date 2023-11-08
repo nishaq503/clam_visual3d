@@ -18,6 +18,7 @@ public class SideMenu : MonoBehaviour
 
     ClusterMenu m_ClusterMenu;
     GraphBuildMenu m_GraphBuildMenu;
+    TreeMenu m_TreeMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -43,10 +44,11 @@ public class SideMenu : MonoBehaviour
             }
 
             instance.name = m_DropdownField.choices[i];
-            rightField.Add(instance);
+            rightField.hierarchy.Add(instance);
         }
         m_DropdownField.RegisterValueChangedCallback(Callback);
 
+        m_TreeMenu = new TreeMenu(m_UIDocument);
         m_ClusterMenu = new ClusterMenu(GetComponent<UIDocument>());
         m_GraphBuildMenu = new GraphBuildMenu(GetComponent<UIDocument>(), "GraphBuildMenu");
     }
@@ -86,39 +88,22 @@ public class SideMenu : MonoBehaviour
         }
     }
 
-    public void Lock()
+    public void SetFocusable(bool focusable)
     {
         var rightField = m_UIDocument.rootVisualElement.Q<VisualElement>("Right");
 
         if (rightField != null)
         {
-            rightField.Children().ToList().ForEach(c => c.focusable = true);
+            SetFocusableRecursive(rightField, focusable);
         }
-        m_DropdownField.focusable = false;
-
-        m_ClusterMenu.Lock();
-
     }
 
-
-
-    public void UnLock()
+    void SetFocusableRecursive(VisualElement element, bool focusable)
     {
-        var rightField = m_UIDocument.rootVisualElement.Q<VisualElement>("Right");
-
-        if (rightField != null)
+        element.Children().ToList().ForEach(c =>
         {
-            rightField.Children().ToList().ForEach(c => c.focusable = true);
-        }
-        m_DropdownField.focusable = true;
-        m_ClusterMenu.UnLock();
-
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+            c.focusable = focusable;
+            SetFocusableRecursive(c, focusable);
+        });
     }
 }

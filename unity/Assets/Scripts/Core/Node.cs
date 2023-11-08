@@ -177,7 +177,7 @@ namespace Clam
 
         //public FFI.ClusterData ToNodeData()
         //{
-        //    FFI.ClusterData node = new FFI.ClusterData(m_ID, m_LeftChildID, m_RightChildID, GetPosition(), GetColor());
+        //    FFI.ClusterData node = new Clam.FFI.ClusterData(m_ID, m_LeftChildID, m_RightChildID, GetPosition(), GetColor());
 
         //    return node;
         //}

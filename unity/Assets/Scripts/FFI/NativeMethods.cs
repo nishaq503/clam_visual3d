@@ -19,17 +19,17 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231031125246";
+	public const string __DllName = "clam_ffi_20231108134838";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
 
             // init/shutdown functions for clam
-            public static FFIError InitClam(string dataName, uint cardinality)
+            public static FFIError InitClam(string dataName, uint cardinality, DistanceMetric distanceMetric)
             {
                 byte[] byteName = Encoding.UTF8.GetBytes(dataName);
                 int len = byteName.Length;
-                var e = init_clam(out m_Handle, byteName, len, cardinality);
+                var e = init_clam(out m_Handle, byteName, len, cardinality, distanceMetric);
                 if (e == FFIError.Ok)
                 {
                     m_Initialized = true;
@@ -87,7 +87,7 @@ namespace Clam
                     Debug.Log(result);
                     return null;
                 }
-                var node = Cakes.Tree.GetTree().GetValueOrDefault(data.id.AsString).GetComponent<Node>();
+                var node = Cakes.Tree.GetOrAdd(data.id.AsString).GetComponent<Node>();
                 data.SetPos(node.GetPosition());
                 data.SetColor(node.GetColor());
 
@@ -182,10 +182,10 @@ namespace Clam
                 return draw_heirarchy(m_Handle, callback);
             }
 
-            public static FFIError DrawHeirarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback)
+            public static FFIError DrawHeirarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback, int rootDepth = 0, int currentDepth = 1, int maxDepth = 1)
             {
                 ClusterData nodeData = wrapper.Data;
-                return draw_heirarchy_offset_from(m_Handle, ref nodeData, callback);
+                return draw_heirarchy_offset_from(m_Handle, ref nodeData, currentDepth, maxDepth - rootDepth, callback);
             }
 
             // Graph Physics

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -46,14 +47,14 @@ namespace Clam
             m_Slider.highLimit = m_Slider.maxValue = maxValue;
             m_Slider.lowLimit = m_Slider.minValue = minValue;
 
-
             m_Label.focusable = false;
             m_MinField.focusable = false;
             m_MaxField.focusable = false;
-
+            m_Slider.focusable = false;
 
             m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
             m_MinField.RegisterValueChangedCallback(MinFieldCallback);
+            m_Slider.RegisterValueChangedCallback(SliderCallback);
 
             m_MinField.tripleClickSelectsLine = true;
             m_MinField.doubleClickSelectsWord = true;
@@ -63,38 +64,64 @@ namespace Clam
 
 
 
-        //public IntTextField(string name, VisualElement parent, int minValue, int maxValue, Func<bool> callback)
-        //{
-        //    m_MinValueThreshold = minValue;
-        //    m_MaxValueThreshold = maxValue;
+        public IntTextField(string name, VisualElement parent, int minValue, int maxValue, Func<bool> callback)
+        {
+            var template = Resources.Load<VisualTreeAsset>("ui/SafeInputFieldTemplate");
 
-        //    m_Callback = callback;
+            var instance = template.Instantiate();
+            parent.Add(instance);
+            m_MinValueThreshold = minValue;
+            m_MaxValueThreshold = maxValue;
 
-        //    var template = Resources.Load<VisualTreeAsset>("ui/SafeInputFieldTemplate");
-
-        //    var instance = template.Instantiate();
-        //    parent.Add(instance);
-        //    m_Label = instance.Q<Label>("DataLabel");
-        //    m_MinField = instance.Q<TextField>("MinField");
-        //    m_MaxField = instance.Q<TextField>("MaxField");
-
-        //    m_Label.text = name;
-
-        //    m_MinField.value = minValue.ToString();
-        //    m_MaxField.value = maxValue.ToString();
-        //    m_Label.focusable = false;
-        //    m_MinField.focusable = false;
-        //    m_MaxField.focusable = false;
+            m_Callback = callback;
 
 
-        //    m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
-        //    m_MinField.RegisterValueChangedCallback(MinFieldCallback);
+            //m_Label = document.rootVisualElement.Q<Label>(name + "Label");
+            //m_MinField = document.rootVisualElement.Q<TextField>(name + "Min");
+            //m_MaxField = document.rootVisualElement.Q<TextField>(name + "Max");
+            //m_Slider = document.rootVisualElement.Q<MinMaxSlider>(name + "Slider");
 
-        //    m_MinField.tripleClickSelectsLine = true;
-        //    m_MinField.doubleClickSelectsWord = true;
-        //    m_MaxField.doubleClickSelectsWord = true;
-        //    m_MaxField.doubleClickSelectsWord = true;
-        //}
+            m_MinField.value = minValue.ToString();
+            m_MaxField.value = maxValue.ToString();
+            m_Slider.highLimit = m_Slider.maxValue = maxValue;
+            m_Slider.lowLimit = m_Slider.minValue = minValue;
+
+            m_Label.focusable = false;
+            m_MinField.focusable = false;
+            m_MaxField.focusable = false;
+
+            m_MaxField.RegisterValueChangedCallback(MaxFieldCallback);
+            m_MinField.RegisterValueChangedCallback(MinFieldCallback);
+
+            m_Slider.RegisterValueChangedCallback(SliderCallback);
+
+            m_MinField.tripleClickSelectsLine = true;
+            m_MinField.doubleClickSelectsWord = true;
+            m_MaxField.tripleClickSelectsLine = true;
+            m_MaxField.doubleClickSelectsWord = true;
+        }
+
+        void SliderCallback(ChangeEvent<Vector2> evt)
+        {
+            var slider = evt.target as MinMaxSlider;
+
+            //Vector2 newValue = evt.newValue; // The new value from the event
+            //Vector2 oldValue = evt.previousValue; // The previous value from the event
+
+            //// Round both components based on the sign of the difference
+            ////newValue.x = (newValue.x > oldValue.x) ? Mathf.Ceil(newValue.x) : Mathf.Floor(newValue.x);
+            ////newValue.y = (newValue.y > oldValue.y) ? Mathf.Ceil(newValue.y) : Mathf.Floor(newValue.y);
+
+            ////// Now you have the rounded newValue, you can use it as needed
+            ////newValue = Vector2.Lerp(newValue, newValue, Time.deltaTime * 5.0f);
+            ////slider.value = newValue;
+
+            //m_MinField.value = evt.newValue.x.ToString();
+            //m_MaxField.value = evt.newValue.y.ToString();
+            //slider.value = evt.newValue;
+
+            m_Callback();
+        }
 
         bool ValidateMinNumericInput(ChangeEvent<string> changeEvent)
         {
@@ -144,6 +171,8 @@ namespace Clam
             }
 
         }
+
+
         void MinFieldCallback(ChangeEvent<string> changeEvent)
         {
             var textField = changeEvent.target as TextField;

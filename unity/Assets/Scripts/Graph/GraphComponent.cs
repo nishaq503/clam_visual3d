@@ -8,6 +8,7 @@ using UnityEngine;
 public class GraphComponent : MonoBehaviour
 {
     List<string> m_ClusterIDs;
+    List<Edge> m_Edges;
     Rigidbody m_RigidBody;
     int m_ID;
 
