@@ -19,10 +19,36 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231108134838";
+	public const string __DllName = "clam_ffi_20231108182118";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
+
+            [DllImport(__DllName, EntryPoint = "create_handle_f32_i32_u8", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern void create_handle_f32_i32_u8(out IntPtr ptr, float value1, int value2, sbyte value3);
+            public static void CreateHandleF32_I32_U8(float value1, int value2, sbyte value3)
+            {
+                create_handle_f32_i32_u8(out m_Handle, value1,value2,value3);
+            }
+            [DllImport(__DllName, EntryPoint = "create_handle_u8_f64_i32", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern void create_handle_u8_f64_i32(out IntPtr ptr, sbyte value1, double value2, int value3);
+            public static void CreateHandleU8_F64_I32(sbyte value1, double value2, int value3)
+            {
+                create_handle_u8_f64_i32(out m_Handle, value1,value2,value3);
+            }
+
+            [DllImport(__DllName, EntryPoint = "get_f32_i32_u8_value1", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern float get_f32_i32_u8_value1(IntPtr ptr);
+            public static float GetF32_I32_U8_Value1()
+            {
+                return get_f32_i32_u8_value1(m_Handle);
+            }
+            [DllImport(__DllName, EntryPoint = "get_u8_f64_i32_value1", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern float get_u8_f64_i32_value1(IntPtr ptr);
+            public static float GetU8_F64_I32_Value1()
+            {
+                return get_u8_f64_i32_value1(m_Handle);
+            }
 
             // init/shutdown functions for clam
             public static FFIError InitClam(string dataName, uint cardinality, DistanceMetric distanceMetric)
@@ -198,7 +224,7 @@ namespace Clam
             {
                 init_graph_vertices(m_Handle, edgeCB);
             }
-           
+
             public static FFIError PhysicsUpdateAsync(NodeVisitor cb_fn)
             {
                 return physics_update_async(m_Handle, cb_fn);
