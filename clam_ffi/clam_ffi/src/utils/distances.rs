@@ -1,12 +1,9 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use distances::{self, number::UInt};
-use std::f32::EPSILON;
-
+use distances;
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
-
 pub enum DistanceMetric {
     Euclidean,
     EuclideanSQ,

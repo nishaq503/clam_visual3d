@@ -9,6 +9,7 @@ use crate::{
     },
     CBFnNameSetter, CBFnNodeVisitor,
 };
+use crate::ffi_impl::cleanup::Cleanup;
 
 use super::{cluster_data::ClusterData, cluster_data_wrapper::ClusterDataWrapper};
 
@@ -60,6 +61,26 @@ pub unsafe fn set_names_impl(
     }
 
     return FFIError::NullPointerPassed;
+}
+
+pub fn free_cluster_data<T: Clone + Cleanup>(
+    in_cluster_data: Option<&T>,
+    out_cluster_data: Option<&mut T>,
+) -> FFIError {
+    // if data.is_none() {
+    // }
+
+    return if let Some(in_data) = in_cluster_data {
+        if let Some(out_data) = out_cluster_data {
+            *out_data = in_data.clone();
+            out_data.free_ids();
+            FFIError::Ok
+        } else {
+            FFIError::NullPointerPassed
+        }
+    } else {
+        FFIError::NullPointerPassed
+    }
 }
 
 pub unsafe fn tree_height_impl(ptr: InHandlePtr) -> i32 {

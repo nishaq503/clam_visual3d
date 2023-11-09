@@ -1,4 +1,4 @@
-use abd_clam::{core::cluster::Cluster, core::dataset::VecDataset, Cakes};
+use abd_clam::{Cakes, Cluster, VecDataset};
 
 use crate::handle::handle::Handle;
 

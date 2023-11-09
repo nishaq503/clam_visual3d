@@ -1,12 +1,8 @@
-// use super::node::NodeData;
 use super::physics_node::PhysicsNode;
 use super::spring::Spring;
-use crate::ffi_impl::cluster_data::ClusterData;
-// use crate::ffi_impl::cluster_data::ClusterData;
 use crate::ffi_impl::cluster_data_wrapper::ClusterDataWrapper;
-use crate::handle::handle::Handle;
 use crate::utils::error::FFIError;
-use crate::{debug, ffi_impl, CBFnNodeVisitor, CBFnNodeVisitorMut};
+use crate::{debug, CBFnNodeVisitor, CBFnNodeVisitorMut};
 use std::collections::HashMap;
 
 use std::sync::{Condvar, Mutex};
@@ -23,7 +19,6 @@ impl Status {
             // this prevents thread from beginning work immediately - true
             data_ready: true,
             force_shutdown: false,
-            // probably not needed - thread has .isfinished...
             // finished: false,
         }
     }
@@ -70,9 +65,6 @@ impl ForceDirectedGraph {
             .wait_while(self.graph.lock().unwrap(), |(status, _)| {
                 status.data_ready == true && status.force_shutdown == false
             });
-        let i = 6;
-
-        // mutex_result.unwrap().0.force_shutdown;
 
         match mutex_result {
             Ok(mut g) => {

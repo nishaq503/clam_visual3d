@@ -3,26 +3,27 @@ extern crate nalgebra as na;
 use std::collections::HashMap;
 use std::sync::Arc;
 // use std::thread;
-use std::thread::{self, JoinHandle};
-use std::time::Duration;
+use std::thread::{JoinHandle};
 
-use abd_clam::core::cluster::PartitionCriteria;
+
+use abd_clam::PartitionCriteria;
 // use abd_clam::cluster::PartitionCriteria;
-use abd_clam::core::dataset::Dataset;
-use abd_clam::core::dataset::VecDataset;
+// use abd_clam::core::dataset::Dataset;
 use abd_clam::Cakes;
+use abd_clam::VecDataset;
 // use abd_clam::dataset::VecVec;
 // use abd_clam::search::cakes::CAKES;
 // use glam::Vec3;
 
-use crate::ffi_impl::cluster_ids::{ClusterIDs, ClusterIDsWrapper};
+
+use crate::ffi_impl::cluster_ids_wrapper::ClusterIDsWrapper;
 use crate::graph::force_directed_graph::{self, ForceDirectedGraph};
-use crate::graph::{self, spring};
+use crate::graph::spring;
 use crate::tree_layout::reingold_tilford;
 use crate::utils::distances::DistanceMetric;
 use crate::utils::error::FFIError;
-use crate::utils::types::{Cakesf32, Clusterf32, DataSet};
-use crate::utils::{self, anomaly_readers, distances, helpers};
+use crate::utils::types::{Clusterf32, DataSet};
+use crate::utils::{self, anomaly_readers, helpers};
 
 use crate::{debug, CBFnNodeVisitor, CBFnNodeVisitorMut};
 
@@ -52,15 +53,15 @@ use spring::Spring;
 //     labels: & [u8],
 // }
 
-struct TestDrop {
-    pub test: i32,
-}
+// struct TestDrop {
+//     pub test: i32,
+// }
 
-impl Drop for TestDrop {
-    fn drop(&mut self) {
-        debug!("drop test");
-    }
-}
+// impl Drop for TestDrop {
+//     fn drop(&mut self) {
+//         debug!("drop test");
+//     }
+// }
 
 pub struct Handle {
     cakes: Option<Cakes<Vec<f32>, f32, DataSet>>,
@@ -70,7 +71,7 @@ pub struct Handle {
     current_query: Option<Vec<f32>>,
     // longest_edge: Option<f32>,
     force_directed_graph: Option<(JoinHandle<()>, Arc<ForceDirectedGraph>)>,
-    test_drop: Option<TestDrop>,
+    // _test_drop: Option<TestDrop>,
     num_edges_in_graph: Option<i32>, // temporary figure out better way later
 }
 
@@ -88,25 +89,25 @@ impl Handle {
     }
 
     pub fn data(&self) -> Option<&DataSet> {
-        if let Some(c) = &self.cakes {
-            return Some(c.data());
+        return if let Some(c) = &self.cakes {
+            Some(c.data())
         } else {
-            return None;
+            None
         }
     }
     pub fn root(&self) -> Option<&Clusterf32> {
-        if let Some(c) = &self.cakes {
-            return Some(&c.tree().root);
+        return if let Some(c) = &self.cakes {
+            Some(&c.tree().root)
         } else {
-            return None;
+            None
         }
     }
 
     pub fn labels(&self) -> Option<&Vec<u8>> {
-        if let Some(labels) = &self.labels {
-            return Some(&labels);
+        return if let Some(labels) = &self.labels {
+            Some(&labels)
         } else {
-            return None;
+            None
         }
     }
 
@@ -126,7 +127,7 @@ impl Handle {
                     current_query: None,
                     // longest_edge: None,
                     force_directed_graph: None,
-                    test_drop: Some(TestDrop { test: 5 }),
+                    // _test_drop: Some(TestDrop { test: 5 }),
                     num_edges_in_graph: None,
                 });
             }
@@ -161,7 +162,7 @@ impl Handle {
         // need to notify working thread to stop and then wait for it
 
         if let Some(force_directed_graph) = &self.force_directed_graph {
-            graph::force_directed_graph::force_shutdown(&force_directed_graph.1);
+            force_directed_graph::force_shutdown(&force_directed_graph.1);
             // let is_finished = force_directed_graph.0.is_finished();
 
             let _ = self.force_directed_graph.take().unwrap().0.join();
@@ -180,7 +181,7 @@ impl Handle {
         // need to notify working thread to stop and then wait for it
 
         if let Some(force_directed_graph) = &self.force_directed_graph {
-            graph::force_directed_graph::init_unity_edges(
+            force_directed_graph::init_unity_edges(
                 // self,
                 &force_directed_graph.1,
                 edge_detect_cb,
@@ -202,18 +203,18 @@ impl Handle {
         if let Some(force_directed_graph) = &self.force_directed_graph {
             let is_finished = force_directed_graph.0.is_finished();
 
-            if is_finished {
+            return if is_finished {
                 let _ = self.force_directed_graph.take().unwrap().0.join();
                 self.force_directed_graph = None;
                 debug!("shutting down physics");
-                return FFIError::PhysicsFinished;
+                FFIError::PhysicsFinished
             } else {
                 // debug!("try to update unity");
 
-                return graph::force_directed_graph::try_update_unity(
+                force_directed_graph::try_update_unity(
                     &force_directed_graph.1,
                     updater,
-                );
+                )
             }
             // let update_result =
             //     physics::force_directed_graph::try_update_unity(&force_directed_graph.1);
@@ -262,28 +263,31 @@ impl Handle {
 
     pub unsafe fn for_each_dft(
         &self,
-        node_visitor: crate::CBFnNodeVisitor,
+        node_visitor: CBFnNodeVisitor,
         start_node: String,
     ) -> FFIError {
-        if let Some(cakes) = &self.cakes {
+        return if let Some(_) = &self.cakes {
             if start_node == "root" {
-                let node = &cakes.tree().root;
-                Self::for_each_dft_helper(&node, node_visitor);
-                return FFIError::Ok;
+                if let Some(node) = self.root() {
+                    Self::for_each_dft_helper(&node, node_visitor);
+                    FFIError::Ok
+                } else {
+                    FFIError::HandleInitFailed
+                }
             } else {
                 match Self::find_node(&self, start_node) {
                     Ok(root) => {
                         Self::for_each_dft_helper(root, node_visitor);
-                        return FFIError::Ok;
+                        FFIError::Ok
                     }
                     Err(e) => {
                         debug!("{:?}", e);
-                        return FFIError::InvalidStringPassed;
+                        FFIError::InvalidStringPassed
                     }
                 }
             }
         } else {
-            return FFIError::NullPointerPassed;
+            FFIError::NullPointerPassed
         }
     }
 
@@ -292,25 +296,28 @@ impl Handle {
         node_visitor: crate::CBFnNameSetter,
         start_node: String,
     ) -> FFIError {
-        if let Some(cakes) = &self.cakes {
+        return if let Some(_) = &self.cakes {
             if start_node == "root" {
-                let node = &cakes.tree().root;
-                Self::set_names_helper(&node, node_visitor);
-                return FFIError::Ok;
+                if let Some(node) = self.root() {
+                    Self::set_names_helper(&node, node_visitor);
+                    FFIError::Ok
+                } else {
+                    FFIError::HandleInitFailed
+                }
             } else {
                 match Self::find_node(&self, start_node) {
                     Ok(root) => {
                         Self::set_names_helper(root, node_visitor);
-                        return FFIError::Ok;
+                        FFIError::Ok
                     }
                     Err(e) => {
                         debug!("{:?}", e);
-                        return FFIError::InvalidStringPassed;
+                        FFIError::InvalidStringPassed
                     }
                 }
             }
         } else {
-            return FFIError::NullPointerPassed;
+            FFIError::NullPointerPassed
         }
     }
 
@@ -324,6 +331,7 @@ impl Handle {
             return;
         }
         if let Some([left, right]) = root.children() {
+            debug!("node name: {:?}", root.name());
             let baton = ClusterIDsWrapper::from_cluster(&root);
 
             node_visitor(Some(baton.data()));
@@ -334,7 +342,7 @@ impl Handle {
         }
     }
 
-    fn for_each_dft_helper(root: &Clusterf32, node_visitor: crate::CBFnNodeVisitor) {
+    fn for_each_dft_helper(root: &Clusterf32, node_visitor: CBFnNodeVisitor) {
         if root.is_leaf() {
             let baton = ClusterDataWrapper::from_cluster(&root);
 
@@ -354,12 +362,12 @@ impl Handle {
     pub fn shutdown_physics(&mut self) -> FFIError {
         let should_shutdown = { self.graph.is_some() && self.edges.is_some() };
 
-        if should_shutdown {
+        return if should_shutdown {
             self.graph = None;
             self.edges = None;
-            return FFIError::Ok;
+            FFIError::Ok
         } else {
-            return FFIError::PhysicsAlreadyShutdown;
+            FFIError::PhysicsAlreadyShutdown
         }
     }
 
@@ -395,7 +403,7 @@ impl Handle {
 
     pub fn tree_height(&self) -> i32 {
         if let Some(cakes) = &self.cakes {
-            cakes.tree().root.max_leaf_depth() as i32
+            cakes.tree().depth() as i32
         } else {
             0
         }
@@ -442,7 +450,7 @@ impl Handle {
 
     // why isnt string taken by reference?
     pub unsafe fn find_node(&self, path: String) -> Result<&Clusterf32, FFIError> {
-        if let Some(cakes) = &self.cakes {
+        if let Some(_) = &self.cakes {
             let mut path: String = helpers::hex_to_binary(path)
                 .trim_start_matches('0')
                 .chars()
@@ -450,7 +458,11 @@ impl Handle {
                 .collect();
             path.pop();
 
-            return Self::find_node_helper(&cakes.tree().root, path);
+            return Self::find_node_helper(
+                self.root()
+                    .unwrap_or_else(|| unreachable!("We just confirmed cakes exists")),
+                path,
+            );
         }
         debug!("root not built");
         return Err(FFIError::HandleInitFailed);
@@ -461,56 +473,55 @@ impl Handle {
             return Ok(&root);
         }
         let choice: char = path.pop().unwrap();
-        if let Some([left, right]) = root.children() {
+        return if let Some([left, right]) = root.children() {
             if choice == '0' {
-                return Self::find_node_helper(left, path);
+                Self::find_node_helper(left, path)
             } else if choice == '1' {
-                return Self::find_node_helper(right, path);
+                Self::find_node_helper(right, path)
             } else {
-                return Err(FFIError::InvalidStringPassed);
+                Err(FFIError::InvalidStringPassed)
             }
         } else {
-            return Err(FFIError::InvalidStringPassed);
+            Err(FFIError::InvalidStringPassed)
         }
     }
 
-    pub fn create_reingold_layout(&self, node_visitor: crate::CBFnNodeVisitor) -> FFIError {
-        if let Some(cakes) = &self.cakes {
-            return reingold_tilford::run(
-                &cakes.tree().root,
+    pub fn create_reingold_layout(&self, node_visitor: CBFnNodeVisitor) -> FFIError {
+        return if let Some(cakes) = &self.cakes {
+            reingold_tilford::run(
+                self.root()
+                    .unwrap_or_else(|| unreachable!("cakes exists - root should exist")),
                 &self.labels,
-                &self.data(),
-                cakes.tree().root.max_leaf_depth() as i32,
+                cakes.tree().depth() as i32,
                 node_visitor,
-            );
+            )
         } else {
-            return FFIError::HandleInitFailed;
+            FFIError::HandleInitFailed
         }
     }
 
     pub unsafe fn create_reingold_layout_offset_from(
         &self,
         root: &ClusterData,
-        current_depth: i32,
+        _current_depth: i32,
         max_depth: i32,
-        node_visitor: crate::CBFnNodeVisitor,
+        node_visitor: CBFnNodeVisitor,
     ) -> FFIError {
-        if let Some(_) = &self.cakes {
+        return if let Some(_) = &self.cakes {
             if let Ok(clam_root) = self.find_node(root.get_id()) {
-                return reingold_tilford::run_offset(
+                reingold_tilford::run_offset(
                     &root.pos,
                     clam_root,
                     &self.labels,
-                    &self.data(),
-                    current_depth,
+                    // current_depth,
                     max_depth,
                     node_visitor,
-                );
+                )
             } else {
-                return FFIError::NullPointerPassed;
+                FFIError::NullPointerPassed
             }
         } else {
-            return FFIError::HandleInitFailed;
+            FFIError::HandleInitFailed
         }
     }
 }

@@ -2,10 +2,10 @@ use std::ffi::{c_char, CStr, CString};
 
 use super::error::FFIError;
 
-pub fn alloc_to_c_char(str: String) -> *mut c_char {
-    let str = CString::new(str).unwrap();
-    str.into_raw()
-}
+// pub fn alloc_to_c_char(str: String) -> *mut c_char {
+//     let str = CString::new(str).unwrap();
+//     str.into_raw()
+// }
 
 // pub fn free_c_char(str: *mut c_char) {
 //     if !str.is_null() {
@@ -15,13 +15,13 @@ pub fn alloc_to_c_char(str: String) -> *mut c_char {
 //     }
 // }
 
-pub fn free_string(str: *mut u8) {
-    if !str.is_null() {
-        unsafe { CString::from_raw(str as *mut i8) };
-    } else {
-        debug!("tried to free null string");
-    }
-}
+// pub fn free_string(str: *mut u8) {
+//     if !str.is_null() {
+//         unsafe { let _ = CString::from_raw(str as *mut i8); };
+//     } else {
+//         debug!("tried to free null string");
+//     }
+// }
 
 // start_node: *const c_char
 // if !start_node.is_null() {

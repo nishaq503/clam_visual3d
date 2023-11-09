@@ -1,32 +1,6 @@
-use crate::{debug, utils::types::Clusterf32};
+use crate::utils::types::Clusterf32;
 
 use super::string_ffi::StringFFI;
-
-pub struct ClusterIDsWrapper {
-    data: ClusterIDs,
-}
-
-impl Drop for ClusterIDsWrapper {
-    fn drop(&mut self) {
-        // debug!("Freeing Cluster Data string with rust destructor");
-        self.data.free_ids();
-    }
-}
-
-impl ClusterIDsWrapper {
-    pub fn from_cluster(cluster: &Clusterf32) -> Self {
-        ClusterIDsWrapper {
-            data: ClusterIDs::from_clam(cluster),
-        }
-    }
-
-    pub fn data(&self) -> &ClusterIDs {
-        &self.data
-    }
-    pub fn data_mut(&mut self) -> &mut ClusterIDs {
-        &mut self.data
-    }
-}
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]

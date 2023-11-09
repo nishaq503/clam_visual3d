@@ -7,16 +7,13 @@ use std::{
 use crate::{
     debug,
     // debug,
-    ffi_impl::{cluster_data::ClusterData, cluster_data_wrapper::ClusterDataWrapper},
-
+    ffi_impl::cluster_data::ClusterData,
     graph,
     handle::handle::Handle,
     utils::{
         error::FFIError,
         types::{Clusterf32, DataSet},
     },
-    CBFnNodeVisitor,
-    CBFnNodeVisitorMut,
 };
 
 type Edge = (String, String, f32, bool);
@@ -171,7 +168,6 @@ fn create_springs(edges_data: Vec<Edge>) -> Vec<Spring> {
 
     for data in edges_data {
         //resting length scaled by spring_multiplier
-        // edge_lenght = data.2
         let new_spring = Spring::new(
             data.2 * spring_multiplier,
             data.0.clone(),

@@ -1,5 +1,3 @@
-// use abd_clam::{dataset::VecVec, number::Number};
-use abd_clam::core::{cluster::Cluster, dataset::VecDataset};
 // use
 
 use glam::Vec3;
@@ -17,12 +15,11 @@ use super::reingold_impl;
 pub fn run(
     clam_root: &Clusterf32,
     labels: &Option<Vec<u8>>,
-    data: &Option<&VecDataset<Vec<f32>, f32>>,
     max_depth: i32,
     node_visitor: crate::CBFnNodeVisitor,
 ) -> FFIError {
     // if let Some(labels) = &self.labels {
-    let layout_root = reingold_impl::Node::create_layout(clam_root, labels, data, max_depth);
+    let layout_root = reingold_impl::Node::create_layout(clam_root, labels, max_depth);
     let result = update_unity_positions(layout_root, node_visitor);
 
     return result;
@@ -32,13 +29,12 @@ pub fn run_offset(
     start_pos: &Vec3,
     clam_root: &Clusterf32,
     labels: &Option<Vec<u8>>,
-    data: &Option<&VecDataset<Vec<f32>, f32>>,
-    current_depth: i32,
+    // current_depth: i32,
     max_depth: i32,
     node_visitor: crate::CBFnNodeVisitor,
 ) -> FFIError {
     // if let Some(labels) = &self.labels {
-    let layout_root = reingold_impl::Node::create_layout(clam_root, labels, data, max_depth);
+    let layout_root = reingold_impl::Node::create_layout(clam_root, labels, max_depth);
     let result = update_unity_positions_offset(layout_root, start_pos, node_visitor);
 
     return result;

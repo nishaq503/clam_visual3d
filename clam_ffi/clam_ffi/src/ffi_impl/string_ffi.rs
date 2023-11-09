@@ -1,9 +1,9 @@
 use std::{
     ffi::{c_char, CStr, CString},
-    ptr::{null, null_mut},
+    ptr::null_mut,
 };
 
-use crate::utils::{error::FFIError, helpers};
+use crate::utils::error::FFIError;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
@@ -25,7 +25,7 @@ impl StringFFI {
     pub fn default() -> Self {
         StringFFI {
             // data: Self::alloc_to_c_char(data.clone()) as *mut u8,
-            len: 0 as i32,
+            len: 0i32,
             data: null_mut(),
             // str.into_raw()
         }

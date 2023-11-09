@@ -4,7 +4,7 @@
 #![allow(unused_variables)]
 // use glam::Vec3;
 
-use crate::{debug, utils::types::Clusterf32};
+use crate::utils::types::Clusterf32;
 
 use crate::tree_layout::reingold_impl;
 
@@ -138,9 +138,7 @@ impl ClusterData {
         ClusterData {
             pos: glam::Vec3::new(other.get_x(), other.get_y(), 0.),
             color: glam::Vec3::new(
-                other.get_color().x,
-                other.get_color().y,
-                other.get_color().z,
+                0.,0.,0.
             ),
             id: StringFFI::new(other.get_name()),
             // left_id: StringFFI::new(left),

@@ -13,7 +13,7 @@ pub fn get_magnitude(vector: glam::Vec3) -> f32 {
 pub fn set_magnitude(mut vector: glam::Vec3, new_mag: f32) -> glam::Vec3 {
     let old_mag = vector.length();
 
-    if old_mag.abs() > std::f32::EPSILON {
+    if old_mag.abs() > f32::EPSILON {
         let ratio: f32 = new_mag / old_mag;
         vector *= ratio;
     } else {

@@ -1,17 +1,15 @@
 //need to use partial struct to pass by reference and access sub structs
 // pass by pointer with classes but cant seem to access sub structs
 
-use std::{ffi::c_char, ptr::null_mut};
+use std::ffi::c_char;
 mod ffi_impl;
 mod graph;
 mod handle;
 mod tests;
 mod tree_layout;
 mod utils;
-// use abd_clam::utils;
-// use abd_clam::utils::helpers;
 use ffi_impl::{
-    cluster_data::{self, ClusterData},
+    cluster_data::ClusterData,
     cluster_ids::ClusterIDs,
     lib_impl::{
         color_by_dist_to_query_impl, distance_to_other_impl, for_each_dft_impl, set_names_impl,
@@ -23,7 +21,7 @@ use graph::entry::{
     get_num_edges_in_graph_impl, init_force_directed_graph_impl, init_graph_vertices_impl,
     physics_update_async_impl, shutdown_physics_impl,
 };
-use tree_layout::entry_point::{draw_heirarchy_impl, draw_heirarchy_offset_from_impl};
+use tree_layout::entry_point::{draw_hierarchy_impl, draw_hierarchy_offset_from_impl};
 use utils::{
     debug,
     distances::DistanceMetric,
@@ -31,6 +29,7 @@ use utils::{
     // helpers,
     types::{InHandlePtr, OutHandlePtr},
 };
+use crate::ffi_impl::lib_impl::free_cluster_data;
 
 use crate::handle::entry_point::{init_clam_impl, shutdown_clam_impl};
 
@@ -50,17 +49,15 @@ pub unsafe extern "C" fn create_cluster_data(
         // let data = Box::new(ClusterData::default());
 
         // match out_node.id.as_string() {
-        match handle.find_node(id) {
+        return match handle.find_node(id) {
             Ok(cluster) => {
                 let cluster_data = ClusterData::from_clam(cluster);
 
                 *outgoing = cluster_data;
-                return FFIError::Ok;
+                FFIError::Ok
             }
-            Err(e) => {
-                return FFIError::InvalidStringPassed;
-            }
-        }
+            Err(_) => FFIError::InvalidStringPassed,
+        };
     }
     return FFIError::NullPointerPassed;
 }
@@ -70,20 +67,21 @@ pub extern "C" fn delete_cluster_data(
     in_cluster_data: Option<&ClusterData>,
     out_cluster_data: Option<&mut ClusterData>,
 ) -> FFIError {
+    free_cluster_data(in_cluster_data, out_cluster_data)
     // if data.is_none() {
     // }
 
-    if let Some(in_data) = in_cluster_data {
-        if let Some(out_data) = out_cluster_data {
-            *out_data = *in_data;
-            out_data.free_ids();
-            return FFIError::Ok;
-        } else {
-            return FFIError::NullPointerPassed;
-        }
-    } else {
-        return FFIError::NullPointerPassed;
-    }
+    // return if let Some(in_data) = in_cluster_data {
+    //     if let Some(out_data) = out_cluster_data {
+    //         *out_data = *in_data;
+    //         out_data.free_ids();
+    //         FFIError::Ok
+    //     } else {
+    //         FFIError::NullPointerPassed
+    //     }
+    // } else {
+    //     FFIError::NullPointerPassed
+    // };
 }
 
 #[no_mangle]
@@ -98,40 +96,40 @@ pub unsafe extern "C" fn create_cluster_ids(
         // let data = Box::new(ClusterData::default());
 
         // match out_node.id.as_string() {
-        match handle.find_node(id) {
+        return match handle.find_node(id) {
             Ok(cluster) => {
                 let cluster_data = ClusterIDs::from_clam(cluster);
 
                 *outgoing = cluster_data;
-                return FFIError::Ok;
+                FFIError::Ok
             }
-            Err(e) => {
-                return FFIError::InvalidStringPassed;
-            }
-        }
+            Err(_) => FFIError::InvalidStringPassed,
+        };
     }
     return FFIError::NullPointerPassed;
 }
 
+//noinspection ALL
 #[no_mangle]
 pub extern "C" fn delete_cluster_ids(
     in_cluster_data: Option<&ClusterIDs>,
     out_cluster_data: Option<&mut ClusterIDs>,
 ) -> FFIError {
+    free_cluster_data(in_cluster_data, out_cluster_data)
     // if data.is_none() {
     // }
 
-    if let Some(in_data) = in_cluster_data {
-        if let Some(out_data) = out_cluster_data {
-            *out_data = *in_data;
-            out_data.free_ids();
-            return FFIError::Ok;
-        } else {
-            return FFIError::NullPointerPassed;
-        }
-    } else {
-        return FFIError::NullPointerPassed;
-    }
+    // return if let Some(in_data) = in_cluster_data {
+    //     if let Some(out_data) = out_cluster_data {
+    //         *out_data = *in_data;
+    //         out_data.free_ids();
+    //         FFIError::Ok
+    //     } else {
+    //         FFIError::NullPointerPassed
+    //     }
+    // } else {
+    //     FFIError::NullPointerPassed
+    // };
 }
 
 #[no_mangle]
@@ -144,16 +142,16 @@ pub unsafe extern "C" fn set_message(
     // }
 
     // if let Some(in_data) = in_cluster_data {
-    if let Some(out_data) = out_cluster_data {
+    return if let Some(out_data) = out_cluster_data {
         // *out_data = *in_data;
         // out_data.free_ids();
         let msg_str = StringFFI::c_char_to_string(msg);
 
         out_data.set_message(msg_str);
-        return FFIError::Ok;
+        FFIError::Ok
     } else {
-        return FFIError::NullPointerPassed;
-    }
+        FFIError::NullPointerPassed
+    };
     // } else {
     //     return FFIError::NullPointerPassed;
     // }
@@ -248,8 +246,8 @@ pub unsafe extern "C" fn distance_to_other(
 // ------------------------------------- Reingold Tilford Tree Layout -------------------------------------
 
 #[no_mangle]
-pub extern "C" fn draw_heirarchy(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor) -> FFIError {
-    return draw_heirarchy_impl(ptr, node_visitor);
+pub extern "C" fn draw_hierarchy(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor) -> FFIError {
+    return draw_hierarchy_impl(ptr, node_visitor);
 }
 
 #[no_mangle]
@@ -260,7 +258,7 @@ pub unsafe extern "C" fn draw_heirarchy_offset_from(
     max_depth: i32,
     node_visitor: CBFnNodeVisitor,
 ) -> FFIError {
-    return draw_heirarchy_offset_from_impl(ptr, root, current_depth, max_depth, node_visitor);
+    return draw_hierarchy_offset_from_impl(ptr, root, current_depth, max_depth, node_visitor);
 }
 
 // ------------------------------------- Graph Physics -------------------------------------

@@ -46,19 +46,19 @@ impl Spring {
         let mut new_force = graph::helpers::set_magnitude(force, new_magnitude);
 
         //drop ownership to get_mut from hashmap
-        std::mem::drop(node1);
-        std::mem::drop(node2);
+        // std::mem::drop(node1);
+        // std::mem::drop(node2);
 
         let node1 = nodes.get_mut(&self.node1).unwrap();
         node1.accelerate(new_force);
-        std::mem::drop(node1);
+        // std::mem::drop(node1);
 
         //reverse direction of force for node on opposite side
         new_force *= -1.;
 
         let node2 = nodes.get_mut(&self.node2).unwrap();
         node2.accelerate(new_force);
-        std::mem::drop(node2);
+        // std::mem::drop(node2);
     }
 
     pub fn nat_len(&self) -> f32 {
