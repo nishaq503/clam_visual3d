@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "clam_ffi"
+		},
+		{
+			"path": "../scripts"
+		},
+		{
+			"path": "clam/"
+		}
+	],
+	"settings": {
+		"rust-analyzer.linkedProjects": [
+			".\\Cargo.toml"
+		],
+		"rust-analyzer.showUnlinkedFileNotification": false
+	},
+}

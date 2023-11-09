@@ -1,3 +1,0 @@
-[submodule "clam_ffi"]
-	path = clam_ffi
-	url = git@github.com:djperrone/clam_ffi.git

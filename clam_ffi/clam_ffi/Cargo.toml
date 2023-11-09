@@ -1,0 +1,28 @@
+[package]
+name = "clam_ffi"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "clam_ffi"
+crate-type = ["cdylib"]
+
+
+[dependencies]
+#abd-clam = "0.22.3"
+#abd-clam = { path = "../clam0223/clam/abd-clam" }
+abd-clam = { path = "../clam/abd-clam" }
+distances = { path = "../clam/distances" }
+#abd-clam = "0.22.3"
+glam = "0.24.0"
+hex = "0.4.3"
+#interoptopus = "0.14.18"
+#interoptopus_backend_c = "0.14.18"
+#interoptopus_backend_csharp = "0.14.18"
+nalgebra = "0.32.2"
+ndarray = "0.15.6"
+ndarray-npy = "0.8.1"
+rand = "0.8.5"
+rmp-serde = "1.1.1"
+serde = "1.0.164"
