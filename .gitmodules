@@ -1,3 +1,4 @@
-[submodule "clam_ffi"]
-	path = clam_ffi
-	url = git@github.com:djperrone/clam_ffi.git
+[submodule "clam_ffi/clam"]
+	path = clam_ffi/clam
+	url = https://github.com/djperrone/clam-ratios.git
+	branch = clam_ffi
