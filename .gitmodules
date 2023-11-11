@@ -1,4 +1,4 @@
 [submodule "clam_ffi/clam"]
 	path = clam_ffi/clam
 	url = https://github.com/djperrone/clam-ratios.git
-	branch = clam_ffi
+	branch = master
