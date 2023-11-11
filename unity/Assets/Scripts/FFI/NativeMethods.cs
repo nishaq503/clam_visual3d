@@ -4,9 +4,7 @@
 using Clam;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 namespace Clam
@@ -19,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231110163442";
+	public const string __DllName = "clam_ffi_20231111164809";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -70,6 +68,10 @@ namespace Clam
             public static int TreeHeight()
             {
                 return tree_height(m_Handle);
+            }
+            public static int TreeCardinality()
+            {
+                return tree_cardinality(m_Handle);
             }
 
             public static FFIError ColorClustersByLabel(NodeVisitor callback)
@@ -157,8 +159,9 @@ namespace Clam
 
             public static bool GetRootData(out ClusterDataWrapper clusterDataWrapper)
             {
-                string rootName = "1";
-                if (Cakes.Tree.GetTree().TryGetValue(rootName, out var root))
+                string rootID = "0-" + NativeMethods.TreeCardinality().ToString();
+
+                if (Cakes.Tree.GetTree().TryGetValue(rootID, out var root))
                 {
                     clusterDataWrapper = CreateClusterDataWrapper(root.GetComponent<Node>().GetId());
 
@@ -177,15 +180,15 @@ namespace Clam
             }
 
             // Reingold Tilford Tree Layout
-            public static FFIError DrawHeirarchy(NodeVisitor callback)
+            public static FFIError DrawHierarchy(NodeVisitor callback)
             {
-                return draw_heirarchy(m_Handle, callback);
+                return draw_hierarchy(m_Handle, callback);
             }
 
-            public static FFIError DrawHeirarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback, int rootDepth = 0, int currentDepth = 1, int maxDepth = 1)
+            public static FFIError DrawHierarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback, int rootDepth = 0, int currentDepth = 1, int maxDepth = 1)
             {
                 ClusterData nodeData = wrapper.Data;
-                return draw_heirarchy_offset_from(m_Handle, ref nodeData, currentDepth, maxDepth - rootDepth, callback);
+                return draw_hierarchy_offset_from(m_Handle, ref nodeData, currentDepth, maxDepth - rootDepth, callback);
             }
 
             // Graph Physics

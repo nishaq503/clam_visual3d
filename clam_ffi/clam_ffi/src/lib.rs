@@ -8,12 +8,13 @@ mod handle;
 mod tests;
 mod tree_layout;
 mod utils;
+use crate::ffi_impl::lib_impl::free_cluster_data;
 use ffi_impl::{
     cluster_data::ClusterData,
     cluster_ids::ClusterIDs,
     lib_impl::{
         color_by_dist_to_query_impl, distance_to_other_impl, for_each_dft_impl, set_names_impl,
-        tree_height_impl,
+        tree_height_impl, tree_cardinality_impl,
     },
     string_ffi::StringFFI,
 };
@@ -29,7 +30,6 @@ use utils::{
     // helpers,
     types::{InHandlePtr, OutHandlePtr},
 };
-use crate::ffi_impl::lib_impl::free_cluster_data;
 
 use crate::handle::entry_point::{init_clam_impl, shutdown_clam_impl};
 
@@ -49,7 +49,7 @@ pub unsafe extern "C" fn create_cluster_data(
         // let data = Box::new(ClusterData::default());
 
         // match out_node.id.as_string() {
-        return match handle.find_node(id) {
+        return match handle.get_cluster(id) {
             Ok(cluster) => {
                 let cluster_data = ClusterData::from_clam(cluster);
 
@@ -96,7 +96,7 @@ pub unsafe extern "C" fn create_cluster_ids(
         // let data = Box::new(ClusterData::default());
 
         // match out_node.id.as_string() {
-        return match handle.find_node(id) {
+        return match handle.get_cluster(id) {
             Ok(cluster) => {
                 let cluster_data = ClusterIDs::from_clam(cluster);
 
@@ -216,6 +216,11 @@ pub unsafe extern "C" fn tree_height(ptr: InHandlePtr) -> i32 {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn tree_cardinality(ptr: InHandlePtr) -> i32 {
+    return tree_cardinality_impl(ptr);
+}
+
+#[no_mangle]
 // add recursive bool option and node name
 pub unsafe extern "C" fn color_clusters_by_label(
     ptr: InHandlePtr,
@@ -251,7 +256,7 @@ pub extern "C" fn draw_hierarchy(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn draw_heirarchy_offset_from(
+pub unsafe extern "C" fn draw_hierarchy_offset_from(
     ptr: InHandlePtr,
     root: Option<&ClusterData>,
     current_depth: i32,

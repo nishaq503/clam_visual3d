@@ -25,7 +25,8 @@ public class TreeMenu
         m_ColorOptions.RegisterValueChangedCallback(ColorChangeCallback);
 
         // root id
-        m_Layout = new TreeLayout("1");
+        var foundRoot = NativeMethods.GetRootData(out var rootData);
+        m_Layout = new TreeLayout(rootData.Data.id.AsString);
 
         m_DepthField = new IntTextField("TreeDepth",m_UIDocument, 0, Clam.FFI.NativeMethods.TreeHeight(), InputFieldChangeCallback);
 

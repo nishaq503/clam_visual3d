@@ -1,5 +1,6 @@
 use std::ffi::{c_char, CStr};
 
+use crate::ffi_impl::cleanup::Cleanup;
 use crate::{
     debug,
     utils::{
@@ -9,7 +10,6 @@ use crate::{
     },
     CBFnNameSetter, CBFnNodeVisitor,
 };
-use crate::ffi_impl::cleanup::Cleanup;
 
 use super::{cluster_data::ClusterData, cluster_data_wrapper::ClusterDataWrapper};
 
@@ -80,7 +80,7 @@ pub fn free_cluster_data<T: Clone + Cleanup>(
         }
     } else {
         FFIError::NullPointerPassed
-    }
+    };
 }
 
 pub unsafe fn tree_height_impl(ptr: InHandlePtr) -> i32 {
@@ -94,6 +94,21 @@ pub unsafe fn tree_height_impl(ptr: InHandlePtr) -> i32 {
     debug!("handle not created");
 
     return 0;
+}
+
+pub unsafe fn tree_cardinality_impl(ptr: InHandlePtr) -> i32 {
+    // Handle::from_ptr(ptr).get_num_nodes() + 1
+
+    if let Some(handle) = ptr {
+        // debug!("cardinality: {}", handle.tree_height() + 1);
+
+        if let Some(tree) = handle.get_tree() {
+            return tree.cardinality() as i32;
+        }
+    }
+    debug!("handle not created");
+
+    return -1;
 }
 
 pub fn color_clusters_by_label_impl(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor) -> FFIError {
@@ -231,8 +246,8 @@ pub unsafe fn distance_to_other_impl(
     node_name2: *const c_char,
 ) -> f32 {
     if let Some(handle) = ptr {
-        let node1 = handle.find_node(helpers::c_char_to_string(node_name1));
-        let node2 = handle.find_node(helpers::c_char_to_string(node_name2));
+        let node1 = handle.get_cluster(helpers::c_char_to_string(node_name1));
+        let node2 = handle.get_cluster(helpers::c_char_to_string(node_name2));
 
         if let Ok(node1) = node1 {
             if let Ok(node2) = node2 {

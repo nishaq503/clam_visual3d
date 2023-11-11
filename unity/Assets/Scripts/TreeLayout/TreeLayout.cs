@@ -20,6 +20,7 @@ public class TreeLayout
     public TreeLayout(string rootId)
     {
         m_RootID = rootId;
+       
         var dataWrapper = NativeMethods.CreateClusterDataWrapper(rootId);
         m_RootDepth = dataWrapper.Data.depth;
 
@@ -28,7 +29,7 @@ public class TreeLayout
         m_CurrentDepth = m_RootDepth;
         m_MaxDepth = m_CurrentDepth + m_IntervalStep;
 
-        NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+        NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
 
         NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID);
         NativeMethods.ForEachDFT(EdgeVisibilityCallback);
@@ -48,7 +49,7 @@ public class TreeLayout
         {
             Debug.Log("Increasing size");
             m_MaxDepth += m_IntervalStep;
-            NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
         }
 
         UpdateNodeVisibility(nextDepth);
@@ -69,7 +70,7 @@ public class TreeLayout
             Debug.Log("Decreasing size");
 
             m_MaxDepth = m_CurrentDepth + m_IntervalStep;
-            NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
         }
 
         UpdateNodeVisibility(nextDepth);
@@ -89,7 +90,7 @@ public class TreeLayout
 
     void UpdateNodeVisibility(int newDepth)
     {
-        //NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_MaxDepth);
+        //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_MaxDepth);
 
         NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID);
         NativeMethods.ForEachDFT(EdgeVisibilityCallback);
@@ -105,7 +106,7 @@ public class TreeLayout
         //    //    GrowTree();
         //    //}
         //    // traverse children and make active up to newDepth
-        //    NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), VisibilityCallback, m_RootDepth, m_CurrentDepth);
+        //    NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), VisibilityCallback, m_RootDepth, m_CurrentDepth);
         //}
         //else if (newDepth < m_CurrentDepth)
         //{
@@ -115,7 +116,7 @@ public class TreeLayout
 
         //    //    ShrinkTree();
         //    //}
-        //    NativeMethods.DrawHeirarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), VisibilityCallback, m_RootDepth, m_CurrentDepth);
+        //    NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), VisibilityCallback, m_RootDepth, m_CurrentDepth);
 
         //    // traverse children above current depth and make inactive
         //}

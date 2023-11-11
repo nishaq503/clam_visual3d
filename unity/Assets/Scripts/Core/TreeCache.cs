@@ -37,7 +37,7 @@ namespace Clam
             m_TreeData = MenuEventManager.instance.m_TreeData;
             //m_TreeData.dataName = "arrhythmia";
             //m_TreeData.cardinality = 15;
-            if (m_TreeData.dataName == null || m_TreeData.dataName.Length == 0 || m_TreeData.distanceMetric == null)
+            if (m_TreeData.dataName == null || m_TreeData.dataName.Length == 0)
             {
                 Debug.Log("error with tree data");
                 //Application.Quit();
@@ -66,7 +66,7 @@ namespace Clam
             {
                 Debug.Log("ERROR " + e);
             }
-            Clam.FFI.NativeMethods.DrawHeirarchy(PositionUpdater);
+            Clam.FFI.NativeMethods.DrawHierarchy(PositionUpdater);
             Clam.FFI.NativeMethods.ColorClustersByLabel(ColorFiller);
 
             Clam.FFI.NativeMethods.ForEachDFT(EdgeDrawer);

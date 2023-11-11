@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Clam;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -210,7 +211,10 @@ namespace StarterAssets
 
         void OnExit()
         {
-            Application.Quit();
+            //Application.Quit();
+            m_PlayerInput.SwitchCurrentActionMap("WorldUI");
+
+            MenuEventManager.SwitchState(Menu.Pause);
         }
 
         public void OnChangeMapToWorldUI(InputValue value)

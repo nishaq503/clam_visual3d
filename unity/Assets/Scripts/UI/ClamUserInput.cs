@@ -1,6 +1,4 @@
-using Clam;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -207,7 +205,7 @@ namespace Clam
                                 // tempoarary fix to prevent moving nodes around when already in reingold format
                                 //if (!root.activeSelf)
                                 {
-                                    Clam.FFI.NativeMethods.DrawHeirarchyOffsetFrom(wrapper, PositionUpdater);
+                                    Clam.FFI.NativeMethods.DrawHierarchyOffsetFrom(wrapper, PositionUpdater);
 
                                 }
                             }

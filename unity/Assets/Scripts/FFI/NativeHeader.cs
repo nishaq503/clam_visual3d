@@ -29,6 +29,8 @@ namespace Clam
 
             [DllImport(__DllName, EntryPoint = "tree_height", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern int tree_height(IntPtr handle);
+            [DllImport(__DllName, EntryPoint = "tree_cardinality", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern int tree_cardinality(IntPtr handle);
 
             [DllImport(__DllName, EntryPoint = "color_clusters_by_label", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError color_clusters_by_label(IntPtr ptr, NodeVisitor callback);
@@ -59,11 +61,11 @@ namespace Clam
 
             // ------------------------------------- Reingold Tilford Tree Layout -------------------------------------
 
-            [DllImport(__DllName, EntryPoint = "draw_heirarchy", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError draw_heirarchy(IntPtr ptr, NodeVisitor callback);
+            [DllImport(__DllName, EntryPoint = "draw_hierarchy", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError draw_hierarchy(IntPtr ptr, NodeVisitor callback);
 
-            [DllImport(__DllName, EntryPoint = "draw_heirarchy_offset_from", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError draw_heirarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos,int currentDepth, int maxDepth, NodeVisitor callback);
+            [DllImport(__DllName, EntryPoint = "draw_hierarchy_offset_from", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError draw_hierarchy_offset_from(IntPtr ptr, ref ClusterData offsetPos,int currentDepth, int maxDepth, NodeVisitor callback);
 
             // ------------------------------------- Graph Physics -------------------------------------
             [System.Security.SecurityCritical]

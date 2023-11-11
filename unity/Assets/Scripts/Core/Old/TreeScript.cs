@@ -84,7 +84,7 @@
 //            {
 //                print("ERROR " + e);
 //            }
-//            Clam.ClamFFI.DrawHeirarchy(Reingoldify);
+//            Clam.ClamFFI.DrawHierarchy(Reingoldify);
 //            //SetLines();
 
 //            m_TempUI = new TempUI(m_Tree, m_SelectedNodes, m_QueryResults, nodePrefab, text);
@@ -174,7 +174,7 @@
 //        public void ResetAll()
 //        {
 //            m_TempUI.Reset();
-//            Clam.ClamFFI.DrawHeirarchy(Reingoldify);
+//            Clam.ClamFFI.DrawHierarchy(Reingoldify);
 //            GameObject[] gos = GameObject.FindGameObjectsWithTag("Spring");
 //            Debug.Log("found " + gos.Length.ToString() + " springs");
 //            foreach (GameObject go in gos)
