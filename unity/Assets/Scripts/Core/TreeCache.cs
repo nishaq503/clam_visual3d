@@ -27,6 +27,17 @@ namespace Clam
         //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
         public FFIError Init(GameObject nodePrefab, GameObject springPrefab)
         {
+
+            var wrapper = NativeMethods.CreateStringFFIWrapper("testing 1234");
+            if (wrapper != null)
+            {
+                Debug.Log("wrapper value allocated: " + wrapper.Data.AsString);
+            }
+            else
+            {
+                Debug.LogError("alloc failed");
+            }
+
             m_NodePrefab = nodePrefab;
             m_SpringPrefab = springPrefab;
             //m_NodePrefab = nodePrefab;

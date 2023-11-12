@@ -7,6 +7,32 @@ namespace Clam
     namespace FFI
     {
 
+        public class StringFFIWrapper
+        {
+            private StringFFI m_Data;
+
+            public StringFFIWrapper(StringFFI nodeData)
+            {
+                m_Data = nodeData;
+            }
+
+            public StringFFI Data
+            {
+                get { return m_Data; }
+                set
+                {
+                    //m_Data.FreeStrings();
+                    m_Data = value;
+                }
+            }
+
+            ~StringFFIWrapper()
+            {
+                Debug.Log("freeign allocated string in wrapper");
+                NativeMethods.FreeString(ref m_Data);
+            }
+        }
+
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public partial struct StringFFI

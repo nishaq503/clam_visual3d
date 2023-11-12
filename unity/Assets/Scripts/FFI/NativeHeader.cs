@@ -53,11 +53,18 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "create_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError create_cluster_data(IntPtr ptr, string id, out ClusterData data);
 
+            [DllImport(__DllName, EntryPoint = "alloc_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError alloc_string(string value, out StringFFI data);
+
             [DllImport(__DllName, EntryPoint = "create_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError create_cluster_ids(IntPtr ptr, string id, out ClusterIDs data);
 
             [DllImport(__DllName, EntryPoint = "delete_cluster_data", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError delete_cluster_data(ref ClusterData inData, out ClusterData outData);
+
+            [DllImport(__DllName, EntryPoint = "free_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError free_string(ref StringFFI inData, out ClusterData outData);
+
             [DllImport(__DllName, EntryPoint = "delete_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError delete_cluster_ids(ref ClusterIDs inData, out ClusterIDs outData);
 

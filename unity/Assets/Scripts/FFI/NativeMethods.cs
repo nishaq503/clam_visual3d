@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231113153939";
+	public const string __DllName = "clam_ffi_20231113160249";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -122,6 +122,19 @@ namespace Clam
                 //ClusterData* data = create_cluster_data("1");
             }
 
+            public static Clam.FFI.StringFFIWrapper CreateStringFFIWrapper(string id)
+            {
+                var result = alloc_string(id, out var data);
+                if (result != FFIError.Ok)
+                {
+                    Debug.Log(result);
+                    return null;
+                }
+
+                return new StringFFIWrapper(data);
+                //ClusterData* data = create_cluster_data("1");
+            }
+
             public static Clam.FFI.ClusterIDsWrapper CreateClusterIDsWrapper(string id)
             {
                 var result = create_cluster_ids(m_Handle, id, out var data);
@@ -160,6 +173,14 @@ namespace Clam
             {
                 //Debug.Log("freeing with delete cluster data");
                 return delete_cluster_data(ref data, out var outData);
+                //return data;
+                //ClusterData* data = create_cluster_data("1");
+            }
+
+            public static FFIError FreeString(ref StringFFI data)
+            {
+                //Debug.Log("freeing with delete cluster data");
+                return free_string(ref data, out var outData);
                 //return data;
                 //ClusterData* data = create_cluster_data("1");
             }

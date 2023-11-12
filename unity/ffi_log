@@ -1,6 +1,166 @@
-UnsupportedMetric
-HandleInitFailed
-handle not created
+built clam tree for annthyroid
+node name: "0-7200"
+node name: "0-4842"
+node name: "0-4790"
+node name: "0-2782"
+node name: "0-2274"
+node name: "0-1200"
+node name: "0-687"
+node name: "0-675"
+node name: "0-592"
+node name: "687-513"
+node name: "1200-1074"
+node name: "1200-683"
+node name: "2274-508"
+node name: "2782-2008"
+node name: "2782-1821"
+node name: "2782-1746"
+node name: "2782-1099"
+node name: "2782-554"
+node name: "3336-545"
+node name: "3881-647"
+node name: "3881-569"
+node name: "4842-2358"
+node name: "4842-2318"
+node name: "4842-2298"
+node name: "4842-1841"
+node name: "4842-1787"
+node name: "4842-1033"
+node name: "4842-736"
+node name: "4842-591"
+node name: "5875-754"
+left name 0-4842
+id was not valid
+rightt name 4842-2358
+id was not valid
+left name 0-4790
+id was not valid
+rightt name 4790-52
+id was not valid
+left name 0-2782
+id was not valid
+rightt name 2782-2008
+id was not valid
+left name 0-2274
+id was not valid
+rightt name 2274-508
+id was not valid
+left name 0-1200
+id was not valid
+rightt name 1200-1074
+id was not valid
+left name 0-687
+id was not valid
+rightt name 687-513
+id was not valid
+left name 0-675
+id was not valid
+rightt name 675-12
+id was not valid
+left name 0-592
+id was not valid
+rightt name 592-83
+id was not valid
+left name 0-421
+id was not valid
+rightt name 421-171
+id was not valid
+left name 687-484
+id was not valid
+rightt name 1171-29
+id was not valid
+left name 1200-683
+id was not valid
+rightt name 1883-391
+id was not valid
+left name 1200-383
+id was not valid
+rightt name 1583-300
+id was not valid
+left name 2274-336
+id was not valid
+rightt name 2610-172
+id was not valid
+left name 2782-1821
+id was not valid
+rightt name 4603-187
+id was not valid
+left name 2782-1746
+id was not valid
+rightt name 4528-75
+id was not valid
+left name 2782-1099
+id was not valid
+rightt name 3881-647
+id was not valid
+left name 2782-554
+id was not valid
+rightt name 3336-545
+id was not valid
+left name 2782-368
+id was not valid
+rightt name 3150-186
+id was not valid
+left name 3336-448
+id was not valid
+rightt name 3784-97
+id was not valid
+left name 3881-569
+id was not valid
+rightt name 4450-78
+id was not valid
+left name 3881-410
+id was not valid
+rightt name 4291-159
+id was not valid
+left name 4842-2318
+id was not valid
+rightt name 7160-40
+id was not valid
+left name 4842-2298
+id was not valid
+rightt name 7140-20
+id was not valid
+left name 4842-1841
+id was not valid
+rightt name 6683-457
+id was not valid
+left name 4842-1787
+id was not valid
+rightt name 6629-54
+id was not valid
+left name 4842-1033
+id was not valid
+rightt name 5875-754
+id was not valid
+left name 4842-736
+id was not valid
+rightt name 5578-297
+id was not valid
+left name 4842-591
+id was not valid
+rightt name 5433-145
+id was not valid
+left name 4842-318
+id was not valid
+rightt name 5160-273
+id was not valid
+left name 5875-480
+id was not valid
+rightt name 6355-274
+id was not valid
+left name 0-4842
+id was not valid
+rightt name 4842-2358
+id was not valid
+left name 0-4790
+id was not valid
+rightt name 4790-52
+id was not valid
+left name 4842-2318
+id was not valid
+rightt name 7160-40
+id was not valid
 built clam tree for arrhythmia
 node name: "0-452"
 node name: "0-448"
@@ -87,6 +247,8 @@ left name 355-28
 id was not valid
 rightt name 383-25
 id was not valid
+entering free string
+freed allocayed string!!!!!
 left name 0-448
 id was not valid
 rightt name 448-4
@@ -94,792 +256,4 @@ id was not valid
 left name 0-434
 id was not valid
 rightt name 434-14
-id was not valid
-built clam tree for annthyroid
-node name: "0-7200"
-node name: "0-4842"
-node name: "0-4790"
-node name: "0-2782"
-node name: "0-2274"
-node name: "0-1200"
-node name: "0-687"
-node name: "0-675"
-node name: "0-592"
-node name: "0-421"
-node name: "0-229"
-node name: "0-133"
-node name: "133-96"
-node name: "229-192"
-node name: "229-168"
-node name: "229-112"
-node name: "421-171"
-node name: "421-101"
-node name: "421-95"
-node name: "592-83"
-node name: "687-513"
-node name: "687-484"
-node name: "687-396"
-node name: "687-252"
-node name: "687-193"
-node name: "687-105"
-node name: "792-88"
-node name: "939-144"
-node name: "939-105"
-node name: "1083-88"
-node name: "1200-1074"
-node name: "1200-683"
-node name: "1200-383"
-node name: "1200-278"
-node name: "1200-153"
-node name: "1200-151"
-node name: "1200-106"
-node name: "1353-125"
-node name: "1353-86"
-node name: "1478-105"
-node name: "1478-84"
-node name: "1583-300"
-node name: "1583-199"
-node name: "1583-100"
-node name: "1683-99"
-node name: "1683-82"
-node name: "1782-101"
-node name: "1883-391"
-node name: "1883-247"
-node name: "1883-223"
-node name: "1883-120"
-node name: "2003-103"
-node name: "2130-144"
-node name: "2130-84"
-node name: "2274-508"
-node name: "2274-336"
-node name: "2274-250"
-node name: "2274-209"
-node name: "2274-153"
-node name: "2274-132"
-node name: "2524-86"
-node name: "2610-172"
-node name: "2610-135"
-node name: "2610-85"
-node name: "2782-2008"
-node name: "2782-1821"
-node name: "2782-1746"
-node name: "2782-1099"
-node name: "2782-554"
-node name: "2782-368"
-node name: "2782-258"
-node name: "2782-205"
-node name: "2782-156"
-node name: "2782-87"
-node name: "3040-110"
-node name: "3040-86"
-node name: "3150-186"
-node name: "3150-111"
-node name: "3150-87"
-node name: "3336-545"
-node name: "3336-448"
-node name: "3336-349"
-node name: "3336-230"
-node name: "3336-177"
-node name: "3336-124"
-node name: "3336-81"
-node name: "3566-119"
-node name: "3566-81"
-node name: "3685-99"
-node name: "3784-97"
-node name: "3784-92"
-node name: "3881-647"
-node name: "3881-569"
-node name: "3881-410"
-node name: "3881-235"
-node name: "3881-154"
-node name: "3881-94"
-node name: "4035-81"
-node name: "4116-175"
-node name: "4116-103"
-node name: "4116-95"
-node name: "4291-159"
-node name: "4291-101"
-node name: "4603-187"
-node name: "4603-103"
-node name: "4706-84"
-node name: "4842-2358"
-node name: "4842-2318"
-node name: "4842-2298"
-node name: "4842-1841"
-node name: "4842-1787"
-node name: "4842-1023"
-node name: "4842-735"
-node name: "4842-591"
-node name: "4842-318"
-node name: "4842-207"
-node name: "4842-107"
-node name: "4949-100"
-node name: "5049-111"
-node name: "5160-273"
-node name: "5160-169"
-node name: "5160-98"
-node name: "5329-104"
-node name: "5433-144"
-node name: "5433-123"
-node name: "5577-288"
-node name: "5577-163"
-node name: "5577-136"
-node name: "5577-83"
-node name: "5740-125"
-node name: "5740-83"
-node name: "5865-764"
-node name: "5865-456"
-node name: "5865-363"
-node name: "5865-266"
-node name: "5865-178"
-node name: "5865-119"
-node name: "6043-88"
-node name: "6131-97"
-node name: "6228-93"
-node name: "6321-308"
-node name: "6321-220"
-node name: "6321-179"
-node name: "6321-100"
-node name: "6541-88"
-node name: "6683-457"
-node name: "6683-441"
-node name: "6683-222"
-node name: "6683-155"
-node name: "6683-140"
-node name: "6683-109"
-node name: "6905-219"
-node name: "6905-171"
-node name: "6905-151"
-node name: "6905-100"
-left name 0-4842
-id was not valid
-rightt name 4842-2358
-id was not valid
-left name 0-4790
-id was not valid
-rightt name 4790-52
-id was not valid
-left name 0-2782
-id was not valid
-rightt name 2782-2008
-id was not valid
-left name 0-2274
-id was not valid
-rightt name 2274-508
-id was not valid
-left name 0-1200
-id was not valid
-rightt name 1200-1074
-id was not valid
-left name 0-687
-id was not valid
-rightt name 687-513
-id was not valid
-left name 0-675
-id was not valid
-rightt name 675-12
-id was not valid
-left name 0-592
-id was not valid
-rightt name 592-83
-id was not valid
-left name 0-421
-id was not valid
-rightt name 421-171
-id was not valid
-left name 0-229
-id was not valid
-rightt name 229-192
-id was not valid
-left name 0-133
-id was not valid
-rightt name 133-96
-id was not valid
-left name 0-75
-id was not valid
-rightt name 75-58
-id was not valid
-left name 133-66
-id was not valid
-rightt name 199-30
-id was not valid
-left name 229-168
-id was not valid
-rightt name 397-24
-id was not valid
-left name 229-112
-id was not valid
-rightt name 341-56
-id was not valid
-left name 229-64
-id was not valid
-rightt name 293-48
-id was not valid
-left name 421-101
-id was not valid
-rightt name 522-70
-id was not valid
-left name 421-95
-id was not valid
-rightt name 516-6
-id was not valid
-left name 421-59
-id was not valid
-rightt name 480-36
-id was not valid
-left name 592-53
-id was not valid
-rightt name 645-30
-id was not valid
-left name 687-484
-id was not valid
-rightt name 1171-29
-id was not valid
-left name 687-396
-id was not valid
-rightt name 1083-88
-id was not valid
-left name 687-252
-id was not valid
-rightt name 939-144
-id was not valid
-left name 687-193
-id was not valid
-rightt name 880-59
-id was not valid
-left name 687-105
-id was not valid
-rightt name 792-88
-id was not valid
-left name 687-78
-id was not valid
-rightt name 765-27
-id was not valid
-left name 792-59
-id was not valid
-rightt name 851-29
-id was not valid
-left name 939-105
-id was not valid
-rightt name 1044-39
-id was not valid
-left name 939-76
-id was not valid
-rightt name 1015-29
-id was not valid
-left name 1083-61
-id was not valid
-rightt name 1144-27
-id was not valid
-left name 1200-683
-id was not valid
-rightt name 1883-391
-id was not valid
-left name 1200-383
-id was not valid
-rightt name 1583-300
-id was not valid
-left name 1200-278
-id was not valid
-rightt name 1478-105
-id was not valid
-left name 1200-153
-id was not valid
-rightt name 1353-125
-id was not valid
-left name 1200-151
-id was not valid
-rightt name 1351-2
-id was not valid
-left name 1200-106
-id was not valid
-rightt name 1306-45
-id was not valid
-left name 1200-60
-id was not valid
-rightt name 1260-46
-id was not valid
-left name 1353-86
-id was not valid
-rightt name 1439-39
-id was not valid
-left name 1353-68
-id was not valid
-rightt name 1421-18
-id was not valid
-left name 1478-84
-id was not valid
-rightt name 1562-21
-id was not valid
-left name 1478-75
-id was not valid
-rightt name 1553-9
-id was not valid
-left name 1583-199
-id was not valid
-rightt name 1782-101
-id was not valid
-left name 1583-100
-id was not valid
-rightt name 1683-99
-id was not valid
-left name 1583-67
-id was not valid
-rightt name 1650-33
-id was not valid
-left name 1683-82
-id was not valid
-rightt name 1765-17
-id was not valid
-left name 1683-45
-id was not valid
-rightt name 1728-37
-id was not valid
-left name 1782-58
-id was not valid
-rightt name 1840-43
-id was not valid
-left name 1883-247
-id was not valid
-rightt name 2130-144
-id was not valid
-left name 1883-223
-id was not valid
-rightt name 2106-24
-id was not valid
-left name 1883-120
-id was not valid
-rightt name 2003-103
-id was not valid
-left name 1883-72
-id was not valid
-rightt name 1955-48
-id was not valid
-left name 2003-56
-id was not valid
-rightt name 2059-47
-id was not valid
-left name 2130-84
-id was not valid
-rightt name 2214-60
-id was not valid
-left name 2130-74
-id was not valid
-rightt name 2204-10
-id was not valid
-left name 2274-336
-id was not valid
-rightt name 2610-172
-id was not valid
-left name 2274-250
-id was not valid
-rightt name 2524-86
-id was not valid
-left name 2274-209
-id was not valid
-rightt name 2483-41
-id was not valid
-left name 2274-153
-id was not valid
-rightt name 2427-56
-id was not valid
-left name 2274-132
-id was not valid
-rightt name 2406-21
-id was not valid
-left name 2274-78
-id was not valid
-rightt name 2352-54
-id was not valid
-left name 2524-72
-id was not valid
-rightt name 2596-14
-id was not valid
-left name 2610-135
-id was not valid
-rightt name 2745-37
-id was not valid
-left name 2610-85
-id was not valid
-rightt name 2695-50
-id was not valid
-left name 2610-50
-id was not valid
-rightt name 2660-35
-id was not valid
-left name 2782-1821
-id was not valid
-rightt name 4603-187
-id was not valid
-left name 2782-1746
-id was not valid
-rightt name 4528-75
-id was not valid
-left name 2782-1099
-id was not valid
-rightt name 3881-647
-id was not valid
-left name 2782-554
-id was not valid
-rightt name 3336-545
-id was not valid
-left name 2782-368
-id was not valid
-rightt name 3150-186
-id was not valid
-left name 2782-258
-id was not valid
-rightt name 3040-110
-id was not valid
-left name 2782-205
-id was not valid
-rightt name 2987-53
-id was not valid
-left name 2782-156
-id was not valid
-rightt name 2938-49
-id was not valid
-left name 2782-87
-id was not valid
-rightt name 2869-69
-id was not valid
-left name 2782-70
-id was not valid
-rightt name 2852-17
-id was not valid
-left name 3040-86
-id was not valid
-rightt name 3126-24
-id was not valid
-left name 3040-52
-id was not valid
-rightt name 3092-34
-id was not valid
-left name 3150-111
-id was not valid
-rightt name 3261-75
-id was not valid
-left name 3150-87
-id was not valid
-rightt name 3237-24
-id was not valid
-left name 3150-51
-id was not valid
-rightt name 3201-36
-id was not valid
-left name 3336-448
-id was not valid
-rightt name 3784-97
-id was not valid
-left name 3336-349
-id was not valid
-rightt name 3685-99
-id was not valid
-left name 3336-230
-id was not valid
-rightt name 3566-119
-id was not valid
-left name 3336-177
-id was not valid
-rightt name 3513-53
-id was not valid
-left name 3336-124
-id was not valid
-rightt name 3460-53
-id was not valid
-left name 3336-81
-id was not valid
-rightt name 3417-43
-id was not valid
-left name 3336-41
-id was not valid
-rightt name 3377-40
-id was not valid
-left name 3566-81
-id was not valid
-rightt name 3647-38
-id was not valid
-left name 3566-43
-id was not valid
-rightt name 3609-38
-id was not valid
-left name 3685-72
-id was not valid
-rightt name 3757-27
-id was not valid
-left name 3784-92
-id was not valid
-rightt name 3876-5
-id was not valid
-left name 3784-49
-id was not valid
-rightt name 3833-43
-id was not valid
-left name 3881-569
-id was not valid
-rightt name 4450-78
-id was not valid
-left name 3881-410
-id was not valid
-rightt name 4291-159
-id was not valid
-left name 3881-235
-id was not valid
-rightt name 4116-175
-id was not valid
-left name 3881-154
-id was not valid
-rightt name 4035-81
-id was not valid
-left name 3881-94
-id was not valid
-rightt name 3975-60
-id was not valid
-left name 3881-69
-id was not valid
-rightt name 3950-25
-id was not valid
-left name 4035-66
-id was not valid
-rightt name 4101-15
-id was not valid
-left name 4116-103
-id was not valid
-rightt name 4219-72
-id was not valid
-left name 4116-95
-id was not valid
-rightt name 4211-8
-id was not valid
-left name 4116-55
-id was not valid
-rightt name 4171-40
-id was not valid
-left name 4291-101
-id was not valid
-rightt name 4392-58
-id was not valid
-left name 4291-76
-id was not valid
-rightt name 4367-25
-id was not valid
-left name 4603-103
-id was not valid
-rightt name 4706-84
-id was not valid
-left name 4603-80
-id was not valid
-rightt name 4683-23
-id was not valid
-left name 4706-66
-id was not valid
-rightt name 4772-18
-id was not valid
-left name 4842-2318
-id was not valid
-rightt name 7160-40
-id was not valid
-left name 4842-2298
-id was not valid
-rightt name 7140-20
-id was not valid
-left name 4842-1841
-id was not valid
-rightt name 6683-457
-id was not valid
-left name 4842-1787
-id was not valid
-rightt name 6629-54
-id was not valid
-left name 4842-1023
-id was not valid
-rightt name 5865-764
-id was not valid
-left name 4842-735
-id was not valid
-rightt name 5577-288
-id was not valid
-left name 4842-591
-id was not valid
-rightt name 5433-144
-id was not valid
-left name 4842-318
-id was not valid
-rightt name 5160-273
-id was not valid
-left name 4842-207
-id was not valid
-rightt name 5049-111
-id was not valid
-left name 4842-107
-id was not valid
-rightt name 4949-100
-id was not valid
-left name 4842-69
-id was not valid
-rightt name 4911-38
-id was not valid
-left name 4949-66
-id was not valid
-rightt name 5015-34
-id was not valid
-left name 5049-58
-id was not valid
-rightt name 5107-53
-id was not valid
-left name 5160-169
-id was not valid
-rightt name 5329-104
-id was not valid
-left name 5160-98
-id was not valid
-rightt name 5258-71
-id was not valid
-left name 5160-80
-id was not valid
-rightt name 5240-18
-id was not valid
-left name 5329-58
-id was not valid
-rightt name 5387-46
-id was not valid
-left name 5433-123
-id was not valid
-rightt name 5556-21
-id was not valid
-left name 5433-71
-id was not valid
-rightt name 5504-52
-id was not valid
-left name 5577-163
-id was not valid
-rightt name 5740-125
-id was not valid
-left name 5577-136
-id was not valid
-rightt name 5713-27
-id was not valid
-left name 5577-83
-id was not valid
-rightt name 5660-53
-id was not valid
-left name 5577-43
-id was not valid
-rightt name 5620-40
-id was not valid
-left name 5740-83
-id was not valid
-rightt name 5823-42
-id was not valid
-left name 5740-59
-id was not valid
-rightt name 5799-24
-id was not valid
-left name 5865-456
-id was not valid
-rightt name 6321-308
-id was not valid
-left name 5865-363
-id was not valid
-rightt name 6228-93
-id was not valid
-left name 5865-266
-id was not valid
-rightt name 6131-97
-id was not valid
-left name 5865-178
-id was not valid
-rightt name 6043-88
-id was not valid
-left name 5865-119
-id was not valid
-rightt name 5984-59
-id was not valid
-left name 5865-68
-id was not valid
-rightt name 5933-51
-id was not valid
-left name 6043-65
-id was not valid
-rightt name 6108-23
-id was not valid
-left name 6131-66
-id was not valid
-rightt name 6197-31
-id was not valid
-left name 6228-63
-id was not valid
-rightt name 6291-30
-id was not valid
-left name 6321-220
-id was not valid
-rightt name 6541-88
-id was not valid
-left name 6321-179
-id was not valid
-rightt name 6500-41
-id was not valid
-left name 6321-100
-id was not valid
-rightt name 6421-79
-id was not valid
-left name 6321-54
-id was not valid
-rightt name 6375-46
-id was not valid
-left name 6541-63
-id was not valid
-rightt name 6604-25
-id was not valid
-left name 6683-441
-id was not valid
-rightt name 7124-16
-id was not valid
-left name 6683-222
-id was not valid
-rightt name 6905-219
-id was not valid
-left name 6683-155
-id was not valid
-rightt name 6838-67
-id was not valid
-left name 6683-140
-id was not valid
-rightt name 6823-15
-id was not valid
-left name 6683-109
-id was not valid
-rightt name 6792-31
-id was not valid
-left name 6683-72
-id was not valid
-rightt name 6755-37
-id was not valid
-left name 6905-171
-id was not valid
-rightt name 7076-48
-id was not valid
-left name 6905-151
-id was not valid
-rightt name 7056-20
-id was not valid
-left name 6905-100
-id was not valid
-rightt name 7005-51
-id was not valid
-left name 6905-55
-id was not valid
-rightt name 6960-45
-id was not valid
-left name 0-4842
-id was not valid
-rightt name 4842-2358
-id was not valid
-left name 0-4790
-id was not valid
-rightt name 4790-52
-id was not valid
-left name 4842-2318
-id was not valid
-rightt name 7160-40
 id was not valid

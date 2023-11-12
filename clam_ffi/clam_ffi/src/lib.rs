@@ -66,6 +66,19 @@ pub unsafe extern "C" fn create_cluster_data(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn alloc_string(
+    value: *const c_char,
+    outgoing: Option<&mut StringFFI>,
+) -> FFIError {
+        let outgoing = outgoing.unwrap();
+        let value = utils::helpers::c_char_to_string(value);
+        let data = StringFFI::new(value);
+
+    *outgoing = data;
+    return FFIError::Ok;
+}
+
+#[no_mangle]
 pub extern "C" fn delete_cluster_data(
     in_cluster_data: Option<&ClusterData>,
     out_cluster_data: Option<&mut ClusterData>,
@@ -74,17 +87,30 @@ pub extern "C" fn delete_cluster_data(
     // if data.is_none() {
     // }
 
-    // return if let Some(in_data) = in_cluster_data {
-    //     if let Some(out_data) = out_cluster_data {
-    //         *out_data = *in_data;
-    //         out_data.free_ids();
-    //         FFIError::Ok
-    //     } else {
-    //         FFIError::NullPointerPassed
-    //     }
-    // } else {
-    //     FFIError::NullPointerPassed
-    // };
+
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn free_string(
+    in_data: Option<&StringFFI>,
+    out_data: Option<&mut StringFFI>,
+) -> FFIError {
+
+    debug!("entering free string");
+    return if let Some(in_data) = in_data {
+        if let Some(out_data) = out_data {
+            *out_data = in_data.clone();
+            out_data.free();
+            debug!("freed allocayed string!!!!!");
+            FFIError::Ok
+        } else {
+            debug!("out data null");
+            FFIError::NullPointerPassed
+        }
+    } else {
+        debug!("in data null");
+        FFIError::NullPointerPassed
+    };
 }
 
 #[no_mangle]
