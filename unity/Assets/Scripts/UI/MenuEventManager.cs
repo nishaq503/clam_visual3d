@@ -216,7 +216,7 @@ namespace Clam
             string dataName = doc.rootVisualElement.Q<TextField>("DatasetInputField").value;
             // this error handling should be taken care of by the textfield (i.e int parse)
             int cardinality = int.Parse(doc.rootVisualElement.Q<TextField>("CardinalityInputField").value);
-            int distanceMetric = doc.rootVisualElement.Q<DropdownField>("DistanceMetricDropdown").index;
+            int distanceMetric = doc.rootVisualElement.Q<DropdownField>("DistanceMetricDropdown").index + 1;// account for None
             Debug.Log("selected distance metric" + distanceMetric);
             //var test = doc.rootVisualElement.Q<Button>("CreateTree");
             //var treeData = ScriptableObject.CreateInstance<ClamTreeData>();

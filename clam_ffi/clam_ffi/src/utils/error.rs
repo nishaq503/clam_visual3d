@@ -17,4 +17,6 @@ pub enum FFIError {
     PhysicsNotReady,
     StartupDataInvalid,
     SaveFailed,
+    UnsupportedMetric,
+    PathNotFound,
 }

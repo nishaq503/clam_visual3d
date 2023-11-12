@@ -2,6 +2,8 @@
 #![allow(unused_variables)]
 
 use distances;
+use crate::utils::error::FFIError;
+
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
 pub enum DistanceMetric {
@@ -19,49 +21,47 @@ pub enum DistanceMetric {
 }
 
 //TODO: Make generic for strings as well
-pub fn from_enum(metric: DistanceMetric) -> fn(&Vec<f32>, &Vec<f32>) -> f32 {
+pub fn from_enum(metric: DistanceMetric) -> Result<fn(&Vec<f32>, &Vec<f32>) -> f32, FFIError> {
     match metric {
-        DistanceMetric::Euclidean => euclidean,
-        DistanceMetric::EuclideanSQ => euclidean_sq,
-        DistanceMetric::Manhattan => manhattan,
-        DistanceMetric::L3Norm => l3_norm,
-        DistanceMetric::L4Norm => l4_norm,
-        DistanceMetric::Chebyshev => chebyshev,
-        DistanceMetric::Cosine => cosine,
-        DistanceMetric::Canberra => canberra,
+        DistanceMetric::Euclidean => Ok(euclidean),
+        DistanceMetric::EuclideanSQ => Ok(euclidean_sq),
+        DistanceMetric::Manhattan => Ok(manhattan),
+        DistanceMetric::L3Norm => Ok(l3_norm),
+        DistanceMetric::L4Norm => Ok(l4_norm),
+        DistanceMetric::Chebyshev => Ok(chebyshev),
+        DistanceMetric::Cosine => Ok(cosine),
+        DistanceMetric::Canberra => Ok(canberra),
 
-        // DistanceMetric::NeedlemanWunsch => needleman,
-        // "hamming" => hamming,
-        // "jaccard" => jaccard,
-        _ => panic!("Distance {:?} is not implemented in clam.", metric),
+        // Handle unsupported or unimplemented metrics as an error
+        _ => Err(FFIError::UnsupportedMetric)
     }
 }
 
 // lp_norms
 pub fn euclidean(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::euclidean(&x.to_vec(), &y.to_vec());
+    distances::vectors::euclidean(x, y)
 }
 pub fn euclidean_sq(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::euclidean_sq(&x.to_vec(), &y.to_vec());
+    return distances::vectors::euclidean_sq(x, y);
 }
 pub fn manhattan(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::manhattan(&x.to_vec(), &y.to_vec());
+    return distances::vectors::manhattan(x, y);
 }
 pub fn l3_norm(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::l3_norm(&x.to_vec(), &y.to_vec());
+    return distances::vectors::l3_norm(x, y);
 }
 pub fn l4_norm(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::l3_norm(&x.to_vec(), &y.to_vec());
+    return distances::vectors::l3_norm(x, y);
 }
 pub fn chebyshev(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::chebyshev(&x.to_vec(), &y.to_vec());
+    return distances::vectors::chebyshev(x, y);
 }
 
 pub fn cosine(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::cosine(&x.to_vec(), &y.to_vec());
+    return distances::vectors::cosine(x, y);
 }
 pub fn canberra(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
-    return distances::vectors::canberra(&x.to_vec(), &y.to_vec());
+    return distances::vectors::canberra(x, y);
 }
 
 //Needleman Wunsch

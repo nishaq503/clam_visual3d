@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 
 use ndarray::prelude::*;
+use crate::utils::error::FFIError;
 // #[macro_use]
 // mod core::debug;
 // use crate::debug;
@@ -33,19 +34,15 @@ pub static ANOMALY_DATASETS: &[&str] = &[
     "wine",        // 23
 ];
 
-pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>, Vec<u8>), String> {
+pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>, Vec<u8>), FFIError> {
     let mut data_dir = std::env::current_dir().unwrap();
     data_dir.pop();
     data_dir.push("data");
     data_dir.push("anomaly_data");
     data_dir.push("preprocessed");
-
-    // assert!(data_dir.exists(), "Path not found: {data_dir:?}");
     if !data_dir.exists() {
         let p = data_dir.to_str().unwrap_or("path is empty");
-        return Err(format!("path {p} not found"));
-        // debug!("data dir{:?} - {}", data_dir, data_dir.exists());
-        // return Err("data dir not found".to_string());
+        return Err(FFIError::PathNotFound);
     }
 
     let features = {
@@ -59,16 +56,11 @@ pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>,
         if !path.exists() {
             // debug!("path {:?} - {}", path, path.exists());
             let p = path.to_str().unwrap_or("path is empty");
-            return Err(format!("path {p} not found"));
-            // return Err("data dir not found".to_string());
+            return Err(FFIError::PathNotFound);
         }
 
         let features: Array2<f32> = ndarray_npy::read_npy(&path).map_err(|error| {
-            format!(
-                "Error: Failed to read your dataset at {}. {:}",
-                path.to_str().unwrap(),
-                error
-            )
+            FFIError::PathNotFound
         })?;
 
         features.outer_iter().map(|row| row.to_vec()).collect()
@@ -78,17 +70,12 @@ pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>,
         let mut path = data_dir.clone();
         path.push(format!("{name}_scores.npy"));
 
-        // assert!(path.exists(), "Path not found: {path:?}");
-
         if !path.exists() {
-            // debug!("path {:?} - {}", path, path.exists());
-            let p = path.to_str().unwrap_or("path is empty");
-            return Err(format!("path {p} not found"));
+            return Err(FFIError::PathNotFound);
         }
 
         let features: Array1<u8> = ndarray_npy::read_npy(&path).map_err(|error| {
-            let path = path.to_str().unwrap_or("path is empty");
-            format!("Error: Failed to read your dataset at {path}. {error}")
+            FFIError::PathNotFound
         })?;
 
         features.to_vec()

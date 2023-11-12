@@ -21,6 +21,8 @@ namespace Clam
         PhysicsFinished,
         PhysicsNotReady,
         StartupDataInvalid,
-        SaveFailed
+        SaveFailed,
+        UnsupportedMetric,
+        PathNotFound,
     }
 }

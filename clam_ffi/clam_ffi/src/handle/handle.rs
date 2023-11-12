@@ -179,19 +179,29 @@ impl Handle {
         data_name: &str,
         distance_metric: DistanceMetric,
         // distance_metric: fn(&Vec<f32>, &Vec<f32>) -> f32,
-    ) -> Result<(DataSet, Vec<u8>), String> {
+    ) -> Result<(DataSet, Vec<u8>), FFIError> {
+        let metric = match utils::distances::from_enum(distance_metric){
+            Ok(metric) => metric,
+            Err(e)=> {
+                debug!("{:?}", e);
+                return Err(e)
+            },
+        };
         match anomaly_readers::read_anomaly_data(data_name, false) {
             Ok((first_data, labels)) => {
                 let dataset = VecDataset::new(
                     data_name.to_string(),
                     first_data,
-                    utils::distances::from_enum(distance_metric),
+                    metric,
                     false,
                 );
 
                 Ok((dataset, labels))
             }
-            Err(e) => Err(e),
+            Err(e) => {
+                debug!("{:?}", e);
+                Err(e)
+            },
         }
     }
 
