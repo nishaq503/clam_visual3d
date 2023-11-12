@@ -65,7 +65,7 @@ use spring::Spring;
 
 pub struct Handle {
     cakes: Option<Cakes<Vec<f32>, f32, DataSet>>,
-    cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
+    // cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
 
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
