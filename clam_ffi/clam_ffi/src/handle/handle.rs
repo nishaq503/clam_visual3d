@@ -1,6 +1,7 @@
 extern crate nalgebra as na;
 
 use std::collections::HashMap;
+use std::path::Path;
 use std::sync::Arc;
 // use std::thread;
 use std::thread::JoinHandle;
@@ -21,7 +22,7 @@ use crate::graph::spring;
 use crate::tree_layout::reingold_tilford;
 use crate::utils::distances::DistanceMetric;
 use crate::utils::error::FFIError;
-use crate::utils::types::{Clusterf32, DataSet};
+use crate::utils::types::{Cakesf32, Clusterf32, DataSet};
 use crate::utils::{self, anomaly_readers, helpers};
 
 use crate::{debug, CBFnNodeVisitor, CBFnNodeVisitorMut};
@@ -64,6 +65,8 @@ use spring::Spring;
 
 pub struct Handle {
     cakes: Option<Cakes<Vec<f32>, f32, DataSet>>,
+    cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
+
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
     edges: Option<Vec<Spring>>,
@@ -118,6 +121,14 @@ impl Handle {
         };
     }
 
+    pub fn set_cakes(&mut self, cakes: Cakes<Vec<f32>, f32, DataSet>) {
+        self.cakes = Some(cakes);
+    }
+
+    pub fn cakes(&self) -> &Option<Cakes<Vec<f32>, f32, DataSet>> {
+        &self.cakes
+    }
+
     pub fn new(
         data_name: &str,
         cardinality: usize,
@@ -129,6 +140,28 @@ impl Handle {
                 return Ok(Handle {
                     cakes: Some(Cakes::new(dataset, Some(1), &criteria)), //.build(&criteria)),
                     labels: Some(labels),
+                    graph: None,
+                    edges: None,
+                    current_query: None,
+                    // longest_edge: None,
+                    force_directed_graph: None,
+                    // _test_drop: Some(TestDrop { test: 5 }),
+                    num_edges_in_graph: None,
+                });
+            }
+            Err(_) => Err(FFIError::HandleInitFailed),
+        }
+    }
+
+    pub fn load(
+        data_name: &str,
+    ) -> Result<Self, FFIError> {
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(Path::new(data_name), utils::distances::euclidean, false);
+        match c {
+            Ok(cakes) => {
+                return Ok(Handle {
+                    cakes: Some(cakes),
+                    labels: None,
                     graph: None,
                     edges: None,
                     current_query: None,

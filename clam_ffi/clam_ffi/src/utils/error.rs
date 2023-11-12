@@ -15,4 +15,6 @@ pub enum FFIError {
     PhysicsRunning,
     PhysicsFinished,
     PhysicsNotReady,
+    StartupDataInvalid,
+    SaveFailed,
 }

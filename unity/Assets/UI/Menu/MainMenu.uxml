@@ -3,7 +3,7 @@
         <ui:VisualElement name="MenuBackgfround" style="align-items: center; justify-content: center; width: 50%; height: 50%; flex-grow: 0; background-color: rgb(115, 110, 110); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
             <ui:Label text="Clam Visualization" display-tooltip-when-elided="true" name="ClamLabel" style="font-size: 24px;" />
             <ui:Button text="Create" display-tooltip-when-elided="true" name="CreateTree" style="width: 25%;" />
-            <ui:Button text="Import" display-tooltip-when-elided="true" name="ImportTree" style="width: 25%;" />
+            <ui:Button text="Load" display-tooltip-when-elided="true" name="LoadTree" style="width: 25%;" />
             <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitButton" focusable="true" style="width: 25%;" />
         </ui:VisualElement>
     </ui:VisualElement>

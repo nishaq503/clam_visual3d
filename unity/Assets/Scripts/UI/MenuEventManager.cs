@@ -6,13 +6,16 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public enum Menu
 {
     None,
     Main,
     CreateNewTree,
+    LoadTree,
     StartClam,
+    LoadClam,
     Pause,
     Lock,
     Unlock,
@@ -31,6 +34,7 @@ namespace Clam
     {
         public GameObject m_MainMenuPrefab;
         public GameObject m_CreateNewTreeMenuPrefab;
+        public GameObject m_LoadTreeMenuPrefab;
         public GameObject m_PauseMenu;
         public GameObject m_InitalMenu;
         public GameObject m_ClusterSideMenu;
@@ -104,7 +108,9 @@ namespace Clam
 
                 StartListening(Menu.Main, SwitchToMainMenu);
                 StartListening(Menu.CreateNewTree, SwitchToCreateTree);
+                StartListening(Menu.LoadTree, SwitchToLoadTree);
                 StartListening(Menu.StartClam, StartClam);
+                StartListening(Menu.LoadClam, LoadClam);
 
                 StartListening(Menu.Lock, LockUserInput);
                 StartListening(Menu.Unlock, UnLockUserInput);
@@ -199,6 +205,10 @@ namespace Clam
         {
             m_CurrentMenu = Instantiate(m_CreateNewTreeMenuPrefab);
         }
+        void SwitchToLoadTree()
+        {
+            m_CurrentMenu = Instantiate(m_LoadTreeMenuPrefab);
+        }
 
         void StartClam()
         {
@@ -213,6 +223,18 @@ namespace Clam
             m_TreeData.cardinality = (uint)cardinality;
             m_TreeData.dataName = dataName;
             m_TreeData.distanceMetric = (Clam.DistanceMetric)distanceMetric;
+            Debug.Log("swtiching scne?");
+            SceneManager.LoadScene("Scenes/MainScene");
+
+        }
+        void LoadClam()
+        {
+            var doc = m_CurrentMenu.GetComponent<UIDocument>();
+            string dataName = doc.rootVisualElement.Q<TextField>("LoadTreeInputField").value;
+            // this error handling should be taken care of by the textfield (i.e int parse)
+            m_TreeData.cardinality = 0;
+            m_TreeData.dataName = dataName;
+            m_TreeData.distanceMetric = DistanceMetric.None;
             Debug.Log("swtiching scne?");
             SceneManager.LoadScene("Scenes/MainScene");
 

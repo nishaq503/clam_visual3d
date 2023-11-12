@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     UIDocument m_UIDocument;
 
     Button m_CreateNewButton;
-    //Button m_ImportButton;
+    Button m_LoadButton;
     Button m_ExitButton;
 
 
@@ -22,10 +22,13 @@ public class MainMenu : MonoBehaviour
         m_UIDocument = GetComponent<UIDocument>();
 
         m_CreateNewButton = m_UIDocument.rootVisualElement.Q<Button>("CreateTree");
+        m_LoadButton = m_UIDocument.rootVisualElement.Q<Button>("LoadTree");
         m_ExitButton = m_UIDocument.rootVisualElement.Q<Button>("ExitButton");
 
         SetExitButtonCallback(m_ExitButton);
         SetCreateButtonCallback();
+        m_LoadButton.RegisterCallback<ClickEvent>(LoadButtonCallback);
+
     }
 
     private void SetCreateButtonCallback()
@@ -33,11 +36,19 @@ public class MainMenu : MonoBehaviour
         m_CreateNewButton.RegisterCallback<ClickEvent>(CreateButtonCallback);
     }
 
+
     private void CreateButtonCallback(ClickEvent evt)
     {
         Button button = evt.currentTarget as Button;
 
         Clam.MenuEventManager.SwitchState(Menu.CreateNewTree);
+
+    }
+    private void LoadButtonCallback(ClickEvent evt)
+    {
+        Button button = evt.currentTarget as Button;
+
+        Clam.MenuEventManager.SwitchState(Menu.LoadTree);
 
     }
 

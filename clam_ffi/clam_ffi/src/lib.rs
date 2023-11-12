@@ -8,6 +8,8 @@ mod handle;
 mod tests;
 mod tree_layout;
 mod utils;
+mod file_io;
+
 use crate::ffi_impl::lib_impl::free_cluster_data;
 use ffi_impl::{
     cluster_data::ClusterData,
@@ -30,8 +32,9 @@ use utils::{
     // helpers,
     types::{InHandlePtr, OutHandlePtr},
 };
+use crate::file_io::load_save::save_cakes_single_impl;
 
-use crate::handle::entry_point::{init_clam_impl, shutdown_clam_impl};
+use crate::handle::entry_point::{init_clam_impl, load_cakes_impl, shutdown_clam_impl};
 
 type CBFnNodeVisitor = extern "C" fn(Option<&ClusterData>) -> ();
 type CBFnNameSetter = extern "C" fn(Option<&ClusterIDs>) -> ();
@@ -185,6 +188,25 @@ pub unsafe extern "C" fn init_clam(
     return init_clam_impl(ptr, data_name, name_len, cardinality, distance_metric);
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn load_cakes(
+    ptr: OutHandlePtr,
+    data_name: *const u8,
+    name_len: i32,
+
+) -> FFIError {
+    return load_cakes_impl(ptr, data_name, name_len);
+}
+
+
+#[no_mangle]
+pub unsafe extern "C" fn save_cakes(
+    ptr: InHandlePtr,
+    file_name: *const u8,
+    name_len: i32,
+) -> FFIError {
+    return save_cakes_single_impl(ptr, file_name, name_len);
+}
 #[no_mangle]
 pub unsafe extern "C" fn shutdown_clam(context_ptr: OutHandlePtr) -> FFIError {
     return shutdown_clam_impl(context_ptr);

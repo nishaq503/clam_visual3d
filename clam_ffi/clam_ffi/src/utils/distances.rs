@@ -5,6 +5,7 @@ use distances;
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
 pub enum DistanceMetric {
+    None,
     Euclidean,
     EuclideanSQ,
     Manhattan,

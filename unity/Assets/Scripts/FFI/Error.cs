@@ -21,5 +21,6 @@ namespace Clam
         PhysicsFinished,
         PhysicsNotReady,
         StartupDataInvalid,
+        SaveFailed
     }
 }
