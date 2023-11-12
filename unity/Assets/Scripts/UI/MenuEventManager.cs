@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
+using System;
 
 public enum Menu
 {
@@ -220,9 +222,8 @@ namespace Clam
             Debug.Log("selected distance metric" + distanceMetric);
             //var test = doc.rootVisualElement.Q<Button>("CreateTree");
             //var treeData = ScriptableObject.CreateInstance<ClamTreeData>();
-            m_TreeData.cardinality = (uint)cardinality;
-            m_TreeData.dataName = dataName;
-            m_TreeData.distanceMetric = (Clam.DistanceMetric)distanceMetric;
+            m_TreeData.SetAll(dataName, (Clam.DistanceMetric)distanceMetric, (uint)cardinality, false, false);
+            
             Debug.Log("swtiching scne?");
             SceneManager.LoadScene("Scenes/MainScene");
 
@@ -232,12 +233,25 @@ namespace Clam
             var doc = m_CurrentMenu.GetComponent<UIDocument>();
             string dataName = doc.rootVisualElement.Q<TextField>("LoadTreeInputField").value;
             // this error handling should be taken care of by the textfield (i.e int parse)
-            m_TreeData.cardinality = 0;
-            m_TreeData.dataName = dataName;
-            m_TreeData.distanceMetric = DistanceMetric.None;
-            Debug.Log("swtiching scne?");
-            SceneManager.LoadScene("Scenes/MainScene");
+            //m_TreeData.cardinality = 0;
+            //m_TreeData.dataName = dataName;
+            //m_TreeData.distanceMetric = DistanceMetric.None;
 
+            // file name convention:
+            // DataName_Metric_IsExpensive
+            try
+            {
+                (var metric, var isExpensive) = ParseLoadPath(dataName);
+                m_TreeData.SetAll(dataName, metric, 0, isExpensive, true);
+
+                Debug.Log("switching scne?");
+                SceneManager.LoadScene("Scenes/MainScene");
+
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Invalid Cakes Load path: " + ex);
+            }
         }
 
         private void IncludeHiddenInSelection()
@@ -372,5 +386,32 @@ namespace Clam
 
 
         //}
+
+        private static (DistanceMetric, bool) ParseLoadPath(string input)
+        {
+            var parts = input.Split('_');
+
+            if (parts.Length != 3)
+            {
+                throw new ArgumentException("Invalid string format");
+            }
+
+            // Parsing Metric
+            if (!Enum.TryParse(parts[1], true, out DistanceMetric metric))
+            {
+                throw new ArgumentException($"Invalid DistanceMetric: {parts[1]}");
+            }
+
+            // Parsing IsExpensive
+            if (!bool.TryParse(parts[2], out bool isExpensive))
+            {
+                throw new ArgumentException($"Invalid IsExpensive: {parts[2]}");
+            }
+
+            return (metric, isExpensive);
+        }
     }
 }
+
+
+

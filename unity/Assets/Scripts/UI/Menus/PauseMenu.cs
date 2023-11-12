@@ -43,7 +43,7 @@ namespace Clam
                 Directory.CreateDirectory(folderName);
                 Debug.Log("created directory: " + folderName);
             }
-            string filePath = folderName + Cakes.Tree.m_TreeData.dataName + "_" + Cakes.Tree.m_TreeData.distanceMetric.ToString() + "_" + Cakes.Tree.m_TreeData.cardinality.ToString();
+            string filePath = folderName + Cakes.Tree.m_TreeData.dataName + "_" + Cakes.Tree.m_TreeData.distanceMetric.ToString() + "_" + Cakes.Tree.m_TreeData.isExpensive.ToString();
             if (Directory.Exists(filePath))
             {
                Directory.Delete(filePath, true);

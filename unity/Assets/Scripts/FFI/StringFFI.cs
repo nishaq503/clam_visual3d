@@ -7,6 +7,16 @@ namespace Clam
     namespace FFI
     {
 
+        public class StringFFIWrapper
+        {
+            private StringFFI data;
+
+            public StringFFIWrapper(string data)
+            {
+                
+            }
+        }
+
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public partial struct StringFFI

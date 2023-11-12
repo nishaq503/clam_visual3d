@@ -45,13 +45,17 @@ namespace Clam
 
             }
 
-            if (m_TreeData.cardinality == 0 && m_TreeData.distanceMetric == DistanceMetric.None)
+            if (m_TreeData.shouldLoad)
             {
-                FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(m_TreeData.dataName);
+                StartupDataFFI data = new StartupDataFFI(m_TreeData);
+                FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(ref data);
             }
             else
             {
-                FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData.dataName, m_TreeData.cardinality, m_TreeData.distanceMetric);
+                StartupDataFFI data = new StartupDataFFI(m_TreeData);
+                //Debug.Log("new data: " + data.dataName + " " + data.metric.ToString());
+
+                FFIError clam_result = Clam.FFI.NativeMethods.InitClam(ref data);
                 if (clam_result != FFIError.Ok)
                 {
                     Debug.Log("error with tree data");

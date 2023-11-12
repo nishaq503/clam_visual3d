@@ -5,8 +5,8 @@
 use rand::{rngs::ThreadRng, Rng};
 use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
-use abd_clam::Cluster;
 use crate::debug;
+use abd_clam::Cluster;
 
 extern crate nalgebra as na;
 type Vec3 = na::Vector3<f32>;
@@ -77,10 +77,7 @@ impl Node {
     ) -> Link {
         // debug!("before 1st color filler");
 
-        let draw_root = Node::new_link(
-            0f32,
-            abd_clam_root.name(),
-        );
+        let draw_root = Node::new_link(0f32, abd_clam_root.name());
         // debug!("after first color filler");
 
         Self::init_helper(
@@ -135,10 +132,8 @@ impl Node {
                 }
                 // debug!("before a color filler");
 
-                node.borrow_mut().left_child =
-                    Node::new_link(depth, left.name());
-                node.borrow_mut().right_child =
-                    Node::new_link(depth, right.name());
+                node.borrow_mut().left_child = Node::new_link(depth, left.name());
+                node.borrow_mut().right_child = Node::new_link(depth, right.name());
 
                 // debug!("after a color filler");
 
@@ -453,14 +448,10 @@ impl Node {
         }
 
         if let Some(node) = root.clone() {
-            node.borrow_mut().left_child = Self::new_link(
-                depth as f32,
-                String::from(id.to_string()),
-            );
-            node.borrow_mut().right_child = Self::new_link(
-                depth as f32,
-                String::from(id.to_string()),
-            );
+            node.borrow_mut().left_child =
+                Self::new_link(depth as f32, String::from(id.to_string()));
+            node.borrow_mut().right_child =
+                Self::new_link(depth as f32, String::from(id.to_string()));
 
             Self::complete_tree(
                 node.as_ref().borrow().get_left_child(),
@@ -504,14 +495,10 @@ impl Node {
         let name2: u32 = rng.gen();
         if should_recur || depth < 3 {
             if let Some(node) = root.clone() {
-                node.borrow_mut().left_child = Self::new_link(
-                    depth as f32,
-                    String::from(name1.to_string()),
-                );
-                node.borrow_mut().right_child = Self::new_link(
-                    depth as f32,
-                    String::from(name2.to_string()),
-                );
+                node.borrow_mut().left_child =
+                    Self::new_link(depth as f32, String::from(name1.to_string()));
+                node.borrow_mut().right_child =
+                    Self::new_link(depth as f32, String::from(name2.to_string()));
 
                 Self::random_tree(
                     node.as_ref().borrow().get_left_child(),

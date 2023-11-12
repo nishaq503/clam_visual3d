@@ -3,7 +3,7 @@
 
 use distances;
 #[repr(C)]
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum DistanceMetric {
     None,
     Euclidean,

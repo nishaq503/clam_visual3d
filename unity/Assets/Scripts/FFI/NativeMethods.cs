@@ -17,17 +17,17 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231112132931";
+	public const string __DllName = "clam_ffi_20231113111339";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
 
             // init/shutdown functions for clam
-            public static FFIError InitClam(string dataName, uint cardinality, DistanceMetric distanceMetric)
+            public static FFIError InitClam(ref StartupDataFFI data)
             {
-                byte[] byteName = Encoding.UTF8.GetBytes(dataName);
-                int len = byteName.Length;
-                var e = init_clam(out m_Handle, byteName, len, cardinality, distanceMetric);
+                //byte[] byteName = Encoding.UTF8.GetBytes(dataName);
+                //int len = byteName.Length;
+                var e = init_clam(out m_Handle, ref data);
                 if (e == FFIError.Ok)
                 {
                     m_Initialized = true;
@@ -61,11 +61,11 @@ namespace Clam
                 }
                 return e;
             }
-            public static FFIError LoadCakes(string dataName)
+            public static FFIError LoadCakes(ref StartupDataFFI data)
             {
-                byte[] byteName = Encoding.UTF8.GetBytes(dataName);
-                int len = byteName.Length;
-                var e = load_cakes(out m_Handle, byteName, len);
+                //byte[] byteName = Encoding.UTF8.GetBytes(dataName);
+                //int len = byteName.Length;
+                var e = load_cakes(out m_Handle, ref data);
                 if (e == FFIError.Ok)
                 {
                     m_Initialized = true;
@@ -178,6 +178,14 @@ namespace Clam
                 set_message(msg, out data);
                 //data = outData;
                 return FFIError.Ok;
+                //return data;
+                //ClusterData* data = create_cluster_data("1");
+            }
+            public static FFIError AllocString(string msg, out StringFFI data)
+            {
+                //Debug.Log("freeing with delete cluster data");
+                return alloc_string(msg, out data);
+                //data = outData;
                 //return data;
                 //ClusterData* data = create_cluster_data("1");
             }

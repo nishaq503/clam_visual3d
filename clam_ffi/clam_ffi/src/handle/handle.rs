@@ -32,6 +32,7 @@ use crate::ffi_impl::cluster_data_wrapper::ClusterDataWrapper;
 // use super::reingold_impl::{self};
 use crate::graph::physics_node::PhysicsNode;
 use spring::Spring;
+use crate::ffi_impl::startup_data::StartupData;
 // use crate::physics::ForceDirectedGraph;
 
 // use ForceDirectedGraph;
@@ -66,7 +67,6 @@ use spring::Spring;
 pub struct Handle {
     cakes: Option<Cakes<Vec<f32>, f32, DataSet>>,
     // cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
-
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
     edges: Option<Vec<Spring>>,
@@ -130,12 +130,13 @@ impl Handle {
     }
 
     pub fn new(
-        data_name: &str,
-        cardinality: usize,
-        distance_metric: DistanceMetric,
+        startup_data :&StartupData,
+        // data_name: &str,
+        // cardinality: usize,
+        // distance_metric: DistanceMetric,
     ) -> Result<Self, FFIError> {
-        let criteria = PartitionCriteria::new(true).with_min_cardinality(cardinality);
-        match Self::create_dataset(data_name, distance_metric) {
+        let criteria = PartitionCriteria::new(true).with_min_cardinality(startup_data.cardinality as usize);
+        match Self::create_dataset(startup_data){
             Ok((dataset, labels)) => {
                 return Ok(Handle {
                     cakes: Some(Cakes::new(dataset, Some(1), &criteria)), //.build(&criteria)),
@@ -153,10 +154,12 @@ impl Handle {
         }
     }
 
-    pub fn load(
-        data_name: &str,
-    ) -> Result<Self, FFIError> {
-        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(Path::new(data_name), utils::distances::euclidean, false);
+    pub fn load(startup_data: &StartupData) -> Result<Self, FFIError> {
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+            Path::new(&startup_data.data_name),
+            utils::distances::from_enum(startup_data.distance_metric),
+            startup_data.is_expensive,
+        );
         match c {
             Ok(cakes) => {
                 return Ok(Handle {
@@ -176,17 +179,18 @@ impl Handle {
     }
 
     fn create_dataset(
-        data_name: &str,
-        distance_metric: DistanceMetric,
+        startup_data: &StartupData
+        // data_name: &str,
+        // distance_metric: DistanceMetric,
         // distance_metric: fn(&Vec<f32>, &Vec<f32>) -> f32,
     ) -> Result<(DataSet, Vec<u8>), String> {
-        match anomaly_readers::read_anomaly_data(data_name, false) {
+        match anomaly_readers::read_anomaly_data(&startup_data.data_name, false) {
             Ok((first_data, labels)) => {
                 let dataset = VecDataset::new(
-                    data_name.to_string(),
+                    startup_data.data_name.clone(),
                     first_data,
-                    utils::distances::from_enum(distance_metric),
-                    false,
+                    utils::distances::from_enum(startup_data.distance_metric),
+                    startup_data.is_expensive,
                 );
 
                 Ok((dataset, labels))

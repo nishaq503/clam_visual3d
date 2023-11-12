@@ -6,4 +6,5 @@ pub mod cluster_ids;
 pub mod cleanup;
 pub mod cluster_ids_wrapper;
 pub mod lib_impl;
+pub mod startup_data;
 pub mod string_ffi;

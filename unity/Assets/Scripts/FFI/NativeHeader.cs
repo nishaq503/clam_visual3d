@@ -14,10 +14,10 @@ namespace Clam
             // ------------------------------------- Startup/Shutdown -------------------------------------
 
             [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality, DistanceMetric distanceMetric);
+            private static extern FFIError init_clam(out IntPtr ptr, ref StartupDataFFI startup_data);
 
             [DllImport(__DllName, EntryPoint = "load_cakes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError load_cakes(out IntPtr ptr, byte[] data_name, int name_len);
+            private static extern FFIError load_cakes(out IntPtr ptr, ref StartupDataFFI startup_data);
 
             [DllImport(__DllName, EntryPoint = "shutdown_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_clam(out IntPtr ptr);
@@ -63,6 +63,9 @@ namespace Clam
 
             [DllImport(__DllName, EntryPoint = "set_message", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError set_message(string msg, out ClusterData outData);
+
+            [DllImport(__DllName, EntryPoint = "alloc_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError alloc_string(string msg, out StringFFI outData);
 
             [DllImport(__DllName, EntryPoint = "distance_to_other", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static unsafe extern float distance_to_other(IntPtr handle, string node1, string node2);

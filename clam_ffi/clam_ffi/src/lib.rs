@@ -3,20 +3,21 @@
 
 use std::ffi::c_char;
 mod ffi_impl;
+mod file_io;
 mod graph;
 mod handle;
 mod tests;
 mod tree_layout;
 mod utils;
-mod file_io;
 
 use crate::ffi_impl::lib_impl::free_cluster_data;
+use crate::file_io::load_save::save_cakes_single_impl;
 use ffi_impl::{
     cluster_data::ClusterData,
     cluster_ids::ClusterIDs,
     lib_impl::{
         color_by_dist_to_query_impl, distance_to_other_impl, for_each_dft_impl, set_names_impl,
-        tree_height_impl, tree_cardinality_impl,
+        tree_cardinality_impl, tree_height_impl,
     },
     string_ffi::StringFFI,
 };
@@ -32,7 +33,7 @@ use utils::{
     // helpers,
     types::{InHandlePtr, OutHandlePtr},
 };
-use crate::file_io::load_save::save_cakes_single_impl;
+use crate::ffi_impl::startup_data::StartupDataFFI;
 
 use crate::handle::entry_point::{init_clam_impl, load_cakes_impl, shutdown_clam_impl};
 
@@ -168,6 +169,25 @@ pub unsafe extern "C" fn set_message(
     // *ctx = null_mut();
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn alloc_string(
+    msg: *const c_char,
+    out_data: Option<&mut StringFFI>,
+) -> FFIError {
+    // if let Some(in_data) = in_cluster_data {
+    return if let Some(out_data) = out_data {
+        // *out_data = *in_data;
+        // out_data.free_ids();
+        let msg_str = StringFFI::c_char_to_string(msg);
+
+        *out_data = StringFFI::new(msg_str);
+        FFIError::Ok
+    } else {
+        FFIError::NullPointerPassed
+    };
+
+}
+
 #[repr(C)]
 pub struct Context {
     pub foo: bool,
@@ -180,24 +200,37 @@ pub struct Context {
 #[no_mangle]
 pub unsafe extern "C" fn init_clam(
     ptr: OutHandlePtr,
-    data_name: *const u8,
-    name_len: i32,
-    cardinality: u32,
-    distance_metric: DistanceMetric,
+    // data_name: *const u8,
+    // name_len: i32,
+    // cardinality: u32,
+    // distance_metric: DistanceMetric,
+    startup_data : Option<&StartupDataFFI>,
 ) -> FFIError {
-    return init_clam_impl(ptr, data_name, name_len, cardinality, distance_metric);
+    debug!("enter init clam");
+    return match startup_data {
+        Some(data) => {
+            load_cakes_impl(ptr, data)
+        },
+        None => {
+            FFIError::NullPointerPassed
+        }
+    }
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn load_cakes(
     ptr: OutHandlePtr,
-    data_name: *const u8,
-    name_len: i32,
-
+    startup_data : Option<&StartupDataFFI>
 ) -> FFIError {
-    return load_cakes_impl(ptr, data_name, name_len);
+    return match startup_data {
+        Some(data) => {
+            load_cakes_impl(ptr, data)
+        },
+        None => {
+            FFIError::NullPointerPassed
+        }
+    }
 }
-
 
 #[no_mangle]
 pub unsafe extern "C" fn save_cakes(

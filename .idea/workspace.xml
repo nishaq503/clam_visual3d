@@ -8,9 +8,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7566d7cf-f68a-4c42-82fc-ab4f2f8dbace" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cluster_data.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cluster_data.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/load_save.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/load_save.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/entry_point.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/entry_point.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeStartupData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeStartupData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/UI/Menus/PauseMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/UI/Menus/PauseMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/ffi_log" beforeDir="false" afterPath="$PROJECT_DIR$/unity/ffi_log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,48 +48,30 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2Y4xIaRwAA00itlk7NI7sTBt86s" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/uri/clam_visual3d",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/uri/clam_visual3d&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-      <option name="command" value="run" />
-      <option name="emulateTerminal" value="true" />
-      <option name="channel" value="DEFAULT" />
-      <option name="requiredFeatures" value="true" />
-      <option name="allFeatures" value="false" />
-      <option name="withSudo" value="false" />
-      <option name="buildTarget" value="REMOTE" />
-      <option name="backtrace" value="SHORT" />
-      <envs />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-  </component>
+}</component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
