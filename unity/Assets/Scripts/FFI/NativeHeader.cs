@@ -16,8 +16,16 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "init_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError init_clam(out IntPtr ptr, byte[] data_name, int name_len, uint cardinality, DistanceMetric distanceMetric);
 
+            [DllImport(__DllName, EntryPoint = "load_cakes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError load_cakes(out IntPtr ptr, byte[] data_name, int name_len);
+
             [DllImport(__DllName, EntryPoint = "shutdown_clam", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError shutdown_clam(out IntPtr ptr);
+
+            // -------------------------------------  File IO ------------------------------------- 
+
+            [DllImport(__DllName, EntryPoint = "save_cakes", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern FFIError save_cakes(IntPtr ptr, byte[] file_name, int name_len);
 
             // -------------------------------------  Tree helpers ------------------------------------- 
 

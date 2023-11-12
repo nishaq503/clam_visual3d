@@ -45,14 +45,21 @@ namespace Clam
 
             }
 
-            FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData.dataName, m_TreeData.cardinality, m_TreeData.distanceMetric);
-
-            if (clam_result != FFIError.Ok)
+            if (m_TreeData.cardinality == 0 && m_TreeData.distanceMetric == DistanceMetric.None)
             {
-                Debug.Log("error with tree data");
-                //Application.Quit();
-                return clam_result;
+                FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(m_TreeData.dataName);
             }
+            else
+            {
+                FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData.dataName, m_TreeData.cardinality, m_TreeData.distanceMetric);
+                if (clam_result != FFIError.Ok)
+                {
+                    Debug.Log("error with tree data");
+                    //Application.Quit();
+                    return clam_result;
+                }
+            }
+          
 
             m_Tree = new Dictionary<string, GameObject>();
 
@@ -136,7 +143,7 @@ namespace Clam
 
         public GameObject Add(string id)
         {
-            
+
             var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
             if (wrapper != null)
             {

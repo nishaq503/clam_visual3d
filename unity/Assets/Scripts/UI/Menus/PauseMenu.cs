@@ -1,5 +1,7 @@
+using Clam.FFI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -9,7 +11,7 @@ namespace Clam
     public class PauseMenu : MonoBehaviour
     {
         Button m_Resume;
-        Button m_Export;
+        Button m_Save;
         Button m_MainMenu;
 
         UIDocument m_UIDocument;
@@ -19,7 +21,7 @@ namespace Clam
         {
             m_UIDocument = GetComponent<UIDocument>();
             m_Resume = m_UIDocument.rootVisualElement.Q<Button>("Resume");
-            m_Export = m_UIDocument.rootVisualElement.Q<Button>("Export");
+            m_Save = m_UIDocument.rootVisualElement.Q<Button>("SaveBinaryButton");
             m_MainMenu = m_UIDocument.rootVisualElement.Q<Button>("MainMenu");
 
             var background = m_UIDocument.rootVisualElement.Q<VisualElement>("PauseMainBackground");
@@ -27,9 +29,36 @@ namespace Clam
             background.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.71f));
 
             m_MainMenu.RegisterCallback<ClickEvent>(MainMenuCallback);
+            m_Save.RegisterCallback<ClickEvent>(SaveCallback);
 
             BlurFocus();
             //UnityEngine.Cursor.visible = true;
+        }
+
+        void SaveCallback(ClickEvent evt)
+        {
+            string folderName = "../data/binaries/";
+            if (!Directory.Exists(folderName))
+            {
+                Directory.CreateDirectory(folderName);
+                Debug.Log("created directory: " + folderName);
+            }
+            string filePath = folderName + Cakes.Tree.m_TreeData.dataName + "_" + Cakes.Tree.m_TreeData.distanceMetric.ToString() + "_" + Cakes.Tree.m_TreeData.cardinality.ToString();
+            if (Directory.Exists(filePath))
+            {
+               Directory.Delete(filePath, true);
+            }
+            else
+            {
+                Directory.CreateDirectory(filePath);
+                Debug.Log("created directory: " + filePath);
+            }
+            Debug.Log("Saving tree as: " + filePath);
+            var err = NativeMethods.SaveCakes(filePath);
+
+            Debug.Log("save result: " + err.ToString());
+
+            
         }
 
         void MainMenuCallback(ClickEvent evt)

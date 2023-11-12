@@ -3,6 +3,7 @@ namespace Clam
 {
     public enum DistanceMetric
     {
+        None,
         Euclidean,
         EuclideanSQ,
         Manhattan,

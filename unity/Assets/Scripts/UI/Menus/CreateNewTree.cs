@@ -37,7 +37,7 @@ public class CreateNewTree : MonoBehaviour
         m_DatasetDropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("DatasetDropdown");
         m_DistanceMetricDropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("DistanceMetricDropdown");
 
-        var fileNames = GetFilesInDirectory(m_DataDirectory);
+        var fileNames = GetAnomalyFiles(m_DataDirectory);
 
         m_DatasetDropdownField.choices = fileNames.ToList();
 
@@ -69,7 +69,7 @@ public class CreateNewTree : MonoBehaviour
     }
     void CreateButtonCallback(ClickEvent evt)
     {
-        var validNames = GetFilesInDirectory(m_DataDirectory);
+        var validNames = GetAnomalyFiles(m_DataDirectory);
         validNames.Add("rand");
         validNames.Add("test");
 
@@ -83,7 +83,52 @@ public class CreateNewTree : MonoBehaviour
         {
             ErrorDialoguePopup();
         }
+    }
 
+    void LoadButtonCallback(ClickEvent evt)
+    {
+        string loadDir = "../data/binaries";
+        var validNames = Directory.GetFiles(loadDir);
+        Debug.Log("Load name options");
+        foreach(var validName in validNames)
+        {
+            Debug.Log(validName);
+        }
+
+        string dataName = m_DatasetField.text;
+
+        if (uint.TryParse(m_CardinalityField.text, out uint cardinality) && validNames.Contains(dataName))
+        {
+            Clam.MenuEventManager.SwitchState(Menu.StartClam);
+        }
+        else
+        {
+            ErrorDialoguePopup();
+        }
+    }
+
+    private HashSet<string> GetBinaryFiles(string dir)
+    {
+        HashSet<string> fileNames = new HashSet<string>();
+        try
+        {
+            foreach (string f in Directory.GetFiles(dir))
+            {
+                Debug.Log(Path.GetFileName(f));
+                var name = GetUntilOrEmpty(Path.GetFileName(f), "_");
+                Debug.Log(name);
+
+                fileNames.Add(name);
+            }
+
+
+            return fileNames;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log(ex.Message);
+        }
+        return new HashSet<string>();
 
     }
 
@@ -105,7 +150,7 @@ public class CreateNewTree : MonoBehaviour
         };
     }
 
-    private HashSet<string> GetFilesInDirectory(string dir)
+    private HashSet<string> GetAnomalyFiles(string dir)
     {
         HashSet<string> fileNames = new HashSet<string>();
         try
