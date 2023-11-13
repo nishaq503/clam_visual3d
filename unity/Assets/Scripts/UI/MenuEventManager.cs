@@ -196,9 +196,6 @@ namespace Clam
             //}
             //Clam.FFI.NativeMethods.ShutdownClam();
             SceneManager.LoadScene("Scenes/MainMenu");
-
-
-
             //m_CurrentMenu = Instantiate(m_MainMenuPrefab);
         }
         void SwitchToCreateTree()
@@ -223,10 +220,12 @@ namespace Clam
             m_TreeData.cardinality = (uint)cardinality;
             m_TreeData.dataName = dataName;
             m_TreeData.distanceMetric = (Clam.DistanceMetric)distanceMetric;
+            m_TreeData.shouldLoad = false;
+            m_TreeData.isExpensive = false; // change later
             Debug.Log("swtiching scne?");
             SceneManager.LoadScene("Scenes/MainScene");
-
         }
+
         void LoadClam()
         {
             var doc = m_CurrentMenu.GetComponent<UIDocument>();
@@ -235,9 +234,10 @@ namespace Clam
             m_TreeData.cardinality = 0;
             m_TreeData.dataName = dataName;
             m_TreeData.distanceMetric = DistanceMetric.None;
+            m_TreeData.shouldLoad = true;
+            m_TreeData.isExpensive= false;
             Debug.Log("swtiching scne?");
             SceneManager.LoadScene("Scenes/MainScene");
-
         }
 
         private void IncludeHiddenInSelection()

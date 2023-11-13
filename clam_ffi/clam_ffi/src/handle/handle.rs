@@ -30,6 +30,7 @@ use crate::{debug, CBFnNodeVisitor, CBFnNodeVisitorMut};
 use crate::ffi_impl::cluster_data::ClusterData;
 use crate::ffi_impl::cluster_data_wrapper::ClusterDataWrapper;
 // use super::reingold_impl::{self};
+use crate::ffi_impl::tree_startup_data_ffi::TreeStartupDataFFI;
 use crate::graph::physics_node::PhysicsNode;
 use spring::Spring;
 // use crate::physics::ForceDirectedGraph;
@@ -66,7 +67,6 @@ use spring::Spring;
 pub struct Handle {
     cakes: Option<Cakes<Vec<f32>, f32, DataSet>>,
     // cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
-
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
     edges: Option<Vec<Spring>>,
@@ -133,9 +133,10 @@ impl Handle {
         data_name: &str,
         cardinality: usize,
         distance_metric: DistanceMetric,
+        is_expensive: bool,
     ) -> Result<Self, FFIError> {
         let criteria = PartitionCriteria::new(true).with_min_cardinality(cardinality);
-        match Self::create_dataset(data_name, distance_metric) {
+        match Self::create_dataset(data_name, distance_metric, is_expensive) {
             Ok((dataset, labels)) => {
                 return Ok(Handle {
                     cakes: Some(Cakes::new(dataset, Some(1), &criteria)), //.build(&criteria)),
@@ -153,10 +154,51 @@ impl Handle {
         }
     }
 
-    pub fn load(
-        data_name: &str,
-    ) -> Result<Self, FFIError> {
-        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(Path::new(data_name), utils::distances::euclidean, false);
+    pub fn load(data_name: &str) -> Result<Self, FFIError> {
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+            Path::new(data_name),
+            utils::distances::euclidean,
+            false,
+        );
+        match c {
+            Ok(cakes) => {
+                return Ok(Handle {
+                    cakes: Some(cakes),
+                    labels: None,
+                    graph: None,
+                    edges: None,
+                    current_query: None,
+                    // longest_edge: None,
+                    force_directed_graph: None,
+                    // _test_drop: Some(TestDrop { test: 5 }),
+                    num_edges_in_graph: None,
+                });
+            }
+            Err(_) => Err(FFIError::HandleInitFailed),
+        }
+    }
+
+    pub fn load_struct(data: &TreeStartupDataFFI) -> Result<Self, FFIError> {
+        let data_name = match data.data_name.as_string() {
+            Ok(data_name) => data_name,
+            Err(e) => {
+                debug!("{:?}", e);
+                return Err(FFIError::InvalidStringPassed);
+            }
+        };
+
+        let metric = match utils::distances::from_enum(data.distance_metric) {
+            Ok(metric) => metric,
+            Err(e) => {
+                debug!("{:?}", e);
+                return Err(e);
+            }
+        };
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+            Path::new(&data_name),
+            metric,
+            data.is_expensive,
+        );
         match c {
             Ok(cakes) => {
                 return Ok(Handle {
@@ -178,30 +220,27 @@ impl Handle {
     fn create_dataset(
         data_name: &str,
         distance_metric: DistanceMetric,
+        is_expensive: bool,
         // distance_metric: fn(&Vec<f32>, &Vec<f32>) -> f32,
     ) -> Result<(DataSet, Vec<u8>), FFIError> {
-        let metric = match utils::distances::from_enum(distance_metric){
+        let metric = match utils::distances::from_enum(distance_metric) {
             Ok(metric) => metric,
-            Err(e)=> {
+            Err(e) => {
                 debug!("{:?}", e);
-                return Err(e)
-            },
+                return Err(e);
+            }
         };
         match anomaly_readers::read_anomaly_data(data_name, false) {
             Ok((first_data, labels)) => {
-                let dataset = VecDataset::new(
-                    data_name.to_string(),
-                    first_data,
-                    metric,
-                    false,
-                );
+                let dataset =
+                    VecDataset::new(data_name.to_string(), first_data, metric, is_expensive);
 
                 Ok((dataset, labels))
             }
             Err(e) => {
                 debug!("{:?}", e);
                 Err(e)
-            },
+            }
         }
     }
 
@@ -378,7 +417,6 @@ impl Handle {
             return;
         }
         if let Some([left, right]) = root.children() {
-            debug!("node name: {:?}", root.name());
             let baton = ClusterIDsWrapper::from_cluster(&root);
 
             node_visitor(Some(baton.data()));

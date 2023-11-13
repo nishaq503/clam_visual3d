@@ -27,17 +27,6 @@ namespace Clam
         //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
         public FFIError Init(GameObject nodePrefab, GameObject springPrefab)
         {
-            var wrapper = new RustResourceWrapper<StringFFI>(StringFFI.Alloc("1234"));
-            //var wrapper = NativeMethods.CreateStringFFIWrapper("testing 1234");
-            if (wrapper.result == FFIError.Ok)
-            {
-                Debug.Log("wrapper value allocated: " + wrapper.GetData().AsString);
-            }
-            else
-            {
-                Debug.LogError("alloc failed");
-            }
-
             m_NodePrefab = nodePrefab;
             m_SpringPrefab = springPrefab;
             //m_NodePrefab = nodePrefab;
@@ -56,21 +45,26 @@ namespace Clam
 
             }
 
-            if (m_TreeData.cardinality == 0 && m_TreeData.distanceMetric == DistanceMetric.None)
+            if (m_TreeData.shouldLoad)
             {
-                FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(m_TreeData.dataName);
-            }
-            else
-            {
-                FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData.dataName, m_TreeData.cardinality, m_TreeData.distanceMetric);
+                FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(m_TreeData);
+                //FFIError clam_result = Clam.FFI.NativeMethods.LoadCakes(m_TreeData.dataName);
                 if (clam_result != FFIError.Ok)
                 {
                     Debug.Log("error with tree data");
-                    //Application.Quit();
                     return clam_result;
                 }
             }
-          
+            else
+            {
+                FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData);
+                //FFIError clam_result = Clam.FFI.NativeMethods.InitClam(m_TreeData.dataName, m_TreeData.cardinality, m_TreeData.distanceMetric);
+                if (clam_result != FFIError.Ok)
+                {
+                    Debug.Log("error with tree data");
+                    return clam_result;
+                }
+            }
 
             m_Tree = new Dictionary<string, GameObject>();
 

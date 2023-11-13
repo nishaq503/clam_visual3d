@@ -6,6 +6,7 @@ use crate::utils::types::{InHandlePtr, OutHandlePtr};
 use crate::utils::error::FFIError;
 
 use crate::debug;
+use crate::ffi_impl::tree_startup_data_ffi::TreeStartupDataFFI;
 
 pub unsafe fn shutdown_clam_impl(context_ptr: OutHandlePtr) -> FFIError {
     if let Some(handle) = context_ptr {
@@ -31,14 +32,18 @@ pub unsafe fn force_physics_shutdown(ptr: InHandlePtr) -> i32 {
     return 0;
 }
 
-pub unsafe fn init_clam_impl(
+pub unsafe fn init_clam_struct_impl(
     ptr: OutHandlePtr,
-    data_name: *const u8,
-    name_len: i32,
-    cardinality: u32,
-    distance_metric: DistanceMetric,
+    data: Option<&TreeStartupDataFFI>,
 ) -> FFIError {
-    let data_name = match helpers::csharp_to_rust_utf8(data_name, name_len) {
+    let data = match data {
+        Some(data) => data,
+        None => {
+            debug!("data is null");
+            return FFIError::NullPointerPassed;
+        }
+    };
+    let data_name = match data.data_name.as_string() {
         Ok(data_name) => data_name,
         Err(e) => {
             debug!("{:?}", e);
@@ -46,7 +51,12 @@ pub unsafe fn init_clam_impl(
         }
     };
 
-    match Handle::new(&data_name, cardinality as usize, distance_metric) {
+    match Handle::new(
+        &data_name,
+        data.cardinality as usize,
+        data.distance_metric,
+        data.is_expensive,
+    ) {
         Ok(handle) => {
             if let Some(out_handle) = ptr {
                 *out_handle = Box::into_raw(Box::new(handle));
@@ -62,11 +72,38 @@ pub unsafe fn init_clam_impl(
     }
 }
 
-pub unsafe fn load_cakes_impl(
+pub unsafe fn init_clam_impl(
     ptr: OutHandlePtr,
     data_name: *const u8,
     name_len: i32,
+    cardinality: u32,
+    distance_metric: DistanceMetric,
 ) -> FFIError {
+    let data_name = match helpers::csharp_to_rust_utf8(data_name, name_len) {
+        Ok(data_name) => data_name,
+        Err(e) => {
+            debug!("{:?}", e);
+            return FFIError::InvalidStringPassed;
+        }
+    };
+
+    match Handle::new(&data_name, cardinality as usize, distance_metric, false) {
+        Ok(handle) => {
+            if let Some(out_handle) = ptr {
+                *out_handle = Box::into_raw(Box::new(handle));
+            }
+
+            debug!("built clam tree for {}", data_name);
+            return FFIError::Ok;
+        }
+        Err(e) => {
+            debug!("{:?}", e);
+            return FFIError::HandleInitFailed;
+        }
+    }
+}
+
+pub unsafe fn load_cakes_impl(ptr: OutHandlePtr, data_name: *const u8, name_len: i32) -> FFIError {
     let data_name = match helpers::csharp_to_rust_utf8(data_name, name_len) {
         Ok(data_name) => data_name,
         Err(e) => {
@@ -82,6 +119,34 @@ pub unsafe fn load_cakes_impl(
             }
 
             debug!("built clam tree for {}", data_name);
+            return FFIError::Ok;
+        }
+        Err(e) => {
+            debug!("{:?}", e);
+            return FFIError::HandleInitFailed;
+        }
+    }
+}
+
+pub unsafe fn load_cakes_struct_impl(
+    ptr: OutHandlePtr,
+    data: Option<&TreeStartupDataFFI>,
+) -> FFIError {
+    let data = match data {
+        Some(data) => data,
+        None => {
+            debug!("data is null");
+            return FFIError::NullPointerPassed;
+        }
+    };
+
+    match Handle::load_struct(data) {
+        Ok(handle) => {
+            if let Some(out_handle) = ptr {
+                *out_handle = Box::into_raw(Box::new(handle));
+            }
+
+            debug!("built clam tree for {}", data.data_name.as_string().unwrap());
             return FFIError::Ok;
         }
         Err(e) => {

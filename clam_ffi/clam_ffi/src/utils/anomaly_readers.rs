@@ -1,8 +1,8 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use ndarray::prelude::*;
 use crate::utils::error::FFIError;
+use ndarray::prelude::*;
 // #[macro_use]
 // mod core::debug;
 // use crate::debug;
@@ -34,7 +34,10 @@ pub static ANOMALY_DATASETS: &[&str] = &[
     "wine",        // 23
 ];
 
-pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>, Vec<u8>), FFIError> {
+pub fn read_anomaly_data(
+    name: &str,
+    normalized: bool,
+) -> Result<(Vec<Vec<f32>>, Vec<u8>), FFIError> {
     let mut data_dir = std::env::current_dir().unwrap();
     data_dir.pop();
     data_dir.push("data");
@@ -59,9 +62,8 @@ pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>,
             return Err(FFIError::PathNotFound);
         }
 
-        let features: Array2<f32> = ndarray_npy::read_npy(&path).map_err(|error| {
-            FFIError::PathNotFound
-        })?;
+        let features: Array2<f32> =
+            ndarray_npy::read_npy(&path).map_err(|error| FFIError::PathNotFound)?;
 
         features.outer_iter().map(|row| row.to_vec()).collect()
     };
@@ -74,9 +76,8 @@ pub fn read_anomaly_data(name: &str, normalized: bool) -> Result<(Vec<Vec<f32>>,
             return Err(FFIError::PathNotFound);
         }
 
-        let features: Array1<u8> = ndarray_npy::read_npy(&path).map_err(|error| {
-            FFIError::PathNotFound
-        })?;
+        let features: Array1<u8> =
+            ndarray_npy::read_npy(&path).map_err(|error| FFIError::PathNotFound)?;
 
         features.to_vec()
     };

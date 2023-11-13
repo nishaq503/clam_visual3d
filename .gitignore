@@ -77,3 +77,5 @@ unity/crashlytics-build.properties
 
 # unity build
 /unity/build/
+
+/unity/ffi_log

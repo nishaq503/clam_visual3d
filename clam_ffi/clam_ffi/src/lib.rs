@@ -3,20 +3,22 @@
 
 use std::ffi::c_char;
 mod ffi_impl;
+mod file_io;
 mod graph;
 mod handle;
 mod tests;
 mod tree_layout;
 mod utils;
-mod file_io;
 
 use crate::ffi_impl::lib_impl::free_resource;
+use crate::ffi_impl::tree_startup_data_ffi::TreeStartupDataFFI;
+use crate::file_io::load_save::save_cakes_single_impl;
 use ffi_impl::{
     cluster_data::ClusterData,
     cluster_ids::ClusterIDs,
     lib_impl::{
         color_by_dist_to_query_impl, distance_to_other_impl, for_each_dft_impl, set_names_impl,
-        tree_height_impl, tree_cardinality_impl,
+        tree_cardinality_impl, tree_height_impl,
     },
     string_ffi::StringFFI,
 };
@@ -32,9 +34,11 @@ use utils::{
     // helpers,
     types::{InHandlePtr, OutHandlePtr},
 };
-use crate::file_io::load_save::save_cakes_single_impl;
 
-use crate::handle::entry_point::{init_clam_impl, load_cakes_impl, shutdown_clam_impl};
+use crate::handle::entry_point::{
+    init_clam_impl, init_clam_struct_impl, load_cakes_impl, load_cakes_struct_impl,
+    shutdown_clam_impl,
+};
 
 type CBFnNodeVisitor = extern "C" fn(Option<&ClusterData>) -> ();
 type CBFnNameSetter = extern "C" fn(Option<&ClusterIDs>) -> ();
@@ -70,9 +74,9 @@ pub unsafe extern "C" fn alloc_string(
     value: *const c_char,
     outgoing: Option<&mut StringFFI>,
 ) -> FFIError {
-        let outgoing = outgoing.unwrap();
-        let value = utils::helpers::c_char_to_string(value);
-        let data = StringFFI::new(value);
+    let outgoing = outgoing.unwrap();
+    let value = utils::helpers::c_char_to_string(value);
+    let data = StringFFI::new(value);
 
     *outgoing = data;
     return FFIError::Ok;
@@ -86,8 +90,6 @@ pub extern "C" fn delete_cluster_data(
     free_resource(in_cluster_data, out_cluster_data)
     // if data.is_none() {
     // }
-
-
 }
 
 #[no_mangle]
@@ -200,15 +202,29 @@ pub unsafe extern "C" fn init_clam(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn init_clam_struct(
+    ptr: OutHandlePtr,
+    data: Option<&TreeStartupDataFFI>,
+) -> FFIError {
+    return init_clam_struct_impl(ptr, data);
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn load_cakes(
     ptr: OutHandlePtr,
     data_name: *const u8,
     name_len: i32,
-
 ) -> FFIError {
     return load_cakes_impl(ptr, data_name, name_len);
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn load_cakes_struct(
+    ptr: OutHandlePtr,
+    data: Option<&TreeStartupDataFFI>,
+) -> FFIError {
+    return load_cakes_struct_impl(ptr, data);
+}
 
 #[no_mangle]
 pub unsafe extern "C" fn save_cakes(

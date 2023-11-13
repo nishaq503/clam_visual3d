@@ -137,9 +137,7 @@ impl ClusterData {
         let (left, right) = other.get_child_names();
         ClusterData {
             pos: glam::Vec3::new(other.get_x(), other.get_y(), 0.),
-            color: glam::Vec3::new(
-                0.,0.,0.
-            ),
+            color: glam::Vec3::new(0., 0., 0.),
             id: StringFFI::new(other.get_name()),
             // left_id: StringFFI::new(left),
             // right_id: StringFFI::new(right),

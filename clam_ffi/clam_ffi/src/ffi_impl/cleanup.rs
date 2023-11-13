@@ -1,5 +1,5 @@
-use crate::debug;
 use super::cluster_data::ClusterData;
+use crate::debug;
 use crate::ffi_impl::cluster_ids::ClusterIDs;
 use crate::ffi_impl::string_ffi::StringFFI;
 
@@ -21,7 +21,7 @@ impl Cleanup for ClusterData {
     }
 }
 
-impl Cleanup for StringFFI{
+impl Cleanup for StringFFI {
     fn free(&mut self) {
         // debug!("freed from cleanup sffi");
         self.free();

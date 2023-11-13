@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231113172426";
+	public const string __DllName = "clam_ffi_20231114124950";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -28,6 +28,19 @@ namespace Clam
                 byte[] byteName = Encoding.UTF8.GetBytes(dataName);
                 int len = byteName.Length;
                 var e = init_clam(out m_Handle, byteName, len, cardinality, distanceMetric);
+                if (e == FFIError.Ok)
+                {
+                    m_Initialized = true;
+                }
+                return e;
+            }
+
+            public static FFIError InitClam(TreeStartupData data)
+            {
+                var wrapper = new RustResourceWrapper<TreeStartupDataFFI>(TreeStartupDataFFI.Alloc(data));
+
+                var refData = wrapper.GetData();
+                var e = init_clam(out m_Handle, ref refData);
                 if (e == FFIError.Ok)
                 {
                     m_Initialized = true;
@@ -71,6 +84,28 @@ namespace Clam
                     m_Initialized = true;
                 }
                 return e;
+            }
+
+            public static FFIError LoadCakes(TreeStartupData data)
+            {
+                //byte[] byteName = Encoding.UTF8.GetBytes(dataName);
+                //int len = byteName.Length;
+                var wrapper = new RustResourceWrapper<TreeStartupDataFFI>(TreeStartupDataFFI.Alloc(data));
+                if (wrapper.result == FFIError.Ok)
+                {
+                    var refData = wrapper.GetData();
+                    var e = load_cakes(out m_Handle, ref refData);
+                    if (e == FFIError.Ok)
+                    {
+                        m_Initialized = true;
+                    }
+                    return e;
+                }
+                else
+                {
+                    return wrapper.result;
+                }
+                
             }
 
             // -------------------------------------  Tree helpers ------------------------------------- 

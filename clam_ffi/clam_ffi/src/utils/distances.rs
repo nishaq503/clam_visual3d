@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use distances;
 use crate::utils::error::FFIError;
+use distances;
 
 #[repr(C)]
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum DistanceMetric {
     None,
     Euclidean,
@@ -33,7 +33,7 @@ pub fn from_enum(metric: DistanceMetric) -> Result<fn(&Vec<f32>, &Vec<f32>) -> f
         DistanceMetric::Canberra => Ok(canberra),
 
         // Handle unsupported or unimplemented metrics as an error
-        _ => Err(FFIError::UnsupportedMetric)
+        _ => Err(FFIError::UnsupportedMetric),
     }
 }
 
