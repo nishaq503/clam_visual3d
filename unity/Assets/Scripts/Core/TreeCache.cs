@@ -27,11 +27,11 @@ namespace Clam
         //public void Init(GameObject nodePrefab, GameObject springPrefab, string dataName, uint cardinality)
         public FFIError Init(GameObject nodePrefab, GameObject springPrefab)
         {
-
-            var wrapper = NativeMethods.CreateStringFFIWrapper("testing 1234");
-            if (wrapper != null)
+            var wrapper = new RustResourceWrapper<StringFFI>(StringFFI.Alloc("1234"));
+            //var wrapper = NativeMethods.CreateStringFFIWrapper("testing 1234");
+            if (wrapper.result == FFIError.Ok)
             {
-                Debug.Log("wrapper value allocated: " + wrapper.Data.AsString);
+                Debug.Log("wrapper value allocated: " + wrapper.GetData().AsString);
             }
             else
             {

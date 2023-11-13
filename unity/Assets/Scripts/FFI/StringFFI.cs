@@ -7,44 +7,51 @@ namespace Clam
     namespace FFI
     {
 
-        public class StringFFIWrapper
-        {
-            private StringFFI m_Data;
+        //public class StringFFIWrapper
+        //{
+        //    private StringFFI m_Data;
 
-            public StringFFIWrapper(StringFFI nodeData)
-            {
-                m_Data = nodeData;
-            }
+        //    public StringFFIWrapper(StringFFI nodeData)
+        //    {
+        //        m_Data = nodeData;
+        //    }
 
-            public StringFFI Data
-            {
-                get { return m_Data; }
-                set
-                {
-                    //m_Data.FreeStrings();
-                    m_Data = value;
-                }
-            }
+        //    public StringFFI Data
+        //    {
+        //        get { return m_Data; }
+        //        set
+        //        {
+        //            //m_Data.FreeStrings();
+        //            m_Data = value;
+        //        }
+        //    }
 
-            ~StringFFIWrapper()
-            {
-                Debug.Log("freeign allocated string in wrapper");
-                NativeMethods.FreeString(ref m_Data);
-            }
-        }
+        //    ~StringFFIWrapper()
+        //    {
+        //        Debug.Log("freeign allocated string in wrapper");
+        //        NativeMethods.FreeString(ref m_Data);
+        //    }
+        //}
 
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]
-        public partial struct StringFFI
+        public partial struct StringFFI : IRustResource
         {
             private IntPtr m_Data;
             private int m_Length;
 
-            //public StringFFI(string data)
-            //{
-            //    m_Data = Marshal.StringToCoTaskMemUTF8(data);
-            //    m_Length = data.Length;
-            //}
+            public static (StringFFI, FFIError) Alloc(string data)
+            {
+                var result = NativeMethods.AllocString(data, out var resource);
+                return (resource, result);
+            }
+
+            private StringFFI(string data)
+            {
+                Debug.LogError("Don't create string ffi in c#");
+                m_Data = IntPtr.Zero; 
+                m_Length = 0;
+            }
 
             public string AsString
             {
@@ -61,23 +68,12 @@ namespace Clam
             public IntPtr AsPtr { get { return m_Data; } }
 
             public bool IsEmpty { get { return m_Length == 0; } }
-            //public bool IsOwned { get { return isOwnedByUnity; } }
             public bool IsNull { get { return m_Data == IntPtr.Zero; } }
 
-
-            //public void Free()
-            //{
-            //    if (!IsNull)
-            //    {
-            //        Marshal.FreeCoTaskMem(m_Data);
-            //        m_Data = IntPtr.Zero;
-            //        m_Length = 0;
-            //    }
-            //    else
-            //    {
-            //        Debug.Log("Warning: string is already null");
-            //    }
-            //}
+            public void Free()
+            {
+                NativeMethods.FreeString(ref this);
+            }
         }
     }
 }

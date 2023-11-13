@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231113160249";
+	public const string __DllName = "clam_ffi_20231113172426";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -122,18 +122,24 @@ namespace Clam
                 //ClusterData* data = create_cluster_data("1");
             }
 
-            public static Clam.FFI.StringFFIWrapper CreateStringFFIWrapper(string id)
+            public static FFIError AllocString(string data, out StringFFI resource)
             {
-                var result = alloc_string(id, out var data);
-                if (result != FFIError.Ok)
-                {
-                    Debug.Log(result);
-                    return null;
-                }
-
-                return new StringFFIWrapper(data);
-                //ClusterData* data = create_cluster_data("1");
+                var result = alloc_string(data, out resource);
+                return result;
             }
+
+            //public static Clam.FFI.StringFFIWrapper CreateStringFFIWrapper(string id)
+            //{
+            //    var result = alloc_string(id, out var data);
+            //    if (result != FFIError.Ok)
+            //    {
+            //        Debug.Log(result);
+            //        return null;
+            //    }
+
+            //    return new StringFFIWrapper(data);
+            //    //ClusterData* data = create_cluster_data("1");
+            //}
 
             public static Clam.FFI.ClusterIDsWrapper CreateClusterIDsWrapper(string id)
             {
@@ -176,6 +182,18 @@ namespace Clam
                 //return data;
                 //ClusterData* data = create_cluster_data("1");
             }
+
+            //public static FFIError FreeResource<T>(ref T data) where T : struct
+            //{
+            //    // Example: Call the foreign library with the specified type
+            //    return FreeResourceInternal(ref data);
+            //}
+
+            //private static FFIError FreeResourceInternal<T>(ref T data) where T : struct
+            //{
+            //    free_string(data, out var outData);
+            //    return FFIError.Ok; // Replace with the actual call to the foreign library
+            //}
 
             public static FFIError FreeString(ref StringFFI data)
             {

@@ -1,165 +1,97 @@
-built clam tree for annthyroid
-node name: "0-7200"
-node name: "0-4842"
-node name: "0-4790"
-node name: "0-2782"
-node name: "0-2274"
-node name: "0-1200"
-node name: "0-687"
-node name: "0-675"
-node name: "0-592"
-node name: "687-513"
-node name: "1200-1074"
-node name: "1200-683"
-node name: "2274-508"
-node name: "2782-2008"
-node name: "2782-1821"
-node name: "2782-1746"
-node name: "2782-1099"
-node name: "2782-554"
-node name: "3336-545"
-node name: "3881-647"
-node name: "3881-569"
-node name: "4842-2358"
-node name: "4842-2318"
-node name: "4842-2298"
-node name: "4842-1841"
-node name: "4842-1787"
-node name: "4842-1033"
-node name: "4842-736"
-node name: "4842-591"
-node name: "5875-754"
-left name 0-4842
+built clam tree for arrhythmia
+node name: "0-452"
+node name: "0-448"
+node name: "0-434"
+node name: "0-258"
+node name: "0-241"
+node name: "0-170"
+node name: "0-93"
+node name: "0-56"
+node name: "93-77"
+node name: "170-71"
+node name: "170-59"
+node name: "258-176"
+node name: "258-171"
+node name: "258-97"
+node name: "258-64"
+node name: "355-74"
+node name: "355-53"
+left name 0-448
 id was not valid
-rightt name 4842-2358
+rightt name 448-4
 id was not valid
-left name 0-4790
+left name 0-434
 id was not valid
-rightt name 4790-52
+rightt name 434-14
 id was not valid
-left name 0-2782
+left name 0-258
 id was not valid
-rightt name 2782-2008
+rightt name 258-176
 id was not valid
-left name 0-2274
+left name 0-241
 id was not valid
-rightt name 2274-508
+rightt name 241-17
 id was not valid
-left name 0-1200
+left name 0-170
 id was not valid
-rightt name 1200-1074
+rightt name 170-71
 id was not valid
-left name 0-687
+left name 0-93
 id was not valid
-rightt name 687-513
+rightt name 93-77
 id was not valid
-left name 0-675
+left name 0-56
 id was not valid
-rightt name 675-12
+rightt name 56-37
 id was not valid
-left name 0-592
+left name 0-41
 id was not valid
-rightt name 592-83
+rightt name 41-15
 id was not valid
-left name 0-421
+left name 93-39
 id was not valid
-rightt name 421-171
+rightt name 132-38
 id was not valid
-left name 687-484
+left name 170-59
 id was not valid
-rightt name 1171-29
+rightt name 229-12
 id was not valid
-left name 1200-683
+left name 170-39
 id was not valid
-rightt name 1883-391
+rightt name 209-20
 id was not valid
-left name 1200-383
+left name 258-171
 id was not valid
-rightt name 1583-300
+rightt name 429-5
 id was not valid
-left name 2274-336
+left name 258-97
 id was not valid
-rightt name 2610-172
+rightt name 355-74
 id was not valid
-left name 2782-1821
+left name 258-64
 id was not valid
-rightt name 4603-187
+rightt name 322-33
 id was not valid
-left name 2782-1746
+left name 258-35
 id was not valid
-rightt name 4528-75
+rightt name 293-29
 id was not valid
-left name 2782-1099
+left name 355-53
 id was not valid
-rightt name 3881-647
+rightt name 408-21
 id was not valid
-left name 2782-554
+left name 355-28
 id was not valid
-rightt name 3336-545
+rightt name 383-25
 id was not valid
-left name 2782-368
+freeing stringffi 12345
+left name 0-448
 id was not valid
-rightt name 3150-186
+rightt name 448-4
 id was not valid
-left name 3336-448
+left name 0-434
 id was not valid
-rightt name 3784-97
-id was not valid
-left name 3881-569
-id was not valid
-rightt name 4450-78
-id was not valid
-left name 3881-410
-id was not valid
-rightt name 4291-159
-id was not valid
-left name 4842-2318
-id was not valid
-rightt name 7160-40
-id was not valid
-left name 4842-2298
-id was not valid
-rightt name 7140-20
-id was not valid
-left name 4842-1841
-id was not valid
-rightt name 6683-457
-id was not valid
-left name 4842-1787
-id was not valid
-rightt name 6629-54
-id was not valid
-left name 4842-1033
-id was not valid
-rightt name 5875-754
-id was not valid
-left name 4842-736
-id was not valid
-rightt name 5578-297
-id was not valid
-left name 4842-591
-id was not valid
-rightt name 5433-145
-id was not valid
-left name 4842-318
-id was not valid
-rightt name 5160-273
-id was not valid
-left name 5875-480
-id was not valid
-rightt name 6355-274
-id was not valid
-left name 0-4842
-id was not valid
-rightt name 4842-2358
-id was not valid
-left name 0-4790
-id was not valid
-rightt name 4790-52
-id was not valid
-left name 4842-2318
-id was not valid
-rightt name 7160-40
+rightt name 434-14
 id was not valid
 built clam tree for arrhythmia
 node name: "0-452"
@@ -247,8 +179,102 @@ left name 355-28
 id was not valid
 rightt name 383-25
 id was not valid
-entering free string
-freed allocayed string!!!!!
+freeing stringffi 12345
+left name 0-448
+id was not valid
+rightt name 448-4
+id was not valid
+left name 0-434
+id was not valid
+rightt name 434-14
+id was not valid
+built clam tree for arrhythmia
+node name: "0-452"
+node name: "0-448"
+node name: "0-434"
+node name: "0-258"
+node name: "0-241"
+node name: "0-170"
+node name: "0-93"
+node name: "0-56"
+node name: "93-77"
+node name: "170-71"
+node name: "170-59"
+node name: "258-176"
+node name: "258-171"
+node name: "258-97"
+node name: "258-64"
+node name: "355-74"
+node name: "355-53"
+left name 0-448
+id was not valid
+rightt name 448-4
+id was not valid
+left name 0-434
+id was not valid
+rightt name 434-14
+id was not valid
+left name 0-258
+id was not valid
+rightt name 258-176
+id was not valid
+left name 0-241
+id was not valid
+rightt name 241-17
+id was not valid
+left name 0-170
+id was not valid
+rightt name 170-71
+id was not valid
+left name 0-93
+id was not valid
+rightt name 93-77
+id was not valid
+left name 0-56
+id was not valid
+rightt name 56-37
+id was not valid
+left name 0-41
+id was not valid
+rightt name 41-15
+id was not valid
+left name 93-39
+id was not valid
+rightt name 132-38
+id was not valid
+left name 170-59
+id was not valid
+rightt name 229-12
+id was not valid
+left name 170-39
+id was not valid
+rightt name 209-20
+id was not valid
+left name 258-171
+id was not valid
+rightt name 429-5
+id was not valid
+left name 258-97
+id was not valid
+rightt name 355-74
+id was not valid
+left name 258-64
+id was not valid
+rightt name 322-33
+id was not valid
+left name 258-35
+id was not valid
+rightt name 293-29
+id was not valid
+left name 355-53
+id was not valid
+rightt name 408-21
+id was not valid
+left name 355-28
+id was not valid
+rightt name 383-25
+id was not valid
+freed from cleanup sffi
 left name 0-448
 id was not valid
 rightt name 448-4

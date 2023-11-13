@@ -10,7 +10,7 @@ mod tree_layout;
 mod utils;
 mod file_io;
 
-use crate::ffi_impl::lib_impl::free_cluster_data;
+use crate::ffi_impl::lib_impl::free_resource;
 use ffi_impl::{
     cluster_data::ClusterData,
     cluster_ids::ClusterIDs,
@@ -83,7 +83,7 @@ pub extern "C" fn delete_cluster_data(
     in_cluster_data: Option<&ClusterData>,
     out_cluster_data: Option<&mut ClusterData>,
 ) -> FFIError {
-    free_cluster_data(in_cluster_data, out_cluster_data)
+    free_resource(in_cluster_data, out_cluster_data)
     // if data.is_none() {
     // }
 
@@ -95,22 +95,7 @@ pub unsafe extern "C" fn free_string(
     in_data: Option<&StringFFI>,
     out_data: Option<&mut StringFFI>,
 ) -> FFIError {
-
-    debug!("entering free string");
-    return if let Some(in_data) = in_data {
-        if let Some(out_data) = out_data {
-            *out_data = in_data.clone();
-            out_data.free();
-            debug!("freed allocayed string!!!!!");
-            FFIError::Ok
-        } else {
-            debug!("out data null");
-            FFIError::NullPointerPassed
-        }
-    } else {
-        debug!("in data null");
-        FFIError::NullPointerPassed
-    };
+    return free_resource(in_data, out_data);
 }
 
 #[no_mangle]
@@ -144,7 +129,7 @@ pub extern "C" fn delete_cluster_ids(
     in_cluster_data: Option<&ClusterIDs>,
     out_cluster_data: Option<&mut ClusterIDs>,
 ) -> FFIError {
-    free_cluster_data(in_cluster_data, out_cluster_data)
+    free_resource(in_cluster_data, out_cluster_data)
     // if data.is_none() {
     // }
 

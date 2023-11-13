@@ -76,6 +76,12 @@ namespace Clam
                 this.color.z = color.b;
             }
 
+            public static (FFIError, ClusterData) Alloc(string data)
+            {
+                var result = NativeMethods.CreateClusterDataMustFree(data, out var resource);
+                return (result, resource);
+            }
+
             //public void SetMessage(string msg)
             //{
             //    Clam.FFI.NativeMethods.SetMessage(msg, ref this);

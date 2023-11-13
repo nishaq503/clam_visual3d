@@ -65,6 +65,7 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "free_string", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError free_string(ref StringFFI inData, out ClusterData outData);
 
+
             [DllImport(__DllName, EntryPoint = "delete_cluster_ids", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError delete_cluster_ids(ref ClusterIDs inData, out ClusterIDs outData);
 
