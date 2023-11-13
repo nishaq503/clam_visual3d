@@ -9,24 +9,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7566d7cf-f68a-4c42-82fc-ab4f2f8dbace" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cleanup.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cleanup.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cluster_data.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cluster_data.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/load_save.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/load_save.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/file_io/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/entry_point.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/entry_point.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/anomaly_readers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/anomaly_readers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/RustWrapper.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/ffi_log" beforeDir="false" afterPath="$PROJECT_DIR$/unity/ffi_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/TreeLayout.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/TreeLayout.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/TreeLayout/TreeLayout.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/TreeLayout/TreeLayout.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +51,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",

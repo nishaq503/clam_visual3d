@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using System;
+using System.IO;
 
 public enum Menu
 {
@@ -230,15 +232,52 @@ namespace Clam
         {
             var doc = m_CurrentMenu.GetComponent<UIDocument>();
             string dataName = doc.rootVisualElement.Q<TextField>("LoadTreeInputField").value;
-            // this error handling should be taken care of by the textfield (i.e int parse)
-            m_TreeData.cardinality = 0;
-            m_TreeData.dataName = dataName;
-            m_TreeData.distanceMetric = DistanceMetric.None;
             m_TreeData.shouldLoad = true;
-            m_TreeData.isExpensive= false;
-            Debug.Log("swtiching scne?");
-            SceneManager.LoadScene("Scenes/MainScene");
+            try
+            {
+                (var metric, var isExpensive) = ParseLoadPath(dataName);
+
+                m_TreeData.cardinality = 0;
+                m_TreeData.dataName = dataName = "../data/binaries/" + dataName;
+
+                m_TreeData.distanceMetric = metric;
+                m_TreeData.isExpensive = isExpensive;
+                Debug.Log("swtiching scne?");
+                SceneManager.LoadScene("Scenes/MainScene");
+
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Invalid Cakes Load path: " + ex);
+            }
+            // this error handling should be taken care of by the textfield (i.e int parse)
+            
         }
+
+        private static (DistanceMetric, bool) ParseLoadPath(string input)
+        {
+            var parts = input.Split('_');
+
+            if (parts.Length != 3)
+            {
+                throw new ArgumentException("Invalid string format");
+            }
+
+            // Parsing Metric
+            if (!Enum.TryParse(parts[1], true, out DistanceMetric metric))
+            {
+                throw new ArgumentException($"Invalid DistanceMetric: {parts[1]}");
+            }
+
+            // Parsing IsExpensive
+            if (!bool.TryParse(parts[2], out bool isExpensive))
+            {
+                throw new ArgumentException($"Invalid IsExpensive: {parts[2]}");
+            }
+
+            return (metric, isExpensive);
+        }
+
 
         private void IncludeHiddenInSelection()
         {

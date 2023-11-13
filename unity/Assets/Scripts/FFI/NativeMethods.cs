@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231114124950";
+	public const string __DllName = "clam_ffi_20231114130927";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -105,14 +105,22 @@ namespace Clam
                 {
                     return wrapper.result;
                 }
-                
+
             }
 
             // -------------------------------------  Tree helpers ------------------------------------- 
 
-            public static FFIError ForEachDFT(NodeVisitor callback, string startNode = "root")
+            public static FFIError ForEachDFT(NodeVisitor callback, string startNode = "root", int maxDepth = -1)
             {
-                return for_each_dft(m_Handle, callback, startNode);
+                if (maxDepth == -1)
+                {
+                    return for_each_dft(m_Handle, callback, startNode, NativeMethods.TreeHeight());
+                }
+                else
+                {
+                    return for_each_dft(m_Handle, callback, startNode, maxDepth);
+
+                }
             }
 
             public static FFIError SetNames(NameSetter callback, string startNode = "root")
@@ -147,7 +155,7 @@ namespace Clam
                 return result;
             }
 
-            public static FFIError CreateClusterIDsMustFree (string id, out Clam.FFI.ClusterIDs clusterData)
+            public static FFIError CreateClusterIDsMustFree(string id, out Clam.FFI.ClusterIDs clusterData)
             {
                 var result = create_cluster_ids(m_Handle, id, out var data);
                 if (result != FFIError.Ok)
@@ -253,7 +261,7 @@ namespace Clam
             {
                 init_graph_vertices(m_Handle, edgeCB);
             }
-           
+
             public static FFIError PhysicsUpdateAsync(NodeVisitor cb_fn)
             {
                 return physics_update_async(m_Handle, cb_fn);

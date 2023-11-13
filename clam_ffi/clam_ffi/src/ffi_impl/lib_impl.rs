@@ -17,6 +17,7 @@ pub unsafe fn for_each_dft_impl(
     ptr: InHandlePtr,
     node_visitor: CBFnNodeVisitor,
     start_node: *const c_char,
+    max_depth : i32,
 ) -> FFIError {
     if let Some(handle) = ptr {
         if !start_node.is_null() {
@@ -29,7 +30,7 @@ pub unsafe fn for_each_dft_impl(
             // debug!("start node name {}", r_str);
 
             // return Handle::from_ptr(ptr).for_each_dft(node_visitor, r_str.to_string());
-            return handle.for_each_dft(node_visitor, r_str.to_string());
+            return handle.for_each_dft(node_visitor, r_str.to_string(), max_depth);
         } else {
             return FFIError::InvalidStringPassed;
         }

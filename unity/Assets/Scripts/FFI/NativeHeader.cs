@@ -36,7 +36,7 @@ namespace Clam
             // -------------------------------------  Tree helpers ------------------------------------- 
 
             [DllImport(__DllName, EntryPoint = "for_each_dft", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            private static extern FFIError for_each_dft(IntPtr ptr, NodeVisitor callback, string startNode);
+            private static extern FFIError for_each_dft(IntPtr ptr, NodeVisitor callback, string startNode, int maxDepth);
 
             [DllImport(__DllName, EntryPoint = "set_names", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError set_names(IntPtr ptr, NameSetter callback, string startNode);

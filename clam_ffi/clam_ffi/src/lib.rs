@@ -246,8 +246,9 @@ pub unsafe extern "C" fn for_each_dft(
     ptr: InHandlePtr,
     node_visitor: CBFnNodeVisitor,
     start_node: *const c_char,
+    max_depth: i32,
 ) -> FFIError {
-    return for_each_dft_impl(ptr, node_visitor, start_node);
+    return for_each_dft_impl(ptr, node_visitor, start_node, max_depth);
 }
 
 #[no_mangle]

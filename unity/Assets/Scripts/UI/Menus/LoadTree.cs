@@ -34,15 +34,14 @@ public class LoadTree : MonoBehaviour
         m_LoadTreeDropdownField = m_UIDocument.rootVisualElement.Q<DropdownField>("LoadTreeDropdown");
 
         var dirNames = Directory.GetDirectories(m_DataDirectory);
+        var extractedDirNames = dirNames.Select(dirName => Path.GetFileName(dirName));
 
-        m_LoadTreeDropdownField.choices = dirNames.ToList();
+        m_LoadTreeDropdownField.choices = extractedDirNames.ToList();
 
         m_LoadTreeDropdownField.RegisterValueChangedCallback(evt =>
         {
             m_LoadTreeField.value = evt.newValue;
         });
-
-       
     }
 
     void BackButtonCallback(ClickEvent evt)
@@ -61,13 +60,14 @@ public class LoadTree : MonoBehaviour
         }
 
         string dataName = m_LoadTreeField.text;
-
+        dataName = "../data/binaries/" + dataName;
         if (validNames.Contains(dataName))
         {
             Clam.MenuEventManager.SwitchState(Menu.LoadClam);
         }
         else
         {
+            Debug.LogError("Path not found: " + dataName);
             ErrorDialoguePopup();
         }
     }

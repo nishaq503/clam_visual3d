@@ -351,11 +351,12 @@ impl Handle {
         &self,
         node_visitor: CBFnNodeVisitor,
         start_node: String,
+        max_depth : i32,
     ) -> FFIError {
         return if let Some(_) = &self.cakes {
             if start_node == "root" {
                 if let Some(node) = self.root() {
-                    Self::for_each_dft_helper(&node, node_visitor);
+                    Self::for_each_dft_helper(&node, node_visitor, max_depth);
                     FFIError::Ok
                 } else {
                     FFIError::HandleInitFailed
@@ -363,7 +364,7 @@ impl Handle {
             } else {
                 match Self::get_cluster(&self, start_node) {
                     Ok(root) => {
-                        Self::for_each_dft_helper(root, node_visitor);
+                        Self::for_each_dft_helper(root, node_visitor, max_depth);
                         FFIError::Ok
                     }
                     Err(e) => {
@@ -427,8 +428,8 @@ impl Handle {
         }
     }
 
-    fn for_each_dft_helper(root: &Clusterf32, node_visitor: CBFnNodeVisitor) {
-        if root.is_leaf() {
+    fn for_each_dft_helper(root: &Clusterf32, node_visitor: CBFnNodeVisitor, max_depth : i32) {
+        if root.is_leaf() || root.depth() as i32 >= max_depth {
             let baton = ClusterDataWrapper::from_cluster(&root);
 
             node_visitor(Some(baton.data()));
@@ -439,8 +440,8 @@ impl Handle {
 
             node_visitor(Some(&baton.data()));
 
-            Self::for_each_dft_helper(left, node_visitor);
-            Self::for_each_dft_helper(right, node_visitor);
+            Self::for_each_dft_helper(left, node_visitor, max_depth);
+            Self::for_each_dft_helper(right, node_visitor, max_depth);
         }
     }
 

@@ -9,7 +9,7 @@ public class TreeLayout
     int m_RootDepth;
     int m_CurrentDepth;
     int m_MaxDepth;
-    int m_IntervalStep = 2;
+    int m_IntervalStep = 5;
     // depth given to reingold will be max-rootDepth
 
     public int CurrentDepth()
@@ -20,7 +20,7 @@ public class TreeLayout
     public TreeLayout(string rootId)
     {
         m_RootID = rootId;
-       
+
         //var dataWrapper = NativeMethods.CreateClusterDataWrapper(rootId);
 
         var dataWrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(rootId));
@@ -97,8 +97,8 @@ public class TreeLayout
     {
         //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_MaxDepth);
 
-        NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID);
-        NativeMethods.ForEachDFT(EdgeVisibilityCallback);
+        NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID, m_MaxDepth);
+        NativeMethods.ForEachDFT(EdgeVisibilityCallback, m_RootID, m_MaxDepth);
         //if (newDepth == m_RootDepth)
         //{
         //    // destroy this object
