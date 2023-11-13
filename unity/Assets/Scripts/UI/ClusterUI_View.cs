@@ -140,15 +140,11 @@ public class ClusterUI_View : MonoBehaviour
         foreach (var item in Cakes.Tree.GetTree().ToList())
         {
             var cluster = item.Value;
-            //if (!cluster.activeSelf)
-            //{
-            //    continue;
-            //}
-            Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
+            var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(cluster.GetComponent<Node>().GetId()));
 
             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
             //Clam.FFI.NativeMethods.GetClusterData(wrapper);
-            if (wrapper != null)
+            if (wrapper.result == FFIError.Ok)
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {
@@ -190,8 +186,8 @@ public class ClusterUI_View : MonoBehaviour
 
             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
             //Clam.FFI.NativeMethods.GetClusterData(wrapper);
-            Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
-            if (wrapper != null )
+            var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(cluster.GetComponent<Node>().GetId()));
+            if (wrapper != null)
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {

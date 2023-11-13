@@ -21,7 +21,9 @@ public class TreeLayout
     {
         m_RootID = rootId;
        
-        var dataWrapper = NativeMethods.CreateClusterDataWrapper(rootId);
+        //var dataWrapper = NativeMethods.CreateClusterDataWrapper(rootId);
+
+        var dataWrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(rootId));
         m_RootDepth = dataWrapper.Data.depth;
 
         Debug.Log("root depth: " + m_RootDepth);
@@ -29,7 +31,8 @@ public class TreeLayout
         m_CurrentDepth = m_RootDepth;
         m_MaxDepth = m_CurrentDepth + m_IntervalStep;
 
-        NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+        NativeMethods.DrawHierarchyOffsetFrom(new RustResourceWrapper<ClusterData>(ClusterData.Alloc(m_RootID)), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+        //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
 
         NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID);
         NativeMethods.ForEachDFT(EdgeVisibilityCallback);
@@ -49,7 +52,8 @@ public class TreeLayout
         {
             Debug.Log("Increasing size");
             m_MaxDepth += m_IntervalStep;
-            NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            NativeMethods.DrawHierarchyOffsetFrom(new RustResourceWrapper<ClusterData>(ClusterData.Alloc(m_RootID)), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
         }
 
         UpdateNodeVisibility(nextDepth);
@@ -70,7 +74,8 @@ public class TreeLayout
             Debug.Log("Decreasing size");
 
             m_MaxDepth = m_CurrentDepth + m_IntervalStep;
-            NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            NativeMethods.DrawHierarchyOffsetFrom(new RustResourceWrapper<ClusterData>(ClusterData.Alloc(m_RootID)), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
+            //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
         }
 
         UpdateNodeVisibility(nextDepth);

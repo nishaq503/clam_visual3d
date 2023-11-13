@@ -1,4 +1,5 @@
 using Clam;
+using Clam.FFI;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -275,14 +276,13 @@ namespace Clam
             return new Tuple<int, int>(int.Parse(m_MinField.value), int.Parse(m_MaxField.value));
         }
 
-        public bool IsWithinRange(FFI.ClusterDataWrapper wrapper)
+        public bool IsWithinRange(FFI.RustResourceWrapper<ClusterData> wrapper)
         {
-
             List<Tuple<string, int>> comparisons = new List<Tuple<string, int>>();
-            comparisons.Add(new Tuple<string, int>("Depth", wrapper.Data.depth));
-            comparisons.Add(new Tuple<string, int>("Cardinality", wrapper.Data.cardinality));
-            comparisons.Add(new Tuple<string, int>("ArgRadius", wrapper.Data.argRadius));
-            comparisons.Add(new Tuple<string, int>("ArgCenter", wrapper.Data.argCenter));
+            comparisons.Add(new Tuple<string, int>("Depth", wrapper.GetData().depth));
+            comparisons.Add(new Tuple<string, int>("Cardinality", wrapper.GetData().cardinality));
+            comparisons.Add(new Tuple<string, int>("ArgRadius", wrapper.GetData().argRadius));
+            comparisons.Add(new Tuple<string, int>("ArgCenter", wrapper.GetData().argCenter));
 
             foreach ((string name, int value) in comparisons)
             {

@@ -7,9 +7,9 @@ namespace Clam
 {
     namespace FFI
     {
-        public interface IRustResource<T>
+        public interface IRustResource
         {
-            T GetData();
+            //T GetData();
             void Free();
             // must also implement but its impossible to enforce...
             //public static (T, FFIError) Alloc(Args&&... data)
@@ -19,6 +19,11 @@ namespace Clam
         {
             T m_Data;
             public FFIError result;
+
+            public T Data
+            {
+                get { return m_Data; }
+            }
 
             public RustResourceWrapper(T data, FFIError result)
             {
@@ -42,7 +47,7 @@ namespace Clam
                 return m_Data;
             }
 
-            ~RustResourceWrapper() 
+            ~RustResourceWrapper()
             {
                 m_Data.Free();
             }

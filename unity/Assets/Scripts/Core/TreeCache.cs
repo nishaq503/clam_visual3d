@@ -154,9 +154,10 @@ namespace Clam
 
         public GameObject Add(string id)
         {
+            var wrapper = new RustResourceWrapper<ClusterIDs>(ClusterIDs.Alloc(id));
 
-            var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
-            if (wrapper != null)
+            //var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
+            if (wrapper.result == FFIError.Ok)
             {
                 GameObject node = Instantiate(m_NodePrefab);
                 //nodeData.LogInfo();
@@ -178,8 +179,9 @@ namespace Clam
             {
                 return m_Tree.GetValueOrDefault(id);
             }
-            var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
-            if (wrapper != null)
+            var wrapper = new RustResourceWrapper<ClusterIDs>(ClusterIDs.Alloc(id));
+            //var wrapper = NativeMethods.CreateClusterIDsWrapper(id);
+            if (wrapper.result == FFIError.Ok)
             {
                 GameObject node = Instantiate(m_NodePrefab);
                 node.GetComponent<Node>().SetID(wrapper.Data.id.AsString);
@@ -204,11 +206,11 @@ namespace Clam
                 //{
                 //    continue;
                 //}
-                Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(kvp.Key);
-
+                //Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(kvp.Key);
+                var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(kvp.Key));
                 //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
                 //Clam.FFI.NativeMethods.GetClusterData(wrapper);
-                if (wrapper != null)
+                if (wrapper.result == FFIError.Ok)
                 {
                     //if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                     {

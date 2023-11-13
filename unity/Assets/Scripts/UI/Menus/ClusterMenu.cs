@@ -1,4 +1,5 @@
 using Clam;
+using Clam.FFI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,11 +60,12 @@ public class ClusterMenu
             //{
             //    continue;
             //}
-            Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
+            var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(cluster.GetComponent<Node>().GetId()));
+            //var wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(cluster.GetComponent<Node>().GetId());
 
             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(cluster.GetComponent<Node>().ToNodeData());
             //Clam.FFI.NativeMethods.GetClusterData(wrapper);
-            if (wrapper != null)
+            if (wrapper.result == FFIError.Ok)
             {
                 if (m_IntInputFields.TryGetValue("Depth", out var depthField))
                 {

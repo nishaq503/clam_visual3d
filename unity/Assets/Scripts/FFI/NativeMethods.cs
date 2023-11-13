@@ -106,55 +106,22 @@ namespace Clam
 
             // ------------------------------------- Cluster Helpers ------------------------------------- 
 
-            public static Clam.FFI.ClusterDataWrapper CreateClusterDataWrapper(string id)
-            {
-                var result = create_cluster_data(m_Handle, id, out var data);
-                if (result != FFIError.Ok)
-                {
-                    Debug.Log(result);
-                    return null;
-                }
-                var node = Cakes.Tree.GetOrAdd(data.id.AsString).GetComponent<Node>();
-                data.SetPos(node.GetPosition());
-                data.SetColor(node.GetColor());
-
-                return new ClusterDataWrapper(data);
-                //ClusterData* data = create_cluster_data("1");
-            }
-
             public static FFIError AllocString(string data, out StringFFI resource)
             {
                 var result = alloc_string(data, out resource);
                 return result;
             }
 
-            //public static Clam.FFI.StringFFIWrapper CreateStringFFIWrapper(string id)
-            //{
-            //    var result = alloc_string(id, out var data);
-            //    if (result != FFIError.Ok)
-            //    {
-            //        Debug.Log(result);
-            //        return null;
-            //    }
-
-            //    return new StringFFIWrapper(data);
-            //    //ClusterData* data = create_cluster_data("1");
-            //}
-
-            public static Clam.FFI.ClusterIDsWrapper CreateClusterIDsWrapper(string id)
+            public static FFIError CreateClusterIDsMustFree (string id, out Clam.FFI.ClusterIDs clusterData)
             {
                 var result = create_cluster_ids(m_Handle, id, out var data);
                 if (result != FFIError.Ok)
                 {
                     Debug.Log(result);
-                    return null;
+                    clusterData = new ClusterIDs();
                 }
-                //var node = Cakes.Tree.GetTree().GetValueOrDefault(data.id.AsString).GetComponent<Node>();
-                //data.SetPos(node.GetPosition());
-                //data.SetColor(node.GetColor());
-
-                return new ClusterIDsWrapper(data);
-                //ClusterData* data = create_cluster_data("1");
+                clusterData = data;
+                return FFIError.Ok;
             }
 
             public static FFIError CreateClusterDataMustFree(string id, out Clam.FFI.ClusterData clusterData)
@@ -171,8 +138,6 @@ namespace Clam
                 data.SetColor(node.GetColor());
                 clusterData = data;
                 return FFIError.Ok;
-                //return new ClusterDataWrapper(data);
-                //ClusterData* data = create_cluster_data("1");
             }
 
             public static FFIError DeleteClusterData(ref ClusterData data)
@@ -182,18 +147,6 @@ namespace Clam
                 //return data;
                 //ClusterData* data = create_cluster_data("1");
             }
-
-            //public static FFIError FreeResource<T>(ref T data) where T : struct
-            //{
-            //    // Example: Call the foreign library with the specified type
-            //    return FreeResourceInternal(ref data);
-            //}
-
-            //private static FFIError FreeResourceInternal<T>(ref T data) where T : struct
-            //{
-            //    free_string(data, out var outData);
-            //    return FFIError.Ok; // Replace with the actual call to the foreign library
-            //}
 
             public static FFIError FreeString(ref StringFFI data)
             {
@@ -221,15 +174,15 @@ namespace Clam
                 //ClusterData* data = create_cluster_data("1");
             }
 
-            public static bool GetRootData(out ClusterDataWrapper clusterDataWrapper)
+            public static bool GetRootData(out RustResourceWrapper<ClusterData> clusterDataWrapper)
             {
                 string rootID = "0-" + NativeMethods.TreeCardinality().ToString();
 
                 if (Cakes.Tree.GetTree().TryGetValue(rootID, out var root))
                 {
-                    clusterDataWrapper = CreateClusterDataWrapper(root.GetComponent<Node>().GetId());
+                    clusterDataWrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(rootID));
 
-                    if (clusterDataWrapper != null)
+                    if (clusterDataWrapper.result == FFIError.Ok)
                     {
                         return true;
                     }
@@ -249,7 +202,7 @@ namespace Clam
                 return draw_hierarchy(m_Handle, callback);
             }
 
-            public static FFIError DrawHierarchyOffsetFrom(ClusterDataWrapper wrapper, NodeVisitor callback, int rootDepth = 0, int currentDepth = 1, int maxDepth = 1)
+            public static FFIError DrawHierarchyOffsetFrom(RustResourceWrapper<ClusterData> wrapper, NodeVisitor callback, int rootDepth = 0, int currentDepth = 1, int maxDepth = 1)
             {
                 ClusterData nodeData = wrapper.Data;
                 return draw_hierarchy_offset_from(m_Handle, ref nodeData, currentDepth, maxDepth - rootDepth, callback);
@@ -293,5 +246,4 @@ namespace Clam
             }
         }
     }
-
 }

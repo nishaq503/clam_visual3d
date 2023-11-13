@@ -1,3 +1,4 @@
+using Clam.FFI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -104,7 +105,7 @@ namespace Clam
                 {
                     //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper(selectedNode.GetComponent<Node>().ToNodeData());
                     //FFIError found = Clam.FFI.NativeMethods.GetClusterData(wrapper);
-                    Clam.FFI.ClusterDataWrapper wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
+                                var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(selectedNode.GetComponent<Node>().GetId()));
                     if (wrapper != null)
                     {
                         if (!selectedNode.GetComponent<Node>().Selected)
@@ -198,7 +199,8 @@ namespace Clam
 
                             // need to redraw parent child lines
                             //string rootName = "1";
-                            var wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
+                            var wrapper = new RustResourceWrapper<ClusterData>(ClusterData.Alloc(selectedNode.GetComponent<Node>().GetId()));
+                            //var wrapper = Clam.FFI.NativeMethods.CreateClusterDataWrapper(selectedNode.GetComponent<Node>().GetId());
                             //Clam.FFI.ClusterDataWrapper wrapper = new Clam.FFI.ClusterDataWrapper();
                             //if (MenuEventManager.instance.GetTree().TryGetValue(rootName, out var root))
                             {
