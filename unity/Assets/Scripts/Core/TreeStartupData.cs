@@ -10,6 +10,8 @@ public class TreeStartupData : ScriptableObject
     public string dataName;
     public DistanceMetric distanceMetric;
     public uint cardinality;
+    public bool isExpensive;
+    public bool shouldLoad;
     // Start is called before the first frame update
     void Start()
     {

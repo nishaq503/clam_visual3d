@@ -9,12 +9,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7566d7cf-f68a-4c42-82fc-ab4f2f8dbace" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/anomaly_readers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/anomaly_readers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/distances.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/error.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/Error.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/Error.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cleanup.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/cleanup.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/ClusterData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/ClusterData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/StringFFI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/StringFFI.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/ffi_log" beforeDir="false" afterPath="$PROJECT_DIR$/unity/ffi_log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +54,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "string-ffi-wrapper",
     "last_opened_file_path": "C:/uri/clam_visual3d",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -75,7 +77,7 @@
       <option name="presentableId" value="Default" />
       <updated>1699798577216</updated>
       <workItem from="1699798579300" duration="7586000" />
-      <workItem from="1699901840462" duration="1034000" />
+      <workItem from="1699901840462" duration="3383000" />
     </task>
     <servers />
   </component>

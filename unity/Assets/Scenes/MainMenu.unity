@@ -394,6 +394,10 @@ PrefabInstance:
       propertyPath: m_ClusterSideMenu
       value: 
       objectReference: {fileID: 5464502129025283835, guid: ead783c851f275043a91c635c430b0fc, type: 3}
+    - target: {fileID: 1773597683, guid: 9bef4f42a298bae478320457626b1a4f, type: 3}
+      propertyPath: m_LoadTreeMenuPrefab
+      value: 
+      objectReference: {fileID: 282500079766783759, guid: e300c471549c1b34f998b90d3a3c0d06, type: 3}
     - target: {fileID: 8812543147707653320, guid: 9bef4f42a298bae478320457626b1a4f, type: 3}
       propertyPath: m_Name
       value: MenuManager

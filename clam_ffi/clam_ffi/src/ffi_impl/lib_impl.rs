@@ -63,7 +63,7 @@ pub unsafe fn set_names_impl(
     return FFIError::NullPointerPassed;
 }
 
-pub fn free_cluster_data<T: Clone + Cleanup>(
+pub fn free_resource<T: Clone + Cleanup>(
     in_cluster_data: Option<&T>,
     out_cluster_data: Option<&mut T>,
 ) -> FFIError {
@@ -73,7 +73,7 @@ pub fn free_cluster_data<T: Clone + Cleanup>(
     return if let Some(in_data) = in_cluster_data {
         if let Some(out_data) = out_cluster_data {
             *out_data = in_data.clone();
-            out_data.free_ids();
+            out_data.free();
             FFIError::Ok
         } else {
             FFIError::NullPointerPassed
