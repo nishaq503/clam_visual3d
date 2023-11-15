@@ -9,14 +9,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7566d7cf-f68a-4c42-82fc-ab4f2f8dbace" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/ffi_impl/lib_impl.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeHeader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_impl.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_tilford.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/tree_layout/reingold_tilford.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/Edge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/Edge.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/Core/TreeCache.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/TreeLayout.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/TreeLayout.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/TreeLayout/TreeLayout.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/TreeLayout/TreeLayout.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/UI/MenuEventManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,22 +49,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/uri/clam_visual3d",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/uri/clam_visual3d&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
@@ -78,6 +78,7 @@
       <updated>1699798577216</updated>
       <workItem from="1699798579300" duration="7586000" />
       <workItem from="1699901840462" duration="3383000" />
+      <workItem from="1700054388848" duration="3725000" />
     </task>
     <servers />
   </component>

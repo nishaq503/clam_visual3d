@@ -604,7 +604,7 @@ impl Handle {
                 reingold_tilford::run_offset(
                     &root.pos,
                     clam_root,
-                    &self.labels,
+                    // &self.labels,
                     // current_depth,
                     max_depth,
                     node_visitor,

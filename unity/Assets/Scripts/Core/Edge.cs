@@ -94,6 +94,11 @@ public class Edge : MonoBehaviour
         m_Node2 = node2;
     }
 
+    public (GameObject, GameObject) GetNodes()
+    {
+        return (m_Node1, m_Node2);
+    }
+
     public void SetColor(Color color)
     {
         GetComponent<LineRenderer>().startColor = color;

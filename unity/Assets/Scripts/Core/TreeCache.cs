@@ -19,6 +19,7 @@ namespace Clam
         public TreeStartupData m_TreeData;
 
         private Dictionary<string, GameObject> m_Tree;
+        private Dictionary<string, GameObject> m_EdgeCache;
 
         //private float m_EdgeScalar = 25.0f;
         //private float m_SearchRadius = 0.05f;
@@ -67,6 +68,7 @@ namespace Clam
             }
 
             m_Tree = new Dictionary<string, GameObject>();
+            m_EdgeCache = new Dictionary<string, GameObject>();
 
             FFIError e = Clam.FFI.NativeMethods.SetNames(SetNodeNames);
 
@@ -82,6 +84,7 @@ namespace Clam
             Clam.FFI.NativeMethods.ColorClustersByLabel(ColorFiller);
 
             Clam.FFI.NativeMethods.ForEachDFT(EdgeDrawer);
+            PopulateEdgeDictionary();
 
             if (Clam.FFI.NativeMethods.GetRootData(out var rootData) == true)
             {
@@ -95,6 +98,25 @@ namespace Clam
 
             //SetVisibleTreeDepth(7);
             return FFIError.Ok;
+        }
+
+        private void PopulateEdgeDictionary()
+        {
+            Edge[] edges = GameObject.FindObjectsOfType<Edge>(true);
+            foreach (Edge edge in edges)
+            {
+                (var node1, var node2) = edge.GetComponent<Edge>().GetNodes();
+                string edgeKey = node1.GetComponent<Node>().GetId() + node2.GetComponent<Node>().GetId();
+
+                if (!m_EdgeCache.ContainsKey(edgeKey))
+                {
+                    m_EdgeCache[edgeKey] = edge.gameObject;
+                }
+                else
+                {
+                    Debug.LogWarning("Duplicate edge key found: " + edgeKey);
+                }
+            }
         }
 
 
@@ -135,6 +157,13 @@ namespace Clam
         {
             return m_Tree;
         }
+
+        public Dictionary<string, GameObject> GetEdges()
+        {
+            return m_EdgeCache;
+        }
+
+
 
         public void Set(Dictionary<string, GameObject> tree)
         {

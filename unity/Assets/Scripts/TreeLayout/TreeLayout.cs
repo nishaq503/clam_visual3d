@@ -9,8 +9,7 @@ public class TreeLayout
     int m_RootDepth;
     int m_CurrentDepth;
     int m_MaxDepth;
-    int m_IntervalStep = 5;
-    // depth given to reingold will be max-rootDepth
+    int m_IntervalStep = 4;    // depth given to reingold will be max-rootDepth
 
     public int CurrentDepth()
     {
@@ -97,8 +96,8 @@ public class TreeLayout
     {
         //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_MaxDepth);
 
-        NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID, m_MaxDepth);
-        NativeMethods.ForEachDFT(EdgeVisibilityCallback, m_RootID, m_MaxDepth);
+        NativeMethods.ForEachDFT(ClusterVisibilityCallback, m_RootID, m_CurrentDepth + 1);
+        NativeMethods.ForEachDFT(EdgeVisibilityCallback, m_RootID, m_CurrentDepth + 1);
         //if (newDepth == m_RootDepth)
         //{
         //    // destroy this object
@@ -136,7 +135,7 @@ public class TreeLayout
     {
         var id = data.id.AsString;
         GameObject clusterObject = Cakes.Tree.GetOrAdd(id);
-        Debug.Log("visibility callback");
+        //Debug.Log("visibility callback");
 
         clusterObject.GetComponent<Clam.Node>().SetPosition(data.pos.AsVector3);
         //Debug.Log("node depth: " + data.depth + ", cur depth: " + m_CurrentDepth);
@@ -173,44 +172,24 @@ public class TreeLayout
         {
             if (node.activeSelf && !node.GetComponent<Node>().IsLeaf())
             {
-                if (Cakes.Tree.GetTree().TryGetValue(node.GetComponent<Node>().GetLeftChildID(), out var lc))
-                {
-                    if (lc.activeSelf)
-                    {
-                        var edges = GameObject.FindObjectsOfType<Edge>(true).Where(e => e.name == node.GetComponent<Node>().GetId() + lc.GetComponent<Node>().GetId()).ToArray();
-                        if (edges.Count() != 0)
-                        {
-                            var edge = edges[0];
-                            if (!edge.gameObject.activeSelf)
-                            {
-
-                                Debug.Log("setting left edge acgive");
-                                edge.gameObject.SetActive(true);
-                            }
-                        }
-                    }
-                }
-
-                if (Cakes.Tree.GetTree().TryGetValue(node.GetComponent<Node>().GetRightChildID(), out var rc))
-                {
-                    if (rc.activeSelf)
-                    {
-                        var edge = System.Array.Find(GameObject.FindObjectsOfType<Edge>(true), e => e.name == (node.GetComponent<Node>().GetId() + rc.GetComponent<Node>().GetId()));
-                        if (edge != null)
-                        {
-                            if (!edge.gameObject.activeSelf)
-                            {
-                                edge.gameObject.SetActive(true);
-                            }
-                        }
-                    }
-                }
+                UpdateEdgeVisibility(node.GetComponent<Node>().GetLeftChildID(), node);
+                UpdateEdgeVisibility(node.GetComponent<Node>().GetRightChildID(), node);
             }
         }
     }
 
+    private void UpdateEdgeVisibility(string childId, GameObject parentNode)
+    {
+        if (Cakes.Tree.GetTree().TryGetValue(childId, out var childNode) && childNode.activeSelf)
+        {
+            string edgeKey = parentNode.GetComponent<Node>().GetId() + childNode.GetComponent<Node>().GetId();
 
-
+            if (Cakes.Tree.GetEdges().TryGetValue(edgeKey, out var edgeGameObject) && edgeGameObject != null && !edgeGameObject.activeSelf)
+            {
+                edgeGameObject.SetActive(true);
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

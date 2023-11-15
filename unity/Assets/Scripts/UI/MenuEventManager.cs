@@ -239,7 +239,6 @@ namespace Clam
 
                 m_TreeData.cardinality = 0;
                 m_TreeData.dataName = dataName = "../data/binaries/" + dataName;
-
                 m_TreeData.distanceMetric = metric;
                 m_TreeData.isExpensive = isExpensive;
                 Debug.Log("swtiching scne?");
