@@ -146,7 +146,10 @@ pub unsafe fn load_cakes_struct_impl(
                 *out_handle = Box::into_raw(Box::new(handle));
             }
 
-            debug!("built clam tree for {}", data.data_name.as_string().unwrap());
+            debug!(
+                "built clam tree for {}",
+                data.data_name.as_string().unwrap()
+            );
             return FFIError::Ok;
         }
         Err(e) => {

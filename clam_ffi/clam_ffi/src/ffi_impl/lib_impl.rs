@@ -17,7 +17,7 @@ pub unsafe fn for_each_dft_impl(
     ptr: InHandlePtr,
     node_visitor: CBFnNodeVisitor,
     start_node: *const c_char,
-    max_depth : i32,
+    max_depth: i32,
 ) -> FFIError {
     if let Some(handle) = ptr {
         if !start_node.is_null() {
@@ -110,6 +110,24 @@ pub unsafe fn tree_cardinality_impl(ptr: InHandlePtr) -> i32 {
     debug!("handle not created");
 
     return -1;
+}
+
+pub unsafe fn max_lfd_impl(ptr: InHandlePtr) -> f32 {
+    // Handle::from_ptr(ptr).get_num_nodes() + 1
+
+    if let Some(handle) = ptr {
+        if let Some(cakes) = handle.cakes() {
+            let clusters = cakes.trees().first().unwrap().root().subtree();
+            let lfd = clusters.first().unwrap().lfd();
+            let max_lfd = clusters
+                .iter()
+                .map(|c| c.lfd())
+                .max_by(|a, b| a.partial_cmp(b).unwrap())
+                .unwrap();
+            return max_lfd as f32;
+        }
+    }
+        return -1.0;
 }
 
 pub fn color_clusters_by_label_impl(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor) -> FFIError {

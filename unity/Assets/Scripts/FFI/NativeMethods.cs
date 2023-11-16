@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231115090523";
+	public const string __DllName = "clam_ffi_20231116144827";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -136,6 +136,11 @@ namespace Clam
             public static int TreeHeight()
             {
                 return tree_height(m_Handle);
+            }
+
+            public static float MaxLFD()
+            {
+                return max_lfd(m_Handle);
             }
             public static int TreeCardinality()
             {

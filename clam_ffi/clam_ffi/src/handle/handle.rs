@@ -33,7 +33,6 @@ use crate::ffi_impl::cluster_data_wrapper::ClusterDataWrapper;
 use crate::ffi_impl::tree_startup_data_ffi::TreeStartupDataFFI;
 use crate::graph::physics_node::PhysicsNode;
 use spring::Spring;
-// use crate::physics::ForceDirectedGraph;
 
 // use ForceDirectedGraph;
 
@@ -351,7 +350,7 @@ impl Handle {
         &self,
         node_visitor: CBFnNodeVisitor,
         start_node: String,
-        max_depth : i32,
+        max_depth: i32,
     ) -> FFIError {
         return if let Some(_) = &self.cakes {
             if start_node == "root" {
@@ -413,8 +412,6 @@ impl Handle {
             let baton = ClusterIDsWrapper::from_cluster(&root);
 
             node_visitor(Some(baton.data()));
-            // baton.free_ids();
-
             return;
         }
         if let Some([left, right]) = root.children() {
@@ -427,8 +424,7 @@ impl Handle {
             Self::set_names_helper(right, node_visitor);
         }
     }
-
-    fn for_each_dft_helper(root: &Clusterf32, node_visitor: CBFnNodeVisitor, max_depth : i32) {
+    fn for_each_dft_helper(root: &Clusterf32, node_visitor: CBFnNodeVisitor, max_depth: i32) {
         if root.is_leaf() || root.depth() as i32 >= max_depth {
             let baton = ClusterDataWrapper::from_cluster(&root);
 

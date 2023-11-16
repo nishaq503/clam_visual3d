@@ -70,10 +70,7 @@ impl Node {
         return Some(Rc::new(RefCell::new(Node::new(depth, name))));
     }
 
-    pub fn create_layout(
-        abd_clam_root: &Cluster<f32>,
-        max_depth: i32,
-    ) -> Link {
+    pub fn create_layout(abd_clam_root: &Cluster<f32>, max_depth: i32) -> Link {
         // debug!("before 1st color filler");
 
         let draw_root = Node::new_link(0f32, abd_clam_root.name());
@@ -92,19 +89,14 @@ impl Node {
             0f32,
             Extreme::default_link(),
             Extreme::default_link(),
-            max_depth
+            max_depth,
         );
         Self::petrify(draw_root.clone(), 0f32, max_depth);
 
         return draw_root;
     }
 
-    fn init_helper(
-        draw_root: Link,
-        abd_clam_root: &Cluster<f32>,
-        depth: f32,
-        max_depth: i32,
-    ) {
+    fn init_helper(draw_root: Link, abd_clam_root: &Cluster<f32>, depth: f32, max_depth: i32) {
         if abd_clam_root.is_leaf() || depth as i32 == max_depth {
             return;
         }
@@ -132,9 +124,8 @@ impl Node {
         }
     }
 
-    fn setup(t: Link, level: f32, right_most: ExtremeLink, left_most: ExtremeLink, depth : i32) {
-
-        if depth == -2{
+    fn setup(t: Link, level: f32, right_most: ExtremeLink, left_most: ExtremeLink, depth: i32) {
+        if depth == -2 {
             return;
         }
         let (lr, ll, rr, rl) = (
@@ -151,8 +142,20 @@ impl Node {
             node.borrow_mut().y = level;
 
             let (mut left_child, mut right_child) = node.as_ref().borrow().get_children();
-            Self::setup(left_child.clone(), level + 1., lr.clone(), ll.clone(), depth -1);
-            Self::setup(right_child.clone(), level + 1., rr.clone(), rl.clone(), depth -1);
+            Self::setup(
+                left_child.clone(),
+                level + 1.,
+                lr.clone(),
+                ll.clone(),
+                depth - 1,
+            );
+            Self::setup(
+                right_child.clone(),
+                level + 1.,
+                rr.clone(),
+                rl.clone(),
+                depth - 1,
+            );
 
             if left_child.is_none() && right_child.is_none() {
                 node.borrow_mut().offset = 0.;
@@ -296,8 +299,8 @@ impl Node {
         }
     }
 
-    fn petrify(t: Link, x: f32, max_depth : i32) {
-        if max_depth == -2{
+    fn petrify(t: Link, x: f32, max_depth: i32) {
+        if max_depth == -2 {
             return;
         }
 
@@ -320,7 +323,6 @@ impl Node {
             );
         }
     }
-
 
     pub fn get_children(&self) -> (Link, Link) {
         return (self.get_left_child(), self.get_right_child());

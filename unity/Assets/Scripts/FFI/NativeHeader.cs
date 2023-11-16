@@ -46,6 +46,9 @@ namespace Clam
             [DllImport(__DllName, EntryPoint = "tree_cardinality", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern int tree_cardinality(IntPtr handle);
 
+            [DllImport(__DllName, EntryPoint = "max_lfd", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            private static extern float max_lfd(IntPtr handle);
+
             [DllImport(__DllName, EntryPoint = "color_clusters_by_label", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             private static extern FFIError color_clusters_by_label(IntPtr ptr, NodeVisitor callback);
 

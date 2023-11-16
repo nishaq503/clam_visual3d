@@ -10,7 +10,7 @@ mod tests;
 mod tree_layout;
 mod utils;
 
-use crate::ffi_impl::lib_impl::free_resource;
+use crate::ffi_impl::lib_impl::{free_resource, max_lfd_impl};
 use crate::ffi_impl::tree_startup_data_ffi::TreeStartupDataFFI;
 use crate::file_io::load_save::save_cakes_single_impl;
 use ffi_impl::{
@@ -268,6 +268,11 @@ pub unsafe extern "C" fn tree_height(ptr: InHandlePtr) -> i32 {
 #[no_mangle]
 pub unsafe extern "C" fn tree_cardinality(ptr: InHandlePtr) -> i32 {
     return tree_cardinality_impl(ptr);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn max_lfd(ptr: InHandlePtr) -> f32 {
+    return max_lfd_impl(ptr);
 }
 
 #[no_mangle]

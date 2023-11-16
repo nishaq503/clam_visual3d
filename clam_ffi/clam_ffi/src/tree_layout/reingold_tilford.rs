@@ -45,7 +45,7 @@ fn update_unity_positions_offset(
     root: reingold_impl::Link,
     start_pos: &Vec3,
     node_visitor: crate::CBFnNodeVisitor,
-    max_depth : i32,
+    max_depth: i32,
 ) -> FFIError {
     // if max_depth == -1{
     //     return FFIError::Ok;
@@ -69,9 +69,9 @@ fn update_helper_offset(
     root: reingold_impl::Link,
     offset: &glam::Vec3,
     node_visitor: crate::CBFnNodeVisitor,
-    max_depth : i32,
+    max_depth: i32,
 ) -> () {
-    if max_depth == -2{
+    if max_depth == -2 {
         return;
     }
     if let Some(node) = root {

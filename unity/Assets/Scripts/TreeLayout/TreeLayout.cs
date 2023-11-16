@@ -9,7 +9,7 @@ public class TreeLayout
     int m_RootDepth;
     int m_CurrentDepth;
     int m_MaxDepth;
-    int m_IntervalStep = 4;    // depth given to reingold will be max-rootDepth
+    int m_IntervalStep = 3;    // depth given to reingold will be max-rootDepth
 
     public int CurrentDepth()
     {
@@ -68,11 +68,11 @@ public class TreeLayout
         }
         m_CurrentDepth--;
 
-        if (m_MaxDepth - m_CurrentDepth > m_IntervalStep * 1.5)
+        if (m_CurrentDepth  < m_MaxDepth - m_IntervalStep)
         {
             Debug.Log("Decreasing size");
 
-            m_MaxDepth = m_CurrentDepth + m_IntervalStep;
+            m_MaxDepth -= m_IntervalStep;
             NativeMethods.DrawHierarchyOffsetFrom(new RustResourceWrapper<ClusterData>(ClusterData.Alloc(m_RootID)), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
             //NativeMethods.DrawHierarchyOffsetFrom(Clam.FFI.NativeMethods.CreateClusterDataWrapper(m_RootID), UpdatePositionCallback, m_RootDepth, m_CurrentDepth, m_MaxDepth);
         }
@@ -138,18 +138,6 @@ public class TreeLayout
         //Debug.Log("visibility callback");
 
         clusterObject.GetComponent<Clam.Node>().SetPosition(data.pos.AsVector3);
-        //Debug.Log("node depth: " + data.depth + ", cur depth: " + m_CurrentDepth);
-        //if (data.depth <= m_CurrentDepth)
-        //{
-        //    Debug.Log("set active");
-        //    clusterObject.SetActive(true);
-        //}
-        //else
-        //{
-        //    Debug.Log("set inactive");
-
-        //    clusterObject.SetActive(false);
-        //}
     }
 
     void ClusterVisibilityCallback(ref ClusterData data)
