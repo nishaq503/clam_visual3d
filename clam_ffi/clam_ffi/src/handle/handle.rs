@@ -8,8 +8,8 @@ use std::sync::Arc;
 // use std::thread;
 use std::thread::JoinHandle;
 
-use abd_clam::builder::{detect_edges, select_clusters};
-use abd_clam::{ClusterSet, Edge, EdgeSet, Graph, PartitionCriteria};
+use abd_clam::builder::{detect_edges, my_select_clusters, select_clusters};
+use abd_clam::{ClusterSet, Edge, EdgeSet, Graph, MyEdge, MyEdgeSet, PartitionCriteria};
 // use abd_clam::cluster::PartitionCriteria;
 // use abd_clam::core::dataset::Dataset;
 use abd_clam::Cakes;
@@ -66,12 +66,12 @@ use spring::Spring;
 //     }
 // }
 
-pub struct Handle<'a> {
+pub struct Handle {
     cakes: Option<Rc<RefCell<Cakes<Vec<f32>, f32, DataSet>>>>,
     // cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
-    clam_graph: Option<Rc<RefCell<Graph<'a, f32>>>>,
+    clam_graph: Option<Rc<RefCell<Graph<Vec<f32>, f32, DataSet>>>>,
     edges: Option<Vec<Spring>>,
     current_query: Option<Vec<f32>>,
     // longest_edge: Option<f32>,
@@ -86,7 +86,7 @@ pub struct Handle<'a> {
 //         debug!("DroppingHandle");
 //     }
 // }
-impl<'a> Handle<'a> {
+impl Handle {
     pub fn shutdown(&mut self) {
         self.cakes = None;
         // self.dataset = None;
@@ -134,7 +134,7 @@ impl<'a> Handle<'a> {
         self.cakes = Some(Rc::new(RefCell::new(cakes)));
     }
 
-    pub fn cakes(&'a self) -> Option<Rc<RefCell<Cakes<Vec<f32>, f32, DataSet>>>> {
+    pub fn cakes(&self) -> Option<Rc<RefCell<Cakes<Vec<f32>, f32, DataSet>>>> {
         return self.cakes.clone();
     }
 
@@ -176,6 +176,23 @@ impl<'a> Handle<'a> {
         }
     }
 
+    pub fn init_clam_graph(&mut self) {
+        if let Some(cakes) = &self.cakes {
+            let c2 = cakes.clone();
+            let cakes = cakes.borrow();
+            if let Some(tree) = cakes.trees().first() {
+                let selected_clusters = my_select_clusters(tree.root());
+                let selected_clusters2 = select_clusters(tree.root());
+                let edges = detect_edges(&selected_clusters2, tree.data());
+                let edges = edges
+                    .iter()
+                    .map(|e| MyEdge::from_edge(e))
+                    .collect::<MyEdgeSet<f32>>();
+                let graph = Graph::new(c2.clone(), selected_clusters.clone(), edges.clone());
+                self.clam_graph = Some(Rc::new(RefCell::new(graph.unwrap())));
+            }
+        }
+    }
     pub fn load(data_name: &str) -> Result<Self, FFIError> {
         let c = Cakes::<Vec<f32>, f32, VecDataset<_, _, _>>::load(
             Path::new(data_name),
@@ -377,7 +394,7 @@ impl<'a> Handle<'a> {
     // }
 
     pub unsafe fn for_each_dft(
-        &'a self,
+        &self,
         node_visitor: CBFnNodeVisitor,
         start_node: String,
         max_depth: i32,
@@ -428,7 +445,7 @@ impl<'a> Handle<'a> {
     }
 
     pub unsafe fn set_names(
-        &'a self,
+        &self,
         node_visitor: crate::CBFnNameSetter,
         start_node: String,
     ) -> FFIError {
