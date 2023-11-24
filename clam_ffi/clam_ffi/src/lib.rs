@@ -39,6 +39,7 @@ use crate::handle::entry_point::{
     init_clam_impl, init_clam_struct_impl, load_cakes_impl, load_cakes_struct_impl,
     shutdown_clam_impl,
 };
+use crate::handle::handle::Handle;
 
 type CBFnNodeVisitor = extern "C" fn(Option<&ClusterData>) -> ();
 type CBFnNameSetter = extern "C" fn(Option<&ClusterIDs>) -> ();
@@ -55,15 +56,25 @@ pub unsafe extern "C" fn create_cluster_data(
         let id = utils::helpers::c_char_to_string(id);
         // let data = Box::new(ClusterData::default());
 
+        let id = Handle::parse_cluster_id(id);
+        let id = id.unwrap();
         // match out_node.id.as_string() {
-        return match handle.get_cluster(id) {
-            Ok(cluster) => {
+        return match handle
+            .cakes()
+            .unwrap()
+            .borrow()
+            .trees()
+            .first()
+            .unwrap()
+            .get_cluster(id.0, id.1)
+        {
+            Some(cluster) => {
                 let cluster_data = ClusterData::from_clam(cluster);
 
                 *outgoing = cluster_data;
                 FFIError::Ok
             }
-            Err(_) => FFIError::InvalidStringPassed,
+            None => FFIError::InvalidStringPassed,
         };
     }
     return FFIError::NullPointerPassed;
@@ -110,16 +121,24 @@ pub unsafe extern "C" fn create_cluster_ids(
         let outgoing = outgoing.unwrap();
         let id = utils::helpers::c_char_to_string(id);
         // let data = Box::new(ClusterData::default());
-
+        let id = Handle::parse_cluster_id(id).unwrap();
         // match out_node.id.as_string() {
-        return match handle.get_cluster(id) {
-            Ok(cluster) => {
+        return match handle
+            .cakes()
+            .unwrap()
+            .borrow()
+            .trees()
+            .first()
+            .unwrap()
+            .get_cluster(id.0, id.1)
+        {
+            Some(cluster) => {
                 let cluster_data = ClusterIDs::from_clam(cluster);
 
                 *outgoing = cluster_data;
                 FFIError::Ok
             }
-            Err(_) => FFIError::InvalidStringPassed,
+            None => FFIError::InvalidStringPassed,
         };
     }
     return FFIError::NullPointerPassed;

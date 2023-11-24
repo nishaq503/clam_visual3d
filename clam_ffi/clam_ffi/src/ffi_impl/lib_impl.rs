@@ -1,6 +1,7 @@
 use std::ffi::{c_char, CStr};
 
 use crate::ffi_impl::cleanup::Cleanup;
+use crate::handle::handle::Handle;
 use crate::{
     debug,
     utils::{
@@ -103,8 +104,11 @@ pub unsafe fn tree_cardinality_impl(ptr: InHandlePtr) -> i32 {
     if let Some(handle) = ptr {
         // debug!("cardinality: {}", handle.tree_height() + 1);
 
-        if let Some(tree) = handle.get_tree() {
-            return tree.cardinality() as i32;
+        if let Some(cakes) = handle.cakes() {
+            // let cakes = cakes.borrow();
+            // let tree = cakes.trees().first().unwrap();
+            // return tree.cardinality() as i32;
+            return cakes.borrow().trees().first().unwrap().cardinality() as i32;
         }
     }
     debug!("handle not created");
@@ -117,6 +121,7 @@ pub unsafe fn max_lfd_impl(ptr: InHandlePtr) -> f32 {
 
     if let Some(handle) = ptr {
         if let Some(cakes) = handle.cakes() {
+            let cakes = cakes.borrow();
             let clusters = cakes.trees().first().unwrap().root().subtree();
             let lfd = clusters.first().unwrap().lfd();
             let max_lfd = clusters
@@ -127,18 +132,24 @@ pub unsafe fn max_lfd_impl(ptr: InHandlePtr) -> f32 {
             return max_lfd as f32;
         }
     }
-        return -1.0;
+    return -1.0;
 }
 
 pub fn color_clusters_by_label_impl(ptr: InHandlePtr, node_visitor: CBFnNodeVisitor) -> FFIError {
     if let Some(handle) = ptr {
-        if let Some(root) = handle.root() {
+        if let Some(cakes) = handle.cakes() {
+            let cakes = cakes.borrow();
+            // let root = cakes.borrow().trees().first().unwrap().root();
             if let Some(labels) = handle.labels() {
                 if *(labels.iter().max().unwrap()) > (1) {
                     // need error message for labels not matching
                     return FFIError::HandleInitFailed;
                 }
-                color_helper(Some(root), &labels, node_visitor);
+                color_helper(
+                    Some(cakes.trees().first().unwrap().root()),
+                    &labels,
+                    node_visitor,
+                );
                 return FFIError::Ok;
             }
         }
@@ -238,24 +249,25 @@ pub unsafe fn color_by_dist_to_query_impl(
     len: i32,
     node_visitor: CBFnNodeVisitor,
 ) -> FFIError {
-    if let Some(handle) = context {
-        if arr_ptr.is_null() {
-            return FFIError::NullPointerPassed;
-        }
-        // debug!("creating string arr");
-        let arr = std::slice::from_raw_parts(arr_ptr, len as usize);
-
-        let mut ids = Vec::new();
-        for node in arr {
-            ids.push(node.id.as_string().unwrap());
-        }
-
-        let err = handle.color_by_dist_to_query(ids.as_slice(), node_visitor);
-        // debug!("color result {:?}", err);
-        return err;
-    } else {
-        return FFIError::NullPointerPassed;
-    }
+    FFIError::NotImplemented
+    // if let Some(handle) = context {
+    //     if arr_ptr.is_null() {
+    //         return FFIError::NullPointerPassed;
+    //     }
+    //     // debug!("creating string arr");
+    //     let arr = std::slice::from_raw_parts(arr_ptr, len as usize);
+    //
+    //     let mut ids = Vec::new();
+    //     for node in arr {
+    //         ids.push(node.id.as_string().unwrap());
+    //     }
+    //
+    //     let err = handle.color_by_dist_to_query(ids.as_slice(), node_visitor);
+    //     // debug!("color result {:?}", err);
+    //     return err;
+    // } else {
+    //     return FFIError::NullPointerPassed;
+    // }
     // return FFIError::Ok;
 }
 
@@ -265,18 +277,39 @@ pub unsafe fn distance_to_other_impl(
     node_name2: *const c_char,
 ) -> f32 {
     if let Some(handle) = ptr {
-        let node1 = handle.get_cluster(helpers::c_char_to_string(node_name1));
-        let node2 = handle.get_cluster(helpers::c_char_to_string(node_name2));
+        let name1 = helpers::c_char_to_string(node_name1);
+        let name2 = helpers::c_char_to_string(node_name2);
 
-        if let Ok(node1) = node1 {
-            if let Ok(node2) = node2 {
-                let distance = node1.distance_to_other(handle.data().unwrap(), node2);
-                return distance;
-            } else {
-                return -1f32;
+        let name1 = Handle::parse_cluster_id(name1);
+        let name2 = Handle::parse_cluster_id(name2);
+        let name1 = name1.unwrap();
+        let name2 = name2.unwrap();
+        // let node1 = handle.get_cluster(helpers::c_char_to_string(node_name1));
+        // let node2 = handle.get_cluster(helpers::c_char_to_string(node_name2));
+        if let Some(cakes) = handle.cakes() {
+            let cakes = cakes.borrow();
+            if let Some(tree) = cakes.trees().first() {
+                if let Some(node1) = tree.get_cluster(name1.0, name1.1) {
+                    if let Some(node2) = tree.get_cluster(name2.0, name2.1) {
+                        let distance = node1.distance_to_other(
+                            handle
+                                .cakes()
+                                .unwrap()
+                                .borrow()
+                                .trees()
+                                .first()
+                                .unwrap()
+                                .data(),
+                            node2,
+                        );
+                        return distance;
+                    } else {
+                        return -1f32;
+                    }
+                } else {
+                    return -1f32;
+                }
             }
-        } else {
-            return -1f32;
         }
     }
 

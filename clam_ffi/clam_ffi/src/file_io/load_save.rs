@@ -9,8 +9,8 @@ use std::path::Path;
 pub fn load_single_f32(
     handle: &mut Handle,
     path: &String,
-) -> Result<Cakes<Vec<f32>, f32, VecDataset<Vec<f32>, f32>>, String> {
-    return Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+) -> Result<Cakes<Vec<f32>, f32, VecDataset<Vec<f32>, f32, f32>>, String> {
+    return Cakes::<Vec<f32>, f32, VecDataset<_, _,_>>::load(
         Path::new(path),
         utils::distances::euclidean,
         false,
@@ -32,7 +32,7 @@ pub unsafe fn save_cakes_single_impl(
 
         if let Some(cakes) = handle.cakes() {
             let p = Path::new(&path);
-            match cakes.save(p) {
+            match cakes.borrow().save(p) {
                 Ok(_) => FFIError::Ok,
                 Err(e) => {
                     debug!("save cakes single error: {:?}", e);
