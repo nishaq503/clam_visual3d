@@ -321,6 +321,20 @@ pub unsafe extern "C" fn draw_hierarchy_offset_from(
     return draw_hierarchy_offset_from_impl(ptr, root, current_depth, max_depth, node_visitor);
 }
 
+// ------------------------------------- Graph Clam Init -------------------------------------
+#[no_mangle]
+pub unsafe extern "C" fn init_clam_graph(
+    context: InHandlePtr,
+    cluster_selector: CBFnNodeVisitor,
+) -> FFIError {
+    if let Some(handle) = context {
+        handle.init_clam_graph(cluster_selector);
+        return FFIError::Ok;
+    }
+    return FFIError::HandleInitFailed;
+}
+
+
 // ------------------------------------- Graph Physics -------------------------------------
 
 #[no_mangle]

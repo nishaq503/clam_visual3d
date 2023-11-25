@@ -1,12 +1,15 @@
 extern crate nalgebra as na;
 
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::path::Path;
+use std::rc::Rc;
 use std::sync::Arc;
 // use std::thread;
 use std::thread::JoinHandle;
 
-use abd_clam::PartitionCriteria;
+use abd_clam::{ClusterSet, Graph, MyCluster, MyClusterSet, MyEdge, MyEdgeSet, PartitionCriteria};
+use abd_clam::builder::detect_edges;
 // use abd_clam::cluster::PartitionCriteria;
 // use abd_clam::core::dataset::Dataset;
 use abd_clam::Cakes;
@@ -68,6 +71,7 @@ pub struct Handle {
     // cakes1: Option<Cakes<Vec<f32>, f32, VecDataset<f32,f32>>>,
     labels: Option<Vec<u8>>,
     graph: Option<HashMap<String, PhysicsNode>>,
+    clam_graph: Option<Rc<RefCell<Graph<f32>>>>,
     edges: Option<Vec<Spring>>,
     current_query: Option<Vec<f32>>,
     // longest_edge: Option<f32>,
@@ -141,6 +145,7 @@ impl Handle {
                     cakes: Some(Cakes::new(dataset, Some(1), &criteria)), //.build(&criteria)),
                     labels: Some(labels),
                     graph: None,
+                    clam_graph : None,
                     edges: None,
                     current_query: None,
                     // longest_edge: None,
@@ -165,6 +170,7 @@ impl Handle {
                     cakes: Some(cakes),
                     labels: None,
                     graph: None,
+                    clam_graph : None,
                     edges: None,
                     current_query: None,
                     // longest_edge: None,
@@ -204,6 +210,7 @@ impl Handle {
                     cakes: Some(cakes),
                     labels: None,
                     graph: None,
+                    clam_graph : None,
                     edges: None,
                     current_query: None,
                     // longest_edge: None,
@@ -241,6 +248,53 @@ impl Handle {
                 Err(e)
             }
         }
+    }
+
+    pub fn init_clam_graph(&mut self, cluster_selector: CBFnNodeVisitor) -> FFIError {
+        if let Some(cakes) = &self.cakes {
+            if let Some(tree) = cakes.trees().first() {
+                let mut selected_clusters3 = tree.root().subtree();
+                selected_clusters3.retain(|c| c.depth() == tree.depth() / 2);
+
+                let selected_clusters = selected_clusters3
+                    .iter()
+                    .map(|&c| c)
+                    .collect::<ClusterSet<_>>();
+                let my_selected_clusters = selected_clusters3
+                    .iter()
+                    .map(|c| MyCluster::from_cluster(c))
+                    .collect::<MyClusterSet>();
+
+                // let my_selected_clusters = my_select_clusters(tree.root());
+                // let selected_clusters2 = select_clusters(tree.root());
+                debug!(
+                    "select clusters len {}, {}",
+                    selected_clusters.len(),
+                    my_selected_clusters.len()
+                );
+                // let mut clusters = tree.root().subtree();
+                // clusters.retain(|c| c.is_leaf());
+                // let selected_clusters2 = clusters.iter().map(|&c| c).collect::<ClusterSet<_>>();
+                for cluster in &selected_clusters {
+                    let baton = ClusterDataWrapper::from_cluster(cluster);
+                    cluster_selector(Some(baton.data()));
+                }
+
+                let edges = detect_edges(&selected_clusters, tree.data());
+                let edges = edges
+                    .iter()
+                    .map(|e| MyEdge::from_edge(e))
+                    .collect::<MyEdgeSet<f32>>();
+                if selected_clusters.len() == 0 || my_selected_clusters.len() == 0 {
+                    debug!("selected clusters empty")
+                }
+                let graph = Graph::new(my_selected_clusters.clone(), edges.clone());
+                self.clam_graph = Some(Rc::new(RefCell::new(graph.unwrap())));
+
+                return FFIError::Ok;
+            }
+        }
+        return FFIError::HandleInitFailed;
     }
 
     pub unsafe fn force_physics_shutdown(&mut self) -> FFIError {
@@ -318,7 +372,9 @@ impl Handle {
     pub fn get_num_edges_in_graph(&self) -> i32 {
         self.num_edges_in_graph.unwrap_or(-1)
     }
-
+    pub fn clam_graph(&self) -> Option<Rc<RefCell<Graph<f32>>>> {
+        return self.clam_graph.clone();
+    }
     pub unsafe fn color_by_dist_to_query(
         &self,
         id_arr: &[String],

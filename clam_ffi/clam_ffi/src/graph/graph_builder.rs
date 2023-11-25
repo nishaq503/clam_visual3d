@@ -36,7 +36,14 @@ pub unsafe fn build_force_directed_graph(
                 clusters.push(cluster);
             }
         }
-        create_springs(detect_edges(&clusters, &handle.data())) //, edge_detector_cb))
+        let clam_graph = handle.clam_graph().unwrap();
+        let edges = clam_graph.borrow().edges().clone(); //FIX THIS LATER
+        let edges = edges
+            .iter()
+            .map(|e| (e.left().name(), e.right().name(), e.distance(), true))
+            .collect::<Vec<Edge>>();
+        create_springs(edges)
+        // create_springs(detect_edges(&clusters, &handle.data())) //, edge_detector_cb))
     };
 
     let graph = build_graph(handle, &cluster_data_arr);
@@ -89,49 +96,49 @@ pub unsafe fn build_graph(
 // }
 //adding comment
 
-pub fn detect_edges(
-    clusters: &Vec<&Clusterf32>,
-    dataset: &Option<&DataSet>,
-    // node_visitor: crate::CBFnNodeVisitorMut,
-) -> Vec<Edge> {
-    let mut edges: Vec<Edge> = Vec::new();
-    if let Some(data) = *dataset {
-        for i in 0..clusters.len() {
-            for j in (i + 1)..clusters.len() {
-                let distance = clusters[i].distance_to_other(data, clusters[j]);
-                if distance <= clusters[i].radius() + clusters[j].radius() {
-                    edges.push((clusters[i].name(), clusters[j].name(), distance, true));
-                } else {
-                    // edges.push((clusters[i].name(), clusters[j].name(), distance, false));
-
-                    // edges.push((
-                    //     clusters[i].name(),
-                    //     clusters[j].name(),
-                    //     distance,
-                    //     distance <= clusters[i].radius + clusters[j].radius,
-                    // ));
-                }
-
-                // let mut baton = ClusterDataWrapper::from_cluster(clusters[i]);
-                // baton.data_mut().set_message(clusters[j].name());
-                // node_visitor(Some(baton.data_mut()));
-
-                // debug!(
-                //     "message from unity {}",
-                //     baton
-                //         .data()
-                //         .message
-                //         .as_string()
-                //         .unwrap_or("error null string".to_string())
-                // );
-                // // data.free_ids();
-                // }
-            }
-        }
-    }
-    debug!("number of edges in graph: {}", edges.len());
-    return edges;
-}
+// pub fn detect_edges(
+//     clusters: &Vec<&Clusterf32>,
+//     dataset: &Option<&DataSet>,
+//     // node_visitor: crate::CBFnNodeVisitorMut,
+// ) -> Vec<Edge> {
+//     let mut edges: Vec<Edge> = Vec::new();
+//     if let Some(data) = *dataset {
+//         for i in 0..clusters.len() {
+//             for j in (i + 1)..clusters.len() {
+//                 let distance = clusters[i].distance_to_other(data, clusters[j]);
+//                 if distance <= clusters[i].radius() + clusters[j].radius() {
+//                     edges.push((clusters[i].name(), clusters[j].name(), distance, true));
+//                 } else {
+//                     // edges.push((clusters[i].name(), clusters[j].name(), distance, false));
+//
+//                     // edges.push((
+//                     //     clusters[i].name(),
+//                     //     clusters[j].name(),
+//                     //     distance,
+//                     //     distance <= clusters[i].radius + clusters[j].radius,
+//                     // ));
+//                 }
+//
+//                 // let mut baton = ClusterDataWrapper::from_cluster(clusters[i]);
+//                 // baton.data_mut().set_message(clusters[j].name());
+//                 // node_visitor(Some(baton.data_mut()));
+//
+//                 // debug!(
+//                 //     "message from unity {}",
+//                 //     baton
+//                 //         .data()
+//                 //         .message
+//                 //         .as_string()
+//                 //         .unwrap_or("error null string".to_string())
+//                 // );
+//                 // // data.free_ids();
+//                 // }
+//             }
+//         }
+//     }
+//     debug!("number of edges in graph: {}", edges.len());
+//     return edges;
+// }
 
 // pub unsafe fn physics_update_async(&mut self, updater: CBFnNodeVisitor) -> FFIError {
 //     // let mut finished = false;
