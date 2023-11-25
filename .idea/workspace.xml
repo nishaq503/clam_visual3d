@@ -9,7 +9,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7566d7cf-f68a-4c42-82fc-ab4f2f8dbace" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam/abd-clam/tests/test_graph.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam/abd-clam/tests/test_graph.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam/py-clam" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam/py-clam" afterDir="false" />
@@ -63,9 +62,6 @@
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam/py-clam/python/tests/test_search.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam/py-clam/ruff.toml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/clam_ffi/clam/py-clam/src/lib.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/handle/handle.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/clam_ffi/clam_ffi/src/utils/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/unity/Assets/Scripts/FFI/NativeMethods.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

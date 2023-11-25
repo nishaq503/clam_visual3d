@@ -9,7 +9,9 @@ use std::sync::Arc;
 use std::thread::JoinHandle;
 
 use abd_clam::builder::{detect_edges, my_select_clusters, select_clusters};
-use abd_clam::{ClusterSet, Edge, EdgeSet, Graph, MyEdge, MyEdgeSet, PartitionCriteria};
+use abd_clam::{
+    ClusterSet, Edge, EdgeSet, Graph, MyCluster, MyClusterSet, MyEdge, MyEdgeSet, PartitionCriteria,
+};
 // use abd_clam::cluster::PartitionCriteria;
 // use abd_clam::core::dataset::Dataset;
 use abd_clam::Cakes;
@@ -176,22 +178,53 @@ impl Handle {
         }
     }
 
-    pub fn init_clam_graph(&mut self) {
+    pub fn init_clam_graph(&mut self, cluster_selector: CBFnNodeVisitor) -> FFIError {
         if let Some(cakes) = &self.cakes {
             let c2 = cakes.clone();
             let cakes = cakes.borrow();
             if let Some(tree) = cakes.trees().first() {
-                let selected_clusters = my_select_clusters(tree.root());
-                let selected_clusters2 = select_clusters(tree.root());
-                let edges = detect_edges(&selected_clusters2, tree.data());
+                let mut selected_clusters3 = tree.root().subtree();
+                selected_clusters3.retain(|c| c.depth() == tree.depth() / 2);
+
+                let selected_clusters = selected_clusters3
+                    .iter()
+                    .map(|&c| c)
+                    .collect::<ClusterSet<_>>();
+                let my_selected_clusters = selected_clusters3
+                    .iter()
+                    .map(|c| MyCluster::from_cluster(c))
+                    .collect::<MyClusterSet>();
+
+                // let my_selected_clusters = my_select_clusters(tree.root());
+                // let selected_clusters2 = select_clusters(tree.root());
+                debug!(
+                    "select clusters len {}, {}",
+                    selected_clusters.len(),
+                    my_selected_clusters.len()
+                );
+                // let mut clusters = tree.root().subtree();
+                // clusters.retain(|c| c.is_leaf());
+                // let selected_clusters2 = clusters.iter().map(|&c| c).collect::<ClusterSet<_>>();
+                for cluster in &selected_clusters {
+                    let baton = ClusterDataWrapper::from_cluster(cluster);
+                    cluster_selector(Some(baton.data()));
+                }
+
+                let edges = detect_edges(&selected_clusters, tree.data());
                 let edges = edges
                     .iter()
                     .map(|e| MyEdge::from_edge(e))
                     .collect::<MyEdgeSet<f32>>();
-                let graph = Graph::new(c2.clone(), selected_clusters.clone(), edges.clone());
+                if selected_clusters.len() == 0 || my_selected_clusters.len() == 0 {
+                    debug!("selected clusters empty")
+                }
+                let graph = Graph::new(c2.clone(), my_selected_clusters.clone(), edges.clone());
                 self.clam_graph = Some(Rc::new(RefCell::new(graph.unwrap())));
+
+                return FFIError::Ok;
             }
         }
+        return FFIError::HandleInitFailed;
     }
     pub fn load(data_name: &str) -> Result<Self, FFIError> {
         let c = Cakes::<Vec<f32>, f32, VecDataset<_, _, _>>::load(
@@ -364,6 +397,10 @@ impl Handle {
 
     pub fn get_num_edges_in_graph(&self) -> i32 {
         self.num_edges_in_graph.unwrap_or(-1)
+    }
+
+    pub fn clam_graph(&self) -> Option<Rc<RefCell<Graph<Vec<f32>, f32, DataSet>>>> {
+        return self.clam_graph.clone();
     }
 
     // pub unsafe fn color_by_dist_to_query(

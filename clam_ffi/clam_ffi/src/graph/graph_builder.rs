@@ -32,56 +32,73 @@ pub unsafe fn build_force_directed_graph(
     // edge_detector_cb: CBFnNodeVisitorMut,
     // physics_update_cb: CBFnNodeVisitor,
 ) -> Result<(JoinHandle<()>, Arc<ForceDirectedGraph>), FFIError> {
-    // let springs: Vec<Spring> = {
-    //     let mut clusters: Vec<&Clusterf32> = Vec::new();
-    //
-    //     for c in cluster_data_arr.iter() {
-    //         if let Ok(cluster) = handle.get_cluster(c.id.as_string().unwrap()) {
-    //             clusters.push(cluster);
-    //         }
-    //     }
-    //     // if let Some(cakes) = handle.cakes(){
-    //     // let cakes = cakes.borrow();
-    //     // let tree = cakes.trees().first().unwrap();
-    //     // let data = tree.data();
-    //     create_springs(detect_edges(&clusters, handle.cakes())) //, edge_detector_cb))
-    //
-    // };
-    //
-    // let graph = build_graph(handle, &cluster_data_arr);
-    // if graph.len() == 0 || springs.len() == 0 {
-    //     return Err(FFIError::GraphBuildFailed);
-    // }
-    //
-    // let force_directed_graph = Arc::new(ForceDirectedGraph::new(
-    //     graph, springs, scalar, max_iters,
-    //     // physics_update_cb,
-    // ));
-    //
-    // let b = force_directed_graph.clone();
-    // let p = thread::spawn(move || {
-    //     graph::force_directed_graph::produce_computations(&b);
-    // });
-    // return Ok((p, force_directed_graph.clone()));
+    let springs: Vec<Spring> = {
+        let mut clusters: Vec<&Clusterf32> = Vec::new();
+
+        for c in cluster_data_arr.iter() {
+            if let Ok(cluster) = handle.get_cluster(c.id.as_string().unwrap()) {
+                clusters.push(cluster);
+            }
+        }
+        // if let Some(cakes) = handle.cakes(){
+        // let cakes = cakes.borrow();
+        // let tree = cakes.trees().first().unwrap();
+        // let data = tree.data();
+        // create_springs(detect_edges(&clusters, handle.cakes())) //, edge_detector_cb))
+        let clam_graph = handle.clam_graph().unwrap();
+        let edges = clam_graph.borrow().edges();
+        let edges = edges
+            .iter()
+            .map(|e| (e.left().name(), e.right().name(), e.distance(), true))
+            .collect::<Vec<Edge>>();
+        create_springs(edges)
+    };
+
+    let graph = build_graph(handle, &cluster_data_arr);
+    if graph.len() == 0 || springs.len() == 0 {
+        return Err(FFIError::GraphBuildFailed);
+    }
+
+    let force_directed_graph = Arc::new(ForceDirectedGraph::new(
+        graph, springs, scalar, max_iters,
+        // physics_update_cb,
+    ));
+
+    let b = force_directed_graph.clone();
+    let p = thread::spawn(move || {
+        graph::force_directed_graph::produce_computations(&b);
+    });
+    return Ok((p, force_directed_graph.clone()));
     return Err(FFIError::NotImplemented);
 }
 
-// pub unsafe fn build_graph(
-//     // clusters: &'a Vec<&'a Clusterf32>,
-//     handle: &Handle,
-//     cluster_data_arr: &[ClusterData],
-// ) -> HashMap<String, PhysicsNode> {
-//     let mut graph: HashMap<String, PhysicsNode> = HashMap::new();
-//
-//     for c in cluster_data_arr {
-//         graph.insert(
-//             c.id.as_string().unwrap(),
-//             PhysicsNode::new(&c, handle.get_cluster(c.id.as_string().unwrap()).unwrap()),
-//         );
-//     }
-//
-//     return graph;
-// }
+pub unsafe fn build_graph(
+    // clusters: &'a Vec<&'a Clusterf32>,
+    handle: &Handle,
+    cluster_data_arr: &[ClusterData],
+) -> HashMap<String, PhysicsNode> {
+    let mut graph: HashMap<String, PhysicsNode> = HashMap::new();
+
+    for c in cluster_data_arr {
+        graph.insert(
+            c.id.as_string().unwrap(),
+            PhysicsNode::new(
+                &c,
+                handle
+                    .cakes()
+                    .unwrap()
+                    .borrow()
+                    .trees()
+                    .first()
+                    .unwrap()
+                    .get_cluster(c.id.as_string().unwrap())
+                    .unwrap(),
+            ),
+        );
+    }
+
+    return graph;
+}
 // pub unsafe fn build_graph(
 //     // clusters: &'a Vec<&'a Clusterf32>,
 //     cluster_data_arr: &[NodeData],

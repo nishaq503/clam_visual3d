@@ -17,7 +17,7 @@ namespace Clam
 
         public static partial class NativeMethods
         {
-	public const string __DllName = "clam_ffi_20231125160459";
+	public const string __DllName = "clam_ffi_20231125192035";
             private static IntPtr m_Handle;
 
             private static bool m_Initialized = false;
@@ -59,6 +59,16 @@ namespace Clam
                 }
                 Debug.Log("Failed to shutdown clam");
                 return FFIError.NullPointerPassed;
+            }
+
+            public static FFIError InitClamGraph(NodeVisitor clusterSelector)
+            {
+                var e = init_clam_graph(m_Handle, clusterSelector);
+                if (e == FFIError.Ok)
+                {
+                    m_Initialized = true;
+                }
+                return e;
             }
 
             // -------------------------------------  File IO ------------------------------------- 

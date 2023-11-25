@@ -145,7 +145,7 @@ namespace Clam
         {
             if (m_IsPhysicsRunning)
             {
-                Debug.Log("Error cannot destroy graph while physics is running");
+                Debug.Log("Error cannot destroy tree while physics is running");
                 return;
             }
             //foreach (var (name, node) in GetTree())

@@ -64,6 +64,11 @@ public class GraphBuilder : MonoBehaviour
 
     public void Init(Clam.FFI.ClusterData[] nodes, float edgeScalar, int numIters)
     {
+        if (nodes.Length == 0)
+        {
+            Debug.LogError("nodes for graph are empty");
+            return;
+        }
         GetComponent<MeshFilter>().mesh = new Mesh();
 
         Clam.FFI.NativeMethods.InitForceDirectedGraph(nodes, edgeScalar, numIters);
