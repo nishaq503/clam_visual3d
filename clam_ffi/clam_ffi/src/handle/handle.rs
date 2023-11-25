@@ -89,7 +89,7 @@ impl Handle {
         self.labels = None;
     }
 
-    pub fn get_tree(&self) -> Option<&Tree<Vec<f32>, f32, VecDataset<Vec<f32>, f32>>> {
+    pub fn get_tree(&self) -> Option<&Tree<Vec<f32>, f32, VecDataset<Vec<f32>, f32, bool>>> {
         if let Some(cakes) = &self.cakes {
             return cakes.trees().first().map(|x| *x);
         } else {
@@ -154,7 +154,7 @@ impl Handle {
     }
 
     pub fn load(data_name: &str) -> Result<Self, FFIError> {
-        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _,_>>::load(
             Path::new(data_name),
             utils::distances::euclidean,
             false,
@@ -193,7 +193,7 @@ impl Handle {
                 return Err(e);
             }
         };
-        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+        let c = Cakes::<Vec<f32>, f32, VecDataset<_, _,_>>::load(
             Path::new(&data_name),
             metric,
             data.is_expensive,
@@ -232,7 +232,7 @@ impl Handle {
         match anomaly_readers::read_anomaly_data(data_name, false) {
             Ok((first_data, labels)) => {
                 let dataset =
-                    VecDataset::new(data_name.to_string(), first_data, metric, is_expensive);
+                    VecDataset::new(data_name.to_string(), first_data, metric, is_expensive, None);
 
                 Ok((dataset, labels))
             }

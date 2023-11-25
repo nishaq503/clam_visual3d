@@ -9,8 +9,8 @@ use std::path::Path;
 pub fn load_single_f32(
     handle: &mut Handle,
     path: &String,
-) -> Result<Cakes<Vec<f32>, f32, VecDataset<Vec<f32>, f32>>, String> {
-    return Cakes::<Vec<f32>, f32, VecDataset<_, _>>::load(
+) -> Result<Cakes<Vec<f32>, f32, VecDataset<Vec<f32>, f32, bool>>, String> {
+    return Cakes::<Vec<f32>, f32, VecDataset<_, _,_>>::load(
         Path::new(path),
         utils::distances::euclidean,
         false,
